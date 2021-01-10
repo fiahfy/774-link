@@ -1,0 +1,32 @@
+{
+  "name": "functions",
+  "description": "Firebase Functions",
+  "version": "0.0.1",
+  "dependencies": {
+    "firebase-admin": "^9.4.2",
+    "firebase-functions": "^3.13.0"
+  },
+  "devDependencies": {
+    "@fiahfy/eslint-config": "^0.0.11",
+    "eslint": "^7.17.0",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.3"
+  },
+  "engines": {
+    "node": "12"
+  },
+  "main": "dist/index.js",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "deploy": "firebase deploy --only functions",
+    "dev": "tsc -w",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:eslint": "eslint -f codeframe --ext .js,.ts --ignore-path .gitignore .",
+    "lint:prettier": "prettier -c --ignore-path .gitignore **/*.{js,ts}",
+    "logs": "firebase functions:log",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell"
+  }
+}

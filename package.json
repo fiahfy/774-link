@@ -1,0 +1,51 @@
+{
+  "name": "774-link",
+  "description": "WIP",
+  "version": "0.0.1",
+  "author": {
+    "name": "fiahfy",
+    "email": "d.fiahfy@gmail.com",
+    "url": "http://fiahfy.blogspot.com/"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/styles": "^4.11.2",
+    "firebase": "^8.2.2",
+    "next": "^10.0.5",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "@fiahfy/eslint-config-next": "^0.0.11",
+    "eslint": "^7.17.0",
+    "firebase-tools": "^9.1.2",
+    "husky": "^4.3.7",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.3"
+  },
+  "keywords": [
+    "firebase",
+    "material-ui",
+    "next",
+    "react"
+  ],
+  "main": "",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fiahfy/774-link"
+  },
+  "scripts": {
+    "build": "next build",
+    "deploy": "firebase deploy --only hosting",
+    "dev": "next",
+    "export": "next export",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:eslint": "eslint -f codeframe --ext .js,.ts,.tsx --ignore-path .gitignore .",
+    "lint:prettier": "prettier -c --ignore-path .gitignore **/*.{js,ts,tsx}",
+    "release": "npm run build && npm run export && npm run deploy",
+    "start": "next start",
+    "test": "npm run lint"
+  }
+}

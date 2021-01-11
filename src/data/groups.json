@@ -1,0 +1,22 @@
+{
+  "animare": {
+    "name": "AniMare",
+    "name_ja": "有閑喫茶あにまーれ",
+    "twitter_screen_name": "AniMare_cafe"
+  },
+  "honeystrap": {
+    "name": "HoneyStrap",
+    "name_ja": "ハニーストラップ",
+    "twitter_screen_name": "HNST_official"
+  },
+  "sugarlyric": {
+    "name": "SugarLyric",
+    "name_ja": "シュガーリリック",
+    "twitter_screen_name": "SugarLyric_PI"
+  },
+  "vapart": {
+    "name": "VApArt",
+    "name_ja": "ブイアパ",
+    "twitter_screen_name": "Vtuber_ApArt"
+  }
+}

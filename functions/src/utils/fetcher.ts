@@ -1,6 +1,7 @@
 import Twitter from 'twitter'
+import { Timeline } from '../models'
 
-export const fetch = async (screenName: string): Promise<Twitter.ResponseData> => {
+export const fetch = async (screenName: string): Promise<Timeline[]> => {
   /* eslint-disable @typescript-eslint/no-non-null-assertion */
   const client = new Twitter({
     consumer_key: process.env.TWITTER_CONSUMER_KEY!,
@@ -14,5 +15,8 @@ export const fetch = async (screenName: string): Promise<Twitter.ResponseData> =
     tweet_mode: 'extended',
     count: 20,
   })
-  return data
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return data.map((d: any) => {
+    return { createdAt: d.created_at, fullText: d.full_text }
+  })
 }

@@ -53,19 +53,20 @@ describe('extractDate', () => {
 
 describe('parseMessage', () => {
   it('should work', () => {
-    const events = parseMessage('1/11(月)\nシャル 配信中です\n21:00 メアリ\n22:00 シャル\n24:00 パトラ\n\n')
-    expect(events.length).toBe(3)
-    expect(events[0]).toEqual({
+    const result = parseMessage('1/11(月)\nシャル 配信中です\n21:00 メアリ\n22:00 シャル\n24:00 パトラ\n\n')
+    expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.events.length).toBe(3)
+    expect(result?.events[0]).toEqual({
       ownerId: 'mary-saionji',
       title: '',
       startedAt: new Date('2021-01-11T12:00:00.000Z')
     })
-    expect(events[1]).toEqual({
+    expect(result?.events[1]).toEqual({
       ownerId: 'charlotte-shimamura',
       title: '',
       startedAt: new Date('2021-01-11T13:00:00.000Z')
     })
-    expect(events[2]).toEqual({
+    expect(result?.events[2]).toEqual({
       ownerId: 'patra-suou',
       title: '',
       startedAt: new Date('2021-01-11T15:00:00.000Z')

@@ -1,16 +1,6 @@
-import {
-  addHours,
-  addMinutes,
-  getMonth,
-  getYear,
-} from 'date-fns'
+import { addHours, addMinutes, getMonth, getYear } from 'date-fns'
 import { utcToZonedTime } from 'date-fns-tz'
-
-type Event = {
-  ownerId: string
-  title: string
-  startedAt: Date
-}
+import { Event, Schedule, Timeline } from '../models'
 
 const Owner = {
   はねる: 'haneru-inaba',
@@ -68,10 +58,10 @@ export const extractDate = (message: string): Date | undefined => {
   return utcToZonedTime(new Date(years, months, days), 'Asia/Tokyo')
 }
 
-export const parseMessage = (message: string): Event[] => {
+export const parseMessage = (message: string): Omit<Schedule, 'publishedAt'> | undefined => {
   const date = extractDate(message)
   if (!date) {
-    return []
+    return undefined
   }
 
   const events: Event[] = []
@@ -106,13 +96,17 @@ export const parseMessage = (message: string): Event[] => {
     })
   }
 
-  return events
+  return {
+    date,
+    events,
+  }
 }
 
-export const parse = (message: string): Event[] => {
-  const messages = parseFullMessage(message)
+export const parse = (timeline: Timeline): Schedule[] => {
+  const publishedAt = new Date(timeline.createdAt)
+  const messages = parseFullMessage(timeline.fullText)
   return messages.reduce((carry, message) => {
-    const events = parseMessage(message)
-    return [...carry, ...events]
-  }, [] as Event[])
+    const result = parseMessage(message)
+    return result ? [...carry, { ...result, publishedAt }] : carry
+  }, [] as Schedule[])
 }

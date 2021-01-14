@@ -5,6 +5,7 @@ export type Schedule = {
 }
 
 export type Event = {
+  groupId: string
   ownerId: string
   title: string
   startedAt: Date
@@ -13,4 +14,12 @@ export type Event = {
 export type Timeline = {
   createdAt: Date
   fullText: string
+}
+
+export type Member = {
+  name: string
+  nameJa: string
+  groupId: string
+  twitterScreenName: string
+  youtubeChannelId: string
 }

@@ -1,18 +1,7 @@
 import { addHours, addMinutes, getMonth, getYear } from 'date-fns'
 import { utcToZonedTime } from 'date-fns-tz'
-import { Event, Schedule, Timeline } from '../models'
-
-const Owner = {
-  はねる: 'haneru-inaba',
-  いちか: 'ichika-souya',
-  らん: 'ran-hinokuma',
-  くく: 'kuku-kazami',
-  いづみ: 'izumi-yunohara',
-  パトラ: 'patra-suou',
-  シャル: 'charlotte-shimamura',
-  ミコ: 'mico-sekishiro',
-  メアリ: 'mary-saionji',
-}
+import members from '774-link/src/data/members.json'
+import { Event, Member, Schedule, Timeline } from '../models'
 
 export const parseFullMessage = (message: string): string[] => {
   const messages: string[] = []
@@ -58,15 +47,24 @@ export const extractDate = (message: string): Date | undefined => {
   return utcToZonedTime(new Date(years, months, days), 'Asia/Tokyo')
 }
 
-export const parseMessage = (message: string): Omit<Schedule, 'publishedAt'> | undefined => {
+export const parseMessage = (
+  message: string,
+  groupId: string
+): Omit<Schedule, 'publishedAt'> | undefined => {
   const date = extractDate(message)
   if (!date) {
     return undefined
   }
 
+  const filterMembers = Object.entries(members).reduce(
+    (carry, [id, member]) =>
+      member.groupId === groupId ? [...carry, { ...member, id }] : carry,
+    [] as (Member & { id: string })[]
+  )
+
   const events: Event[] = []
   // eslint-disable-next-line no-irregular-whitespace
-  const reg = /(\d+):(\d+)-?\s?([ぁ-んァ-ヶ]+)(?:[\s　]*[(（](.+)[）)])?(?:\n(＊[^\n\s]+))?/g
+  const reg = /(\d+):(\d+)-?\s?([ぁ-んァ-ヶ/]+)(?:[\s　]*[(（](.+)[）)])?(?:\n?＊([^\n\s]+))?/g
   for (;;) {
     const match = reg.exec(message)
     if (!match) {
@@ -75,25 +73,30 @@ export const parseMessage = (message: string): Omit<Schedule, 'publishedAt'> | u
 
     const hours = Number(match[1])
     const minutes = Number(match[2])
-    const member = match[3]
+    const names = match[3].replace('コラボ', '').split('/')
     const description1 = match[4]
     const description2 = match[5]
 
-    const ownerId = Owner[member as keyof typeof Owner] ?? ''
-    let title = ownerId ? '' : member
-    title += description1 ?? ''
-    if (title) {
-      title += description2 ?? ''
+    for (const name of names) {
+      const member = filterMembers.find((member) => member.nameJa.match(name))
+      if (!member) {
+        continue
+      }
+
+      const ownerId = member.id
+      let title = description1 ?? ''
+      if (title && description2) {
+        title += `(${description2})` ?? ''
+      }
+      const startedAt = addMinutes(addHours(date, hours), minutes)
+
+      events.push({
+        groupId,
+        ownerId,
+        title,
+        startedAt,
+      })
     }
-
-    const startedAt = addMinutes(addHours(date, hours), minutes)
-
-    events.push({
-      // match: match[0],
-      ownerId,
-      title,
-      startedAt,
-    })
   }
 
   return {
@@ -102,11 +105,11 @@ export const parseMessage = (message: string): Omit<Schedule, 'publishedAt'> | u
   }
 }
 
-export const parse = (timeline: Timeline): Schedule[] => {
+export const parse = (timeline: Timeline, groupId: string): Schedule[] => {
   const publishedAt = new Date(timeline.createdAt)
   const messages = parseFullMessage(timeline.fullText)
   return messages.reduce((carry, message) => {
-    const result = parseMessage(message)
+    const result = parseMessage(message, groupId)
     return result ? [...carry, { ...result, publishedAt }] : carry
   }, [] as Schedule[])
 }

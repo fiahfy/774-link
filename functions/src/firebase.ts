@@ -1,4 +1,4 @@
-import admin from 'firebase-admin'
+import * as admin from 'firebase-admin'
 
 const options: admin.AppOptions = {}
 const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT

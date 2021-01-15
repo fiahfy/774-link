@@ -1,4 +1,4 @@
-import { addDays, getTime, isAfter, max } from 'date-fns'
+import { addDays, addHours, getTime, isAfter, max } from 'date-fns'
 import groups from '774-link/src/data/groups.json'
 import firebase from '../firebase'
 import { fetch } from '../utils/fetcher'
@@ -30,12 +30,13 @@ const extractSchedule = (schedules: Schedule[]) => {
 }
 
 const updateSchedule = async (schedule: Schedule, groupId: string) => {
-  console.log('updating events: group_id=%s, date=%s', groupId, schedule.date)
+  console.log('updating events of %s at %s', groupId, schedule.date)
 
-  const from = max([schedule.publishedAt, schedule.date])
-  const to = addDays(schedule.date, 1)
+  // between 06:00 to 30:00
+  const from = max([schedule.publishedAt, addHours(schedule.date, 6)])
+  const to = addHours(addDays(schedule.date, 1), 6)
 
-  console.log('target period: from=%s, to=%s', from, to)
+  console.log('between %s to %s', from, to)
 
   // upserting events
   const events = schedule.events.filter((event) => {
@@ -115,7 +116,7 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
     .commit()
 
   console.log(
-    'updated events: deleted=%d, updated=%d, inserted=%d',
+    '%d events deleted, %d events updated and %d events inserted',
     deletings.length,
     updatings.length,
     insertings.length
@@ -131,8 +132,6 @@ export const fetchTimelines = async (): Promise<void> => {
     const extracted = extractSchedule(schedules)
     for (const schedule of extracted) {
       await updateSchedule(schedule, groupId)
-      return
     }
-    return
   }
 }

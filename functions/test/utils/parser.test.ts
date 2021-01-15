@@ -95,6 +95,20 @@ describe('parseMessage', () => {
       startedAt: new Date('2021-01-11T15:00:00.000Z'),
     })
   })
+  it('should work with over 24:00', () => {
+    const result = parseMessage(
+      '1/11(水)\n25:00 ミコ\n\n',
+      'honeystrap'
+    )
+    expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.events.length).toBe(1)
+    expect(result?.events[0]).toEqual({
+      groupId: 'honeystrap',
+      ownerId: 'mico-sekishiro',
+      title: '',
+      startedAt: new Date('2021-01-11T16:00:00.000Z'),
+    })
+  })
   it('should work with title', () => {
     const result = parseMessage(
       '1/11(水)\n18:00 ミコ(メンバー限定配信)\n\n',

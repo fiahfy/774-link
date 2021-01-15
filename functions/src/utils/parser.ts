@@ -1,5 +1,5 @@
 import { addHours, addMinutes, getMonth, getYear } from 'date-fns'
-import { zonedTimeToUtc } from 'date-fns-tz'
+import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 import members from '774-link/src/data/members.json'
 import { Event, Member, Schedule, Timeline } from '../models'
 
@@ -37,9 +37,9 @@ export const extractDate = (message: string): Date | undefined => {
   const months = Number(match[1]) - 1
   const days = Number(match[2])
 
-  const d = zonedTimeToUtc(new Date(), 'Asia/Tokyo')
-  let years = getYear(d)
-  if (months < getMonth(d)) {
+  const jst = utcToZonedTime(new Date(), 'Asia/Tokyo')
+  let years = getYear(jst)
+  if (months < getMonth(jst)) {
     years++ // increment year if it is December
   }
 

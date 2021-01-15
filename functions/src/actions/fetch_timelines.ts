@@ -6,10 +6,10 @@ import { parse } from '../utils/parser'
 import { Event, Schedule, Timeline } from '../models'
 
 const parseTimelines = (timelines: Timeline[], groupId: string) => {
-  return timelines.reduce((carry: Schedule[], timeline: any) => {
+  return timelines.reduce((carry, timeline) => {
     const schedules = parse(timeline, groupId)
     return [...carry, ...schedules]
-  }, [])
+  }, [] as Schedule[])
 }
 
 const extractSchedule = (schedules: Schedule[]) => {
@@ -17,14 +17,14 @@ const extractSchedule = (schedules: Schedule[]) => {
     schedules
       .reverse() // order by date asc
       .reduce(
-        (carry: { [timestamp: number]: Schedule }, schedule: Schedule) => {
+        (carry, schedule) => {
           const timestamp = getTime(schedule.date)
           return {
             ...carry,
             [timestamp]: schedule,
           }
         },
-        {}
+        {} as { [timestamp: number]: Schedule }
       )
   )
 }

@@ -40,10 +40,9 @@ export const extractDate = (message: string): Date | undefined => {
   const jst = utcToZonedTime(new Date(), 'Asia/Tokyo')
   let years = getYear(jst)
   if (months < getMonth(jst)) {
-    years++ // increment year if it is December
+    years++
   }
 
-  // 0:00:00 UTC+9
   return zonedTimeToUtc(new Date(years, months, days), 'Asia/Tokyo')
 }
 

@@ -21,7 +21,7 @@ const extractSchedule = (schedules: Schedule[]) => {
           const timestamp = getTime(schedule.date)
           return {
             ...carry,
-            [timestamp]: schedule,
+            [timestamp]: schedule, // overwrite with the latest schedule for each day
           }
         },
         {} as { [timestamp: number]: Schedule }
@@ -125,13 +125,16 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
 
 const getUid = (event: Event) => `${event.ownerId}_${event.startedAt.getTime()}`
 
-export const fetchTimelines = async (): Promise<void> => {
-  for (const [groupId, group] of Object.entries(groups)) {
+export const fetchTimelines = async (groupId?: string): Promise<void> => {
+  for (const [id, group] of Object.entries(groups)) {
+    if (groupId && id !== groupId) {
+      continue
+    }
     const timelines = await fetch(group.twitterScreenName)
-    const schedules = parseTimelines(timelines, groupId)
+    const schedules = parseTimelines(timelines, id)
     const extracted = extractSchedule(schedules)
     for (const schedule of extracted) {
-      await updateSchedule(schedule, groupId)
+      await updateSchedule(schedule, id)
     }
   }
 }

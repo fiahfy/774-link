@@ -1,20 +1,20 @@
+import { pink } from '@material-ui/core/colors'
 import { createMuiTheme } from '@material-ui/core/styles'
-import red from '@material-ui/core/colors/red'
 
 // Create a theme instance.
 const theme = createMuiTheme({
+  // @see https://github.com/mui-org/material-ui/issues/18308
+  overrides: {
+    MuiAppBar: {
+      colorPrimary: {
+        backgroundColor: '#424242',
+      },
+    },
+  },
   palette: {
+    type: 'dark',
     primary: {
-      main: '#556cd6',
-    },
-    secondary: {
-      main: '#19857b',
-    },
-    error: {
-      main: red.A400,
-    },
-    background: {
-      default: '#fff',
+      main: pink.A200,
     },
   },
 })

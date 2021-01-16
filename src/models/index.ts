@@ -1,2 +1,2 @@
-export * from './event'
+export * from './activity'
 export * from './group'

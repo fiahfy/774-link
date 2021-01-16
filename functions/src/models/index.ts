@@ -1,14 +1,15 @@
 export type Schedule = {
   date: Date
   publishedAt: Date
-  events: Event[]
+  activities: Activity[]
 }
 
-export type Event = {
+export type Activity = {
   groupId: string
   ownerId: string
   title: string
   startedAt: Date
+  source: string
 }
 
 export type Timeline = {

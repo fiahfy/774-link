@@ -15,7 +15,7 @@ import { Schedule } from '@material-ui/icons'
 import { addDays, isSameDay } from 'date-fns'
 import firebase from '~/firebase'
 import DailySchedule from '~/components/DailySchedule'
-import { Event } from '~/models'
+import { Activity } from '~/models'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,42 +43,42 @@ const useStyles = makeStyles((theme) => ({
 const useSchedules = () => {
   const [loading, setLoading] = React.useState(true)
   const [schedules, setSchedules] = React.useState<
-    { date: Date; events: Event[] }[]
+    { date: Date; activities: Activity[] }[]
   >([])
   React.useEffect(() => {
     ;(async () => {
       const schedules = [...Array<number>(3).keys()].reduce((carry, i) => {
         const date = addDays(new Date(), i)
-        return [...carry, { date, events: [] }]
-      }, [] as { date: Date; events: Event[] }[])
+        return [...carry, { date, activities: [] }]
+      }, [] as { date: Date; activities: Activity[] }[])
 
       const snapshot = await firebase
         .firestore()
-        .collection('events')
+        .collection('activities')
         .where('startedAt', '>', new Date())
         .orderBy('startedAt', 'asc')
         .get()
-      const events = snapshot.docs
+      const activities = snapshot.docs
         .map((doc) => {
           const data = doc.data()
           return {
             ...data,
             id: doc.id,
             startedAt: data.startedAt.toDate(),
-          } as Event
+          } as Activity
         })
-        .reduce((carry, event) => {
+        .reduce((carry, activity) => {
           return carry.map((schedule) => {
-            if (!isSameDay(schedule.date, event.startedAt)) {
+            if (!isSameDay(schedule.date, activity.startedAt)) {
               return schedule
             }
             return {
               ...schedule,
-              events: [...schedule.events, event],
+              activities: [...schedule.activities, activity],
             }
           })
         }, schedules)
-      setSchedules(events)
+      setSchedules(activities)
       setLoading(false)
     })()
   }, [])
@@ -108,7 +108,11 @@ const Index: NextPage = () => {
         <div className={classes.toolbarSpacer} />
         <Container className={classes.container} maxWidth="md">
           {schedules.map((schedule, index) => (
-            <DailySchedule date={schedule.date} events={schedule.events} key={index} />
+            <DailySchedule
+              activities={schedule.activities}
+              date={schedule.date}
+              key={index}
+            />
           ))}
         </Container>
         <div className={classes.toolbarSpacer} />
@@ -116,7 +120,7 @@ const Index: NextPage = () => {
       <BottomNavigation className={classes.bottomNavigation} showLabels>
         <BottomNavigationAction icon={<Schedule />} label="Schedule" />
       </BottomNavigation>
-      <Backdrop  open={loading}>
+      <Backdrop open={loading}>
         <CircularProgress />
       </Backdrop>
     </div>

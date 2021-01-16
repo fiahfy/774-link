@@ -3,7 +3,7 @@ import groups from '774-link/src/data/groups.json'
 import firebase from '../firebase'
 import { fetch } from '../utils/fetcher'
 import { parse } from '../utils/parser'
-import { Event, Schedule, Timeline } from '../models'
+import { Activity, Schedule, Timeline } from '../models'
 
 const parseTimelines = (timelines: Timeline[], groupId: string) => {
   return timelines.reduce((carry, timeline) => {
@@ -30,7 +30,7 @@ const extractSchedule = (schedules: Schedule[]) => {
 }
 
 const updateSchedule = async (schedule: Schedule, groupId: string) => {
-  console.log('updating events of %s at %s', groupId, schedule.date)
+  console.log('updating activities of %s at %s', groupId, schedule.date)
 
   // between 06:00 to 30:00
   const from = max([schedule.publishedAt, addHours(schedule.date, 6)])
@@ -38,22 +38,22 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
 
   console.log('between %s to %s', from, to)
 
-  // upserting events
-  const events = schedule.events.filter((event) => {
-    return isAfter(event.startedAt, from)
+  // upserting activities
+  const activities = schedule.activities.filter((activity) => {
+    return isAfter(activity.startedAt, from)
   })
-  const hash = events.reduce((carry, event) => {
-    const uid = `${event.ownerId}_${event.startedAt.getTime()}`
+  const hash = activities.reduce((carry, activity) => {
+    const uid = `${activity.ownerId}_${activity.startedAt.getTime()}`
     return {
       ...carry,
-      [uid]: event,
+      [uid]: activity,
     }
-  }, {} as { [uid: string]: Event })
+  }, {} as { [uid: string]: Activity })
 
-  // stored events
+  // stored activities
   const snapshot = await firebase
     .firestore()
-    .collection('events')
+    .collection('activities')
     .where('groupId', '==', groupId)
     .where('startedAt', '>=', from)
     .where('startedAt', '<', to)
@@ -64,51 +64,51 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
       ...data,
       id: doc.id,
       startedAt: data.startedAt.toDate(),
-    } as Event & { id: string }
+    } as Activity & { id: string }
   })
-  const storedHash = stored.reduce((carry, event) => {
-    const uid = getUid(event)
+  const storedHash = stored.reduce((carry, activity) => {
+    const uid = getUid(activity)
     return {
       ...carry,
-      [uid]: event,
+      [uid]: activity,
     }
-  }, {} as { [uid: string]: Event & { id: string } })
+  }, {} as { [uid: string]: Activity & { id: string } })
 
-  const deletings = stored.filter((event) => {
-    const uid = getUid(event)
+  const deletings = stored.filter((activity) => {
+    const uid = getUid(activity)
     return !hash[uid]
   })
-  const updatings = events.reduce((carry, event) => {
-    const uid = getUid(event)
+  const updatings = activities.reduce((carry, activity) => {
+    const uid = getUid(activity)
     const stored = storedHash[uid]
-    return stored ? [...carry, { ...stored, ...event }] : carry
-  }, [] as (Event & { id: string })[])
-  const insertings = events.reduce((carry, event) => {
-    const uid = getUid(event)
+    return stored ? [...carry, { ...stored, ...activity }] : carry
+  }, [] as (Activity & { id: string })[])
+  const insertings = activities.reduce((carry, activity) => {
+    const uid = getUid(activity)
     const stored = storedHash[uid]
-    return stored ? carry : [...carry, event]
-  }, [] as Event[])
+    return stored ? carry : [...carry, activity]
+  }, [] as Activity[])
 
   await deletings
     .reduce((carry, { id }) => {
-      const ref = firebase.firestore().collection('events').doc(id)
+      const ref = firebase.firestore().collection('activities').doc(id)
       return carry.delete(ref)
     }, firebase.firestore().batch())
     .commit()
   await updatings
-    .reduce((carry, { id, ...event }) => {
-      const ref = firebase.firestore().collection('events').doc(id)
+    .reduce((carry, { id, ...activity }) => {
+      const ref = firebase.firestore().collection('activities').doc(id)
       return carry.update(ref, {
-        ...event,
+        ...activity,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
     }, firebase.firestore().batch())
     .commit()
   await insertings
-    .reduce((carry, event) => {
-      const ref = firebase.firestore().collection('events').doc()
+    .reduce((carry, activity) => {
+      const ref = firebase.firestore().collection('activities').doc()
       return carry.set(ref, {
-        ...event,
+        ...activity,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
@@ -116,14 +116,14 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
     .commit()
 
   console.log(
-    '%d events deleted, %d events updated and %d events inserted',
+    '%d activities deleted, %d activities updated and %d activities inserted',
     deletings.length,
     updatings.length,
     insertings.length
   )
 }
 
-const getUid = (event: Event) => `${event.ownerId}_${event.startedAt.getTime()}`
+const getUid = (activity: Activity) => `${activity.ownerId}_${activity.startedAt.getTime()}`
 
 export const fetchTimelines = async (groupId?: string): Promise<void> => {
   for (const [id, group] of Object.entries(groups)) {

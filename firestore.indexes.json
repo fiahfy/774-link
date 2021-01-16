@@ -1,7 +1,7 @@
 {
   "indexes": [
     {
-      "collectionGroup": "events",
+      "collectionGroup": "activities",
       "queryScope": "COLLECTION",
       "fields": [
         {
@@ -9,13 +9,13 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "started_at",
+          "fieldPath": "startedAt",
           "order": "ASCENDING"
         }
       ]
     },
     {
-      "collectionGroup": "events",
+      "collectionGroup": "activities",
       "queryScope": "COLLECTION",
       "fields": [
         {
@@ -23,7 +23,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "started_at",
+          "fieldPath": "startedAt",
           "order": "ASCENDING"
         }
       ]

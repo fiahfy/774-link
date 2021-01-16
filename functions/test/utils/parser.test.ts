@@ -75,20 +75,20 @@ describe('parseMessage', () => {
       'honeystrap'
     )
     expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
-    expect(result?.events.length).toBe(3)
-    expect(result?.events[0]).toEqual({
+    expect(result?.activities.length).toBe(3)
+    expect(result?.activities[0]).toEqual({
       groupId: 'honeystrap',
       ownerId: 'mary-saionji',
       title: '',
       startedAt: new Date('2021-01-11T12:00:00.000Z'),
     })
-    expect(result?.events[1]).toEqual({
+    expect(result?.activities[1]).toEqual({
       groupId: 'honeystrap',
       ownerId: 'charlotte-shimamura',
       title: '',
       startedAt: new Date('2021-01-11T13:00:00.000Z'),
     })
-    expect(result?.events[2]).toEqual({
+    expect(result?.activities[2]).toEqual({
       groupId: 'honeystrap',
       ownerId: 'patra-suou',
       title: '',
@@ -101,8 +101,8 @@ describe('parseMessage', () => {
       'honeystrap'
     )
     expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
-    expect(result?.events.length).toBe(1)
-    expect(result?.events[0]).toEqual({
+    expect(result?.activities.length).toBe(1)
+    expect(result?.activities[0]).toEqual({
       groupId: 'honeystrap',
       ownerId: 'mico-sekishiro',
       title: '',
@@ -115,8 +115,8 @@ describe('parseMessage', () => {
       'honeystrap'
     )
     expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
-    expect(result?.events.length).toBe(1)
-    expect(result?.events[0]).toEqual({
+    expect(result?.activities.length).toBe(1)
+    expect(result?.activities[0]).toEqual({
       groupId: 'honeystrap',
       ownerId: 'mico-sekishiro',
       title: 'メンバー限定配信',
@@ -129,8 +129,8 @@ describe('parseMessage', () => {
       'honeystrap'
     )
     expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
-    expect(result?.events.length).toBe(1)
-    expect(result?.events[0]).toEqual({
+    expect(result?.activities.length).toBe(1)
+    expect(result?.activities[0]).toEqual({
       groupId: 'honeystrap',
       ownerId: 'mico-sekishiro',
       title: 'メンバー限定配信',
@@ -143,8 +143,8 @@ describe('parseMessage', () => {
       'honeystrap'
     )
     expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
-    expect(result?.events.length).toBe(1)
-    expect(result?.events[0]).toEqual({
+    expect(result?.activities.length).toBe(1)
+    expect(result?.activities[0]).toEqual({
       groupId: 'honeystrap',
       ownerId: 'mary-saionji',
       title: '羽柴なつみさん企画参加(羽柴なつみさんch)',
@@ -156,8 +156,8 @@ describe('parseMessage', () => {
       'animare'
     )
     expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
-    expect(result?.events.length).toBe(1)
-    expect(result?.events[0]).toEqual({
+    expect(result?.activities.length).toBe(1)
+    expect(result?.activities[0]).toEqual({
       groupId: 'animare',
       ownerId: 'haneru-inaba',
       title: 'コラボ(ルイス・キャミーさんch)',
@@ -170,20 +170,20 @@ describe('parseMessage', () => {
       'animare'
     )
     expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
-    expect(result?.events.length).toBe(3)
-    expect(result?.events[0]).toEqual({
+    expect(result?.activities.length).toBe(3)
+    expect(result?.activities[0]).toEqual({
       groupId: 'animare',
       ownerId: 'ran-hinokuma',
       title: '',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
     })
-    expect(result?.events[1]).toEqual({
+    expect(result?.activities[1]).toEqual({
       groupId: 'animare',
       ownerId: 'hikari-hira',
       title: '',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
     })
-    expect(result?.events[2]).toEqual({
+    expect(result?.activities[2]).toEqual({
       groupId: 'animare',
       ownerId: 'rui-seshima',
       title: '',

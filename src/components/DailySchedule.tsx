@@ -12,8 +12,7 @@ import {
   startOfDay,
   subMinutes,
 } from 'date-fns'
-import { Event } from '~/models'
-import { Schedule } from '@material-ui/icons'
+import { Activity } from '~/models'
 
 const titleWidth = 48
 const guidlineHeight = 66
@@ -52,6 +51,10 @@ const Guideline: React.FC<{
   )
 }
 
+const DailyScheduleActivity: React.FC = () => {
+  return <div style={{ backgroundColor: '#ccc' }} />
+}
+
 const useNow = (interval: number) => {
   const [now, setNow] = React.useState(new Date())
   React.useEffect(() => {
@@ -65,13 +68,48 @@ const useNow = (interval: number) => {
   return now
 }
 
+const useActivityItems = (activities: Activity[]) => {
+  const unitsPerHour = 4
+  return React.useMemo(() => {
+    const grids = activities.reduce((carry, activity) => {
+      const y = Math.floor(
+        (getHours(activity.startedAt) * 60 + getMinutes(activity.startedAt)) /
+          (60 / unitsPerHour)
+      )
+      const x =
+        [...Array<number>(carry.length).keys()].find(
+          (i) =>
+            carry[i]
+              ?.slice(y, y + unitsPerHour)
+              .every((id) => id === undefined) ?? true
+        ) ?? carry.length
+      console.log(x, y, carry)
+      if (x < carry.length) {
+        return carry.map((lane, i) => {
+          if (i !== x) {
+            return lane
+          }
+          return lane.map((id, j) => (j >= y && j <= y + 4 ? activity.id : id))
+        })
+      } else {
+        return [
+          ...carry,
+          Array(24 * unitsPerHour)
+            .fill(undefined)
+            .map((id, j) => (j >= y && j <= y + 4 ? activity.id : id)),
+        ]
+      }
+    }, [] as (string | undefined)[][])
+  }, [activities])
+}
+
 type Props = {
   date: Date
-  events: Event[]
+  activities: Activity[]
 }
 
 const DailySchedule: React.FC<Props> = (props) => {
-  const { date: initialDate, events } = props
+  const { date: initialDate, activities } = props
 
   const date = startOfDay(initialDate)
 
@@ -94,6 +132,8 @@ const DailySchedule: React.FC<Props> = (props) => {
     },
     [now]
   )
+
+  const activityItems = useActivityItems(activities)
 
   return (
     <Box my={3}>
@@ -124,7 +164,7 @@ const DailySchedule: React.FC<Props> = (props) => {
           top={0}
           width="100%"
         >
-          {' '}
+          <DailyScheduleActivity />
         </Box>
       </Box>
     </Box>

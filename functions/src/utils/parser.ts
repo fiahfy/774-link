@@ -1,7 +1,7 @@
 import { addHours, addMinutes, getMonth, getYear } from 'date-fns'
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 import members from '774-link/src/data/members.json'
-import { Event, Member, Schedule, Timeline } from '../models'
+import { Activity, Member, Schedule, Timeline } from '../models'
 
 export const parseFullMessage = (message: string): string[] => {
   const messages: string[] = []
@@ -61,7 +61,7 @@ export const parseMessage = (
     [] as (Member & { id: string })[]
   )
 
-  const events: Event[] = []
+  const activities: Activity[] = []
   // eslint-disable-next-line no-irregular-whitespace
   const reg = /(\d+):(\d+)-?\s?([ぁ-んァ-ヶ/]+)(?:[\s　]*[(（](.+)[）)])?(?:\n?＊([^\n\s]+))?/g
   for (;;) {
@@ -89,18 +89,19 @@ export const parseMessage = (
       }
       const startedAt = addMinutes(addHours(date, hours), minutes)
 
-      events.push({
+      activities.push({
         groupId,
         ownerId,
         title,
         startedAt,
+        source: 'twitter'
       })
     }
   }
 
   return {
     date,
-    events,
+    activities,
   }
 }
 

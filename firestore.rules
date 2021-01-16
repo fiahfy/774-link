@@ -5,13 +5,5 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
-    match /groups/{group} {
-      allow read: if true;
-      allow write: if false;
-    }
-    match /members/{member} {
-      allow read: if true;
-      allow write: if false;
-    }
   }
 }

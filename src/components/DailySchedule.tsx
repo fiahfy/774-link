@@ -12,7 +12,10 @@ import {
   startOfDay,
   subMinutes,
 } from 'date-fns'
+import { Event } from '~/models'
+import { Schedule } from '@material-ui/icons'
 
+const titleWidth = 48
 const guidlineHeight = 66
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +35,7 @@ const Guideline: React.FC<{
 
   return (
     <Box alignItems="center" display="flex" height={guidlineHeight}>
-      <Box mr={1} textAlign="right" width={40}>
+      <Box textAlign="center" width={titleWidth}>
         {!hideTitle && (
           <Typography
             color={primary ? 'primary' : 'textSecondary'}
@@ -64,10 +67,11 @@ const useNow = (interval: number) => {
 
 type Props = {
   date: Date
+  events: Event[]
 }
 
 const DailySchedule: React.FC<Props> = (props) => {
-  const { date: initialDate } = props
+  const { date: initialDate, events } = props
 
   const date = startOfDay(initialDate)
 
@@ -113,6 +117,15 @@ const DailySchedule: React.FC<Props> = (props) => {
             <Guideline primary title={format(now, 'HH:mm')} />
           </Box>
         )}
+        <Box
+          height="100%"
+          paddingLeft={`${titleWidth}px`}
+          position="absolute"
+          top={0}
+          width="100%"
+        >
+          {' '}
+        </Box>
       </Box>
     </Box>
   )

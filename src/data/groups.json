@@ -1,22 +1,26 @@
-{
-  "animare": {
+[
+  {
+    "id": "animare",
     "name": "AniMare",
     "nameJa": "有閑喫茶あにまーれ",
     "twitterScreenName": "AniMare_cafe"
   },
-  "honeystrap": {
+  {
+    "id": "honeystrap",
     "name": "HoneyStrap",
     "nameJa": "ハニーストラップ",
     "twitterScreenName": "HNST_official"
   },
-  "sugarlyric": {
+  {
+    "id": "sugarlyric",
     "name": "SugarLyric",
     "nameJa": "シュガーリリック",
     "twitterScreenName": "SugarLyric_PI"
   },
-  "vapart": {
+  {
+    "id": "vapart",
     "name": "VApArt",
     "nameJa": "ブイアパ",
     "twitterScreenName": "Vtuber_ApArt"
   }
-}
+]

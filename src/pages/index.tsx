@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { Schedule } from '@material-ui/icons'
-import { addDays, isSameDay, subDays } from 'date-fns'
+import { addDays, isSameDay, startOfDay, subDays } from 'date-fns'
 import firebase from '~/firebase'
 import DailySchedule from '~/components/DailySchedule'
 import { Activity } from '~/models'
@@ -47,7 +47,7 @@ const useSchedules = () => {
   >([])
   React.useEffect(() => {
     ;(async () => {
-      const startedAt = subDays(new Date(), 1)
+      const startedAt = subDays(startOfDay(new Date()), 1)
 
       const schedules = [...Array<number>(3).keys()].reduce((carry, i) => {
         const date = addDays(startedAt, i)
@@ -88,10 +88,29 @@ const useSchedules = () => {
   return { loading, schedules }
 }
 
+const useScrollToSelector = (selector: string) => {
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      const e = document.querySelector(selector)
+      if (!e) {
+        return
+      }
+      clearInterval(timer)
+
+      const rect = e.getBoundingClientRect()
+      console.log(rect.top + window.innerHeight / 2)
+      window.scrollTo(0, rect.top - window.innerHeight / 2)
+    })
+    return () => clearInterval(timer)
+  }, [selector])
+}
+
 const Index: NextPage = () => {
   const classes = useStyles()
 
   const { loading, schedules } = useSchedules()
+
+  useScrollToSelector('#primary-guideline')
 
   return (
     <div className={classes.root}>
@@ -118,11 +137,11 @@ const Index: NextPage = () => {
             />
           ))}
         </Container>
-        <div className={classes.toolbarSpacer} />
+        {/* <div className={classes.toolbarSpacer} /> */}
       </main>
-      <BottomNavigation className={classes.bottomNavigation} showLabels>
+      {/* <BottomNavigation className={classes.bottomNavigation} showLabels>
         <BottomNavigationAction icon={<Schedule />} label="Schedule" />
-      </BottomNavigation>
+      </BottomNavigation> */}
       <Backdrop open={loading}>
         <CircularProgress />
       </Backdrop>

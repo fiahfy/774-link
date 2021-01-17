@@ -1,5 +1,5 @@
 import { addDays, addHours, getTime, isAfter, max } from 'date-fns'
-import groups from '774-link/src/data/groups.json'
+import { groups } from '../data'
 import firebase from '../firebase'
 import { fetch } from '../utils/fetcher'
 import { parse } from '../utils/parser'
@@ -43,7 +43,7 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
     return isAfter(activity.startedAt, from)
   })
   const hash = activities.reduce((carry, activity) => {
-    const uid = `${activity.ownerId}_${activity.startedAt.getTime()}`
+    const uid = getUid(activity)
     return {
       ...carry,
       [uid]: activity,
@@ -123,18 +123,18 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
   )
 }
 
-const getUid = (activity: Activity) => `${activity.ownerId}_${activity.startedAt.getTime()}`
+const getUid = (activity: Activity) => `${activity.memberId}_${activity.startedAt.getTime()}`
 
 export const fetchTimelines = async (groupId?: string): Promise<void> => {
-  for (const [id, group] of Object.entries(groups)) {
-    if (groupId && id !== groupId) {
+  for (const group of groups) {
+    if (groupId && group.id !== groupId) {
       continue
     }
     const timelines = await fetch(group.twitterScreenName)
-    const schedules = parseTimelines(timelines, id)
+    const schedules = parseTimelines(timelines, group.id)
     const extracted = extractSchedule(schedules)
     for (const schedule of extracted) {
-      await updateSchedule(schedule, id)
+      await updateSchedule(schedule, group.id)
     }
   }
 }

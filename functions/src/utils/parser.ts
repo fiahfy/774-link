@@ -1,7 +1,7 @@
 import { addHours, addMinutes, getMonth, getYear } from 'date-fns'
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
-import members from '774-link/src/data/members.json'
-import { Activity, Member, Schedule, Timeline } from '../models'
+import { members } from '../data'
+import { Activity, Schedule, Timeline } from '../models'
 
 export const parseFullMessage = (message: string): string[] => {
   const messages: string[] = []
@@ -55,11 +55,7 @@ export const parseMessage = (
     return undefined
   }
 
-  const filterMembers = Object.entries(members).reduce(
-    (carry, [id, member]) =>
-      member.groupId === groupId ? [...carry, { ...member, id }] : carry,
-    [] as (Member & { id: string })[]
-  )
+  const groupMembers = members.filter((member) => member.groupId === groupId)
 
   const activities: Activity[] = []
   // eslint-disable-next-line no-irregular-whitespace
@@ -77,12 +73,12 @@ export const parseMessage = (
     const description2 = match[5]
 
     for (const name of names) {
-      const member = filterMembers.find((member) => member.nameJa.match(name))
+      const member = groupMembers.find((member) => member.nameJa.match(name))
       if (!member) {
         continue
       }
 
-      const ownerId = member.id
+      const memberId = member.id
       let title = description1 ?? ''
       if (title && description2) {
         title += `(${description2})` ?? ''
@@ -91,7 +87,7 @@ export const parseMessage = (
 
       activities.push({
         groupId,
-        ownerId,
+        memberId,
         title,
         startedAt,
         source: 'twitter'

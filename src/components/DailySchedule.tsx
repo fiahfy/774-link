@@ -52,16 +52,30 @@ const Guideline: React.FC<{
   )
 }
 
-const DailyScheduleActivity: React.FC = () => {
+const DailyScheduleActivity: React.FC<{ activity: Activity }> = (props) => {
+  const { activity } = props
   return (
-    <div
+    <Box
+      alignItems="center"
+      display="flex"
+      justifyContent="space-around"
+      px={1}
       style={{
         backgroundColor: '#ccc',
         border: '1px solid red',
         width: '100%',
         height: '100%',
       }}
-    />
+    >
+      <Box minWidth={0}>
+        <Typography noWrap variant="subtitle2">
+          {activity.memberId}
+        </Typography>
+        <Typography noWrap variant="body2">
+          {activity.title}
+        </Typography>
+      </Box>
+    </Box>
   )
 }
 
@@ -153,7 +167,12 @@ const DailySchedule: React.FC<Props> = (props) => {
           )
         })}
         {nowY !== undefined && (
-          <Box position="absolute" top={guidlineHeight * nowY} width="100%">
+          <Box
+            id="primary-guideline"
+            position="absolute"
+            top={guidlineHeight * nowY}
+            width="100%"
+          >
             <Guideline primary title={format(now, 'HH:mm')} />
           </Box>
         )}
@@ -175,7 +194,7 @@ const DailySchedule: React.FC<Props> = (props) => {
                 top={rect.y}
                 width={`${rect.w * 100}%`}
               >
-                <DailyScheduleActivity />
+                <DailyScheduleActivity activity={activity} />
               </Box>
             ))}
           </Box>

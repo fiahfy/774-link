@@ -3,6 +3,7 @@
   "description": "Firebase Functions",
   "version": "0.0.1",
   "dependencies": {
+    "chalk": "^4.1.0",
     "date-fns": "^2.16.1",
     "date-fns-tz": "^1.0.12",
     "firebase-admin": "^9.4.2",
@@ -37,6 +38,6 @@
     "start": "npm run shell"
   },
   "workspaces": [
-    ".."
+    "../data"
   ]
 }

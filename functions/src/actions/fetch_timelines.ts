@@ -1,9 +1,10 @@
-import { addDays, addHours, getTime, isAfter, max } from 'date-fns'
+import { addDays, addHours, format, getTime, isAfter, max } from 'date-fns'
 import { groups } from '../data'
 import firebase from '../firebase'
 import { fetch } from '../utils/fetcher'
 import { parse } from '../utils/parser'
 import { Activity, Schedule, Timeline } from '../models'
+import { cyan, green, red, yellow } from 'chalk'
 
 const parseTimelines = (timelines: Timeline[], groupId: string) => {
   return timelines.reduce((carry, timeline) => {
@@ -16,27 +17,24 @@ const extractSchedule = (schedules: Schedule[]) => {
   return Object.values(
     schedules
       .reverse() // order by date asc
-      .reduce(
-        (carry, schedule) => {
-          const timestamp = getTime(schedule.date)
-          return {
-            ...carry,
-            [timestamp]: schedule, // overwrite with the latest schedule for each day
-          }
-        },
-        {} as { [timestamp: number]: Schedule }
-      )
+      .reduce((carry, schedule) => {
+        const timestamp = getTime(schedule.date)
+        return {
+          ...carry,
+          [timestamp]: schedule, // overwrite with the latest schedule for each day
+        }
+      }, {} as { [timestamp: number]: Schedule })
   )
 }
 
 const updateSchedule = async (schedule: Schedule, groupId: string) => {
-  console.log('updating activities of %s at %s', groupId, schedule.date)
+  console.log('updating activities at %s', format(schedule.date, 'P'))
 
   // between 06:00 to 30:00
   const from = max([schedule.publishedAt, addHours(schedule.date, 6)])
   const to = addHours(addDays(schedule.date, 1), 6)
 
-  console.log('between %s to %s', from, to)
+  console.log('between %s to %s', format(from, 'Pp'), format(to, 'Pp'))
 
   // upserting activities
   const activities = schedule.activities.filter((activity) => {
@@ -116,25 +114,34 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
     .commit()
 
   console.log(
-    '%d activities deleted, %d activities updated and %d activities inserted',
+    red('%d activities deleted') +
+      ', ' +
+      yellow('%d activities updated') +
+      ' and ' +
+      cyan('%d activities inserted'),
     deletings.length,
     updatings.length,
     insertings.length
   )
 }
 
-const getUid = (activity: Activity) => `${activity.memberId}_${activity.startedAt.getTime()}`
+const getUid = (activity: Activity) =>
+  `${activity.memberId}_${getTime(activity.startedAt)}`
 
 export const fetchTimelines = async (groupId?: string): Promise<void> => {
+  console.log(green('fetching timelines'))
   for (const group of groups) {
     if (groupId && group.id !== groupId) {
       continue
     }
+    console.log(green('fetching %s timelines'), group.id)
     const timelines = await fetch(group.twitterScreenName)
     const schedules = parseTimelines(timelines, group.id)
     const extracted = extractSchedule(schedules)
     for (const schedule of extracted) {
       await updateSchedule(schedule, group.id)
     }
+    console.log(green('fetched %s timelines'), group.id)
   }
+  console.log(green('fetched timelines'))
 }

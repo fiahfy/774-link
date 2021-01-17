@@ -53,5 +53,8 @@
     "release": "npm run build && npm run export && npm run deploy",
     "start": "next start",
     "test": "npm run lint"
-  }
+  },
+  "workspaces": [
+    "./data"
+  ]
 }

@@ -1,5 +1,5 @@
-import groupsJson from '774-link/src/data/groups.json'
-import membersJson from '774-link/src/data/members.json'
+import groupsJson from '774-link-data/groups.json'
+import membersJson from '774-link-data/members.json'
 import { Group, Member } from '../models'
 
 export const groups = groupsJson as Group[]

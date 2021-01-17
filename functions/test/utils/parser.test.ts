@@ -1,4 +1,4 @@
-import { advanceTo, clear } from 'jest-date-mock';
+import { advanceTo, clear } from 'jest-date-mock'
 import {
   parseFullMessage,
   extractDate,
@@ -81,25 +81,25 @@ describe('parseMessage', () => {
       ownerId: 'mary-saionji',
       title: '',
       startedAt: new Date('2021-01-11T12:00:00.000Z'),
+      source: 'twitter',
     })
     expect(result?.activities[1]).toEqual({
       groupId: 'honeystrap',
       ownerId: 'charlotte-shimamura',
       title: '',
       startedAt: new Date('2021-01-11T13:00:00.000Z'),
+      source: 'twitter',
     })
     expect(result?.activities[2]).toEqual({
       groupId: 'honeystrap',
       ownerId: 'patra-suou',
       title: '',
       startedAt: new Date('2021-01-11T15:00:00.000Z'),
+      source: 'twitter',
     })
   })
   it('should work with over 24:00', () => {
-    const result = parseMessage(
-      '1/11(水)\n25:00 ミコ\n\n',
-      'honeystrap'
-    )
+    const result = parseMessage('1/11(水)\n25:00 ミコ\n\n', 'honeystrap')
     expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
@@ -107,6 +107,7 @@ describe('parseMessage', () => {
       ownerId: 'mico-sekishiro',
       title: '',
       startedAt: new Date('2021-01-11T16:00:00.000Z'),
+      source: 'twitter',
     })
   })
   it('should work with title', () => {
@@ -121,6 +122,7 @@ describe('parseMessage', () => {
       ownerId: 'mico-sekishiro',
       title: 'メンバー限定配信',
       startedAt: new Date('2021-01-11T09:00:00.000Z'),
+      source: 'twitter',
     })
   })
   it('should work with title', () => {
@@ -135,6 +137,7 @@ describe('parseMessage', () => {
       ownerId: 'mico-sekishiro',
       title: 'メンバー限定配信',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
+      source: 'twitter',
     })
   })
   it('should work with title and description', () => {
@@ -149,6 +152,7 @@ describe('parseMessage', () => {
       ownerId: 'mary-saionji',
       title: '羽柴なつみさん企画参加(羽柴なつみさんch)',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
+      source: 'twitter',
     })
 
     result = parseMessage(
@@ -162,6 +166,7 @@ describe('parseMessage', () => {
       ownerId: 'haneru-inaba',
       title: 'コラボ(ルイス・キャミーさんch)',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
+      source: 'twitter',
     })
   })
   it('should work with collaboration', () => {
@@ -176,18 +181,21 @@ describe('parseMessage', () => {
       ownerId: 'ran-hinokuma',
       title: '',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
+      source: 'twitter',
     })
     expect(result?.activities[1]).toEqual({
       groupId: 'animare',
       ownerId: 'hikari-hira',
       title: '',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
+      source: 'twitter',
     })
     expect(result?.activities[2]).toEqual({
       groupId: 'animare',
       ownerId: 'rui-seshima',
       title: '',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
+      source: 'twitter',
     })
   })
 })

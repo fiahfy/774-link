@@ -13,6 +13,7 @@ import {
   subMinutes,
 } from 'date-fns'
 import { Activity } from '~/models'
+import { calc } from '~/utils/calculator'
 
 const titleWidth = 48
 const guidlineHeight = 66
@@ -52,7 +53,16 @@ const Guideline: React.FC<{
 }
 
 const DailyScheduleActivity: React.FC = () => {
-  return <div style={{ backgroundColor: '#ccc' }} />
+  return (
+    <div
+      style={{
+        backgroundColor: '#ccc',
+        border: '1px solid red',
+        width: '100%',
+        height: '100%',
+      }}
+    />
+  )
 }
 
 const useNow = (interval: number) => {
@@ -71,35 +81,25 @@ const useNow = (interval: number) => {
 const useActivityItems = (activities: Activity[]) => {
   const unitsPerHour = 4
   return React.useMemo(() => {
-    const grids = activities.reduce((carry, activity) => {
-      const y = Math.floor(
+    const ys = activities.map((activity) => {
+      return (
         (getHours(activity.startedAt) * 60 + getMinutes(activity.startedAt)) /
-          (60 / unitsPerHour)
+        (60 / unitsPerHour)
       )
-      const x =
-        [...Array<number>(carry.length).keys()].find(
-          (i) =>
-            carry[i]
-              ?.slice(y, y + unitsPerHour)
-              .every((id) => id === undefined) ?? true
-        ) ?? carry.length
-      console.log(x, y, carry)
-      if (x < carry.length) {
-        return carry.map((lane, i) => {
-          if (i !== x) {
-            return lane
-          }
-          return lane.map((id, j) => (j >= y && j <= y + 4 ? activity.id : id))
-        })
-      } else {
-        return [
-          ...carry,
-          Array(24 * unitsPerHour)
-            .fill(undefined)
-            .map((id, j) => (j >= y && j <= y + 4 ? activity.id : id)),
-        ]
+    }, [] as number[])
+    const data = calc(ys, unitsPerHour, 24 * unitsPerHour)
+    return activities.map((activity, i) => {
+      const { x, w } = data[i]
+      return {
+        rect: {
+          x,
+          w,
+          y: (ys[i] * guidlineHeight) / unitsPerHour,
+          h: guidlineHeight,
+        },
+        activity,
       }
-    }, [] as (string | undefined)[][])
+    })
   }, [activities])
 }
 
@@ -133,7 +133,7 @@ const DailySchedule: React.FC<Props> = (props) => {
     [now]
   )
 
-  const activityItems = useActivityItems(activities)
+  const items = useActivityItems(activities)
 
   return (
     <Box my={3}>
@@ -159,12 +159,26 @@ const DailySchedule: React.FC<Props> = (props) => {
         )}
         <Box
           height="100%"
-          paddingLeft={`${titleWidth}px`}
+          pl={`${titleWidth}px`}
           position="absolute"
+          pt={`${guidlineHeight / 2}px`}
           top={0}
           width="100%"
         >
-          <DailyScheduleActivity />
+          <Box position="relative">
+            {items.map(({ rect, activity }, index) => (
+              <Box
+                height={rect.h}
+                key={index}
+                left={`${rect.x * 100}%`}
+                position="absolute"
+                top={rect.y}
+                width={`${rect.w * 100}%`}
+              >
+                <DailyScheduleActivity />
+              </Box>
+            ))}
+          </Box>
         </Box>
       </Box>
     </Box>

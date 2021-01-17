@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { Schedule } from '@material-ui/icons'
-import { addDays, isSameDay } from 'date-fns'
+import { addDays, isSameDay, subDays } from 'date-fns'
 import firebase from '~/firebase'
 import DailySchedule from '~/components/DailySchedule'
 import { Activity } from '~/models'
@@ -47,15 +47,17 @@ const useSchedules = () => {
   >([])
   React.useEffect(() => {
     ;(async () => {
+      const startedAt = subDays(new Date(), 1)
+
       const schedules = [...Array<number>(3).keys()].reduce((carry, i) => {
-        const date = addDays(new Date(), i)
+        const date = addDays(startedAt, i)
         return [...carry, { date, activities: [] }]
       }, [] as { date: Date; activities: Activity[] }[])
 
       const snapshot = await firebase
         .firestore()
         .collection('activities')
-        .where('startedAt', '>', new Date())
+        .where('startedAt', '>', startedAt)
         .orderBy('startedAt', 'asc')
         .get()
       const activities = snapshot.docs
@@ -78,6 +80,7 @@ const useSchedules = () => {
             }
           })
         }, schedules)
+
       setSchedules(activities)
       setLoading(false)
     })()

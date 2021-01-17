@@ -6,7 +6,7 @@ import { Activity, Member, Schedule, Timeline } from '../models'
 export const parseFullMessage = (message: string): string[] => {
   const messages: string[] = []
 
-  const reg = /(\d+)\/(\d+)[(（].[）)]/g
+  const reg = /(\d+)\/(\d+)[(（].[）)]\s*\n/g
   let index = 0
   for (let i = 0; i < 10; i++) {
     const match = reg.exec(message)

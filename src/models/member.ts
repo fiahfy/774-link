@@ -1,8 +1,9 @@
 export type Member = {
   id: string
+  groupId: string
   name: string
   nameJa: string
-  groupId: string
+  themeHue: number
   twitterScreenName: string
   youtubeChannelId: string
 }

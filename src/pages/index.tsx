@@ -98,7 +98,7 @@ const useScrollToSelector = (selector: string) => {
       clearInterval(timer)
 
       const rect = e.getBoundingClientRect()
-      window.scrollTo(0, rect.top - window.innerHeight / 2)
+      window.scrollTo(0, rect.top + rect.height / 2 - window.innerHeight / 2)
     })
     return () => clearInterval(timer)
   }, [selector])

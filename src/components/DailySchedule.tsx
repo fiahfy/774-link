@@ -1,5 +1,12 @@
 import React from 'react'
-import { Box, Divider, makeStyles, Typography } from '@material-ui/core'
+import {
+  Box,
+  Divider,
+  makeStyles,
+  Typography,
+  useTheme,
+} from '@material-ui/core'
+import color from 'color'
 import {
   addDays,
   addMinutes,
@@ -14,6 +21,7 @@ import {
 } from 'date-fns'
 import { Activity } from '~/models'
 import { calc } from '~/utils/calculator'
+import { findMember } from '~/data'
 
 const titleWidth = 48
 const guidlineHeight = 66
@@ -52,8 +60,16 @@ const Guideline: React.FC<{
   )
 }
 
-const DailyScheduleActivity: React.FC<{ activity: Activity }> = (props) => {
+const ActivityTile: React.FC<{ activity: Activity }> = (props) => {
   const { activity } = props
+
+  const theme = useTheme()
+
+  const member = findMember(activity.memberId)
+  if (!member) {
+    return null
+  }
+
   return (
     <Box
       alignItems="center"
@@ -61,15 +77,15 @@ const DailyScheduleActivity: React.FC<{ activity: Activity }> = (props) => {
       justifyContent="space-around"
       px={1}
       style={{
-        backgroundColor: '#ccc',
-        border: '1px solid red',
-        width: '100%',
+        backgroundColor: `${color.hsl(member.themeHue, 33, 50).hex()}99`,
+        border: `1px solid ${theme.palette.divider}`,
         height: '100%',
+        width: '100%',
       }}
     >
       <Box minWidth={0}>
         <Typography noWrap variant="subtitle2">
-          {activity.memberId}
+          {member.nameJa}
         </Typography>
         <Typography noWrap variant="body2">
           {activity.title}
@@ -172,6 +188,7 @@ const DailySchedule: React.FC<Props> = (props) => {
             position="absolute"
             top={guidlineHeight * nowY}
             width="100%"
+            zIndex={1}
           >
             <Guideline primary title={format(now, 'HH:mm')} />
           </Box>
@@ -194,7 +211,7 @@ const DailySchedule: React.FC<Props> = (props) => {
                 top={rect.y}
                 width={`${rect.w * 100}%`}
               >
-                <DailyScheduleActivity activity={activity} />
+                <ActivityTile activity={activity} />
               </Box>
             ))}
           </Box>

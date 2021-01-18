@@ -1,169 +1,189 @@
 [
   {
     "id": "haneru-inaba",
+    "groupId": "animare",
     "name": "Haneru Inaba",
     "nameJa": "因幡はねる",
-    "groupId": "animare",
+    "themeHue": 33,
     "twitterScreenName": "Haneru_Inaba",
     "youtubeChannelId": "UC0Owc36U9lOyi9Gx9Ic-4qg"
   },
   {
     "id": "ichika-souya",
+    "groupId": "animare",
     "name": "Ichika Souya",
     "nameJa": "宗谷いちか",
-    "groupId": "animare",
+    "themeHue": 213,
     "twitterScreenName": "Ichika_Souya",
     "youtubeChannelId": "UC2kyQhzGOB-JPgcQX9OMgEw"
   },
   {
     "id": "ran-hinokuma",
+    "groupId": "animare",
     "name": "Ran Hinokuma",
     "nameJa": "日ノ隈らん",
-    "groupId": "animare",
+    "themeHue": 100,
     "twitterScreenName": "Ran_Hinokuma",
     "youtubeChannelId": "UCRvpMpzAXBRKJQuk-8-Sdvg"
   },
   {
     "id": "kuku-kazami",
+    "groupId": "animare",
     "name": "Kuku Kazami",
     "nameJa": "風見くく",
-    "groupId": "animare",
+    "themeHue": 20,
     "twitterScreenName": "Kuku_Kazami",
     "youtubeChannelId": "UCXp7sNC0F_qkjickvlYkg-Q"
   },
   {
     "id": "izumi-yunohara",
+    "groupId": "animare",
     "name": "Izumi Yunohara",
     "nameJa": "柚原いづみ",
-    "groupId": "animare",
+    "themeHue": 21,
     "twitterScreenName": "Izumi_Yunohara",
     "youtubeChannelId": "UCW8WKciBixmaqaGqrlTITRQ"
   },
   {
     "id": "mimi-shiromiya",
+    "groupId": "animare",
     "name": "Mimi Shiromiya",
     "nameJa": "白宮みみ",
-    "groupId": "animare",
+    "themeHue": 35,
     "twitterScreenName": "shiromiya_mimi",
     "youtubeChannelId": "UCtzCQnCT9E4o6U3mHHSHbQQ"
   },
   {
     "id": "natsumi-hashiba",
+    "groupId": "animare",
     "name": "Natsumi Hashiba",
     "nameJa": "羽柴なつみ",
-    "groupId": "animare",
+    "themeHue": 94,
     "twitterScreenName": "Natsumi_Hashiba",
     "youtubeChannelId": "UC_BlXOQe5OcRC7o0GX8kp8A"
   },
   {
     "id": "hikari-hira",
+    "groupId": "animare",
     "name": "Hikari Hira",
     "nameJa": "飛良ひかり",
-    "groupId": "animare",
+    "themeHue": 10,
     "twitterScreenName": "Hikari_Hira",
     "youtubeChannelId": "UCFsWaTQ7kT76jNNGeGIKNSA"
   },
   {
     "id": "rui-seshima",
+    "groupId": "animare",
     "name": "Rui Seshima",
     "nameJa": "瀬島るい",
-    "groupId": "animare",
+    "themeHue": 353,
     "twitterScreenName": "Rui_Seshima",
     "youtubeChannelId": "UC_WOBIopwUih0rytRnr_1Ag"
   },
   {
     "id": "patra-suou",
+    "groupId": "honeystrap",
     "name": "Patra Suou",
     "nameJa": "周防パトラ",
-    "groupId": "honeystrap",
+    "themeHue": 340,
     "twitterScreenName": "Patra_HNST",
     "youtubeChannelId": "UCeLzT-7b2PBcunJplmWtoDg"
   },
   {
     "id": "charlotte-shimamura",
+    "groupId": "honeystrap",
     "name": "Charlotte Shimamura",
     "nameJa": "島村シャルロット",
-    "groupId": "honeystrap",
+    "themeHue": 219,
     "twitterScreenName": "Charlotte_HNST",
     "youtubeChannelId": "UCYTz3uIgwVY3ZU-IQJS8r3A"
   },
   {
     "id": "mary-saionji",
+    "groupId": "honeystrap",
     "name": "Mary Saionji",
     "nameJa": "西園寺メアリ",
-    "groupId": "honeystrap",
+    "themeHue": 311,
     "twitterScreenName": "Mary_HNST",
     "youtubeChannelId": "UCwePpiw1ocZRSNSkpKvVISw"
   },
   {
     "id": "mico-sekishiro",
+    "groupId": "honeystrap",
     "name": "Mico Sekishiro",
     "nameJa": "堰代ミコ",
-    "groupId": "honeystrap",
+    "themeHue": 78,
     "twitterScreenName": "Mico_HNST",
     "youtubeChannelId": "UCDh2bWI5EDu7PavqwICkVpA"
   },
   {
     "id": "rene-ryugasaki",
+    "groupId": "sugarlyric",
     "name": "Rene Ryugasaki",
     "nameJa": "龍ヶ崎リン",
-    "groupId": "sugarlyric",
+    "themeHue": 3,
     "twitterScreenName": "Rene_Ryugasaki",
     "youtubeChannelId": "UC2hc-00y-MSR6eYA4eQ4tjQ"
   },
   {
     "id": "anna-kojo",
+    "groupId": "sugarlyric",
     "name": "Anna Kojo",
     "nameJa": "虎城アンナ",
-    "groupId": "sugarlyric",
+    "themeHue": 268,
     "twitterScreenName": "Anna_Kojo",
     "youtubeChannelId": "UCvPPBoTOor5gm8zSlE2tg4w"
   },
   {
     "id": "chris-shishio",
-    "name": "Chris Shishio",
-    "nameJa": "獅子王クリス",
     "groupId": "sugarlyric",
+    "nameJa": "獅子王クリス",
+    "themeHue": 180,
     "twitterScreenName": "ChrisShishio",
     "youtubeChannelId": "UC--A2dwZW7-M2kID0N6_lfA"
   },
   {
     "id": "uge-and",
+    "groupId": "vapart",
     "name": "Uge And",
     "nameJa": "杏戸ゆげ",
-    "groupId": "vapart",
+    "themeHue": 192,
     "twitterScreenName": "Uge_And",
     "youtubeChannelId": "UC3EhsuKdEkI99TWZwZgWutg"
   },
   {
     "id": "kanon-kanade",
+    "groupId": "vapart",
     "name": "Kanon Kanade",
     "nameJa": "花奏かのん",
-    "groupId": "vapart",
+    "themeHue": 168,
     "twitterScreenName": "_kanade_kanon",
     "youtubeChannelId": "UCmqrvfLMws-GLGHQcB5dasg"
   },
   {
     "id": "anko-kisaki",
+    "groupId": "vapart",
     "name": "Anko Kisaki",
     "nameJa": "季咲あんこ",
-    "groupId": "vapart",
+    "themeHue": 0,
     "twitterScreenName": "Anko_Kisaki",
     "youtubeChannelId": "UChXm-xAYPfygrbyLo2yCASQ"
   },
   {
     "id": "wat-huma",
+    "groupId": "vapart",
     "name": "Wat Huma",
     "nameJa": "不磨わっと",
-    "groupId": "vapart",
+    "themeHue": 313,
     "twitterScreenName": "Wat_Huma",
     "youtubeChannelId": "UCV4EoK6BVNl7wxuxpUvvSWA"
   },
   {
     "id": "met-komori",
+    "groupId": "vapart",
     "name": "Met Komori",
     "nameJa": "小森めと",
-    "groupId": "vapart",
+    "themeHue": 4,
     "twitterScreenName": "Met_Komori",
     "youtubeChannelId": "UCzUNASdzI4PV5SlqtYwAkKQ"
   }

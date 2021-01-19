@@ -19,9 +19,10 @@ import {
   startOfDay,
   subMinutes,
 } from 'date-fns'
+import Image from '~/components/Image'
+import { findMember } from '~/data'
 import { Activity } from '~/models'
 import { calc } from '~/utils/calculator'
-import { findMember } from '~/data'
 
 const titleWidth = 48
 const guidlineHeight = 66
@@ -72,10 +73,7 @@ const ActivityTile: React.FC<{ activity: Activity }> = (props) => {
 
   return (
     <Box
-      alignItems="center"
       display="flex"
-      justifyContent="space-around"
-      px={1}
       style={{
         backgroundColor: `${color.hsl(member.themeHue, 33, 50).hex()}99`,
         border: `1px solid ${theme.palette.divider}`,
@@ -83,13 +81,27 @@ const ActivityTile: React.FC<{ activity: Activity }> = (props) => {
         width: '100%',
       }}
     >
-      <Box minWidth={0}>
-        <Typography noWrap variant="subtitle2">
-          {member.nameJa}
-        </Typography>
-        <Typography noWrap variant="body2">
-          {activity.title}
-        </Typography>
+      <Box
+        alignItems="center"
+        display="flex"
+        flexGrow={1}
+        justifyContent="center"
+        minWidth={0}
+        px={1}
+        zIndex={1}
+      >
+        <Image
+          src={`/img/members/${member.id}_64x64.png`}
+          style={{ height: '100%' }}
+        />
+        <Box minWidth={0} ml={1}>
+          <Typography noWrap variant="subtitle2">
+            {member.nameJa}
+          </Typography>
+          <Typography noWrap variant="body2">
+            {activity.title}
+          </Typography>
+        </Box>
       </Box>
     </Box>
   )

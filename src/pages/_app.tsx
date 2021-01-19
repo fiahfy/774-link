@@ -1,8 +1,7 @@
-import React from 'react'
-import Head from 'next/head'
+import { CssBaseline, ThemeProvider } from '@material-ui/core'
 import { AppProps } from 'next/app'
-import { ThemeProvider } from '@material-ui/core/styles'
-import CssBaseline from '@material-ui/core/CssBaseline'
+import Head from 'next/head'
+import React from 'react'
 import theme from '~/theme'
 
 export default function MyApp(props: AppProps): JSX.Element {

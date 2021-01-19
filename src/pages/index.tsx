@@ -1,5 +1,3 @@
-import React from 'react'
-import { NextPage } from 'next'
 import {
   AppBar,
   Backdrop,
@@ -7,14 +5,16 @@ import {
   BottomNavigationAction,
   CircularProgress,
   Container,
-  makeStyles,
   Toolbar,
   Typography,
+  makeStyles,
 } from '@material-ui/core'
 import { Schedule } from '@material-ui/icons'
 import { addDays, isSameDay, startOfDay, subDays } from 'date-fns'
-import firebase from '~/firebase'
+import { NextPage } from 'next'
+import React from 'react'
 import DailySchedule from '~/components/DailySchedule'
+import firebase from '~/firebase'
 import { Activity } from '~/models'
 
 const useStyles = makeStyles((theme) => ({

@@ -1,4 +1,4 @@
-import { Box, Divider, makeStyles, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import React from 'react'
 import {
   addDays,
@@ -12,46 +12,14 @@ import {
   startOfDay,
   subMinutes,
 } from 'date-fns'
-import ActivityTile from '~/components/ActivityTile'
+import ScheduleActivityTile from '~/components/ScheduleActivityTile'
+import ScheduleHorizontalLine from '~/components/ScheduleHorizontalLine'
 import { Activity } from '~/models'
 import { calc } from '~/utils/calculator'
+import { useRouter } from 'next/router'
 
-const titleWidth = 48
-const guidlineHeight = 66
-
-const useStyles = makeStyles((theme) => ({
-  primaryDivider: {
-    backgroundColor: theme.palette.primary.dark,
-  },
-}))
-
-const Guideline: React.FC<{
-  hideTitle?: boolean
-  primary?: boolean
-  title: string
-}> = (props) => {
-  const { hideTitle, primary, title } = props
-
-  const classes = useStyles()
-
-  return (
-    <Box alignItems="center" display="flex" height={guidlineHeight}>
-      <Box textAlign="center" width={titleWidth}>
-        {!hideTitle && (
-          <Typography
-            color={primary ? 'primary' : 'textSecondary'}
-            variant="body2"
-          >
-            {title}
-          </Typography>
-        )}
-      </Box>
-      <Box clone flexGrow={1}>
-        <Divider className={primary ? classes.primaryDivider : undefined} />
-      </Box>
-    </Box>
-  )
-}
+const labelWidth = 48
+const tileHeight = 66
 
 const useNow = (interval: number) => {
   const [now, setNow] = React.useState(new Date())
@@ -82,8 +50,8 @@ const useActivityItems = (activities: Activity[]) => {
         rect: {
           x,
           w,
-          y: (ys[i] * guidlineHeight) / unitsPerHour,
-          h: guidlineHeight,
+          y: (ys[i] * tileHeight) / unitsPerHour,
+          h: tileHeight,
         },
         activity,
       }
@@ -101,6 +69,7 @@ const DailySchedule: React.FC<Props> = (props) => {
 
   const date = startOfDay(initialDate)
 
+  const router = useRouter()
   const now = useNow(1000)
 
   const nowY = React.useMemo(() => {
@@ -133,10 +102,10 @@ const DailySchedule: React.FC<Props> = (props) => {
           const d = setHours(date, hour)
           const hideTitle = closeToNow(d)
           return (
-            <Guideline
+            <ScheduleHorizontalLine
               hideTitle={hideTitle}
               key={hour}
-              title={`${String(hour).padStart(2, '0')}:00`}
+              label={`${String(hour).padStart(2, '0')}:00`}
             />
           )
         })}
@@ -144,18 +113,18 @@ const DailySchedule: React.FC<Props> = (props) => {
           <Box
             id="primary-guideline"
             position="absolute"
-            top={guidlineHeight * nowY}
+            top={tileHeight * nowY}
             width="100%"
             zIndex={1}
           >
-            <Guideline primary title={format(now, 'HH:mm')} />
+            <ScheduleHorizontalLine label={format(now, 'HH:mm')} primary />
           </Box>
         )}
         <Box
           height="100%"
-          pl={`${titleWidth}px`}
+          pl={`${labelWidth}px`}
           position="absolute"
-          pt={`${guidlineHeight / 2}px`}
+          pt={`${tileHeight / 2}px`}
           top={0}
           width="100%"
         >
@@ -169,7 +138,12 @@ const DailySchedule: React.FC<Props> = (props) => {
                 top={rect.y}
                 width={`${rect.w * 100}%`}
               >
-                <ActivityTile activity={activity} />
+                <ScheduleActivityTile
+                  activity={activity}
+                  onClick={() => {
+                    router.push(`/activities/${activity.id}`)
+                  }}
+                />
               </Box>
             ))}
           </Box>

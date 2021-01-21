@@ -18,7 +18,7 @@ export default function MyApp(props: AppProps): JSX.Element {
   return (
     <React.Fragment>
       <Head>
-        <title>774.link</title>
+        <title>774.link (β)</title>
         <meta
           content="minimum-scale=1, initial-scale=1, width=device-width"
           name="viewport"

@@ -1,14 +1,14 @@
-import { Box, Typography, useTheme } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import Color from 'color'
 import React from 'react'
 import Image from '~/components/Image'
 import { findMember } from '~/data'
 import { Activity } from '~/models'
 
-const ActivityTile: React.FC<{ activity: Activity }> = (props) => {
-  const { activity } = props
+type Props = { activity: Activity; onClick?: () => void }
 
-  const theme = useTheme()
+const ActivityTile: React.FC<Props> = (props) => {
+  const { activity, onClick } = props
 
   const member = findMember(activity.memberId)
   if (!member) {
@@ -18,9 +18,10 @@ const ActivityTile: React.FC<{ activity: Activity }> = (props) => {
   return (
     <Box
       display="flex"
+      onClick={onClick}
       style={{
         backgroundColor: `${Color.hsl(member.themeHue, 33, 50).hex()}99`,
-        border: `1px solid ${theme.palette.divider}`,
+        cursor: onClick && 'pointer',
         height: '100%',
         width: '100%',
       }}
@@ -31,6 +32,7 @@ const ActivityTile: React.FC<{ activity: Activity }> = (props) => {
         flexGrow={1}
         justifyContent="center"
         minWidth={0}
+        overflow="hidden"
         px={1}
         zIndex={1}
       >

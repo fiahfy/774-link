@@ -9,11 +9,11 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core'
-import { Schedule } from '@material-ui/icons'
+import { Schedule as ScheduleIcon } from '@material-ui/icons'
 import { addDays, isSameDay, startOfDay, subDays } from 'date-fns'
 import { NextPage } from 'next'
 import React from 'react'
-import DailySchedule from '~/components/DailySchedule'
+import Schedule from '~/components/Schedule'
 import firebase from '~/firebase'
 import { Activity } from '~/models'
 
@@ -121,7 +121,7 @@ const Index: NextPage = () => {
             src="/icon_transparent.png"
           />
           <Typography noWrap variant="h6">
-            774.link
+            774.link (β)
           </Typography>
         </Toolbar>
       </AppBar>
@@ -129,7 +129,7 @@ const Index: NextPage = () => {
         <div className={classes.toolbarSpacer} />
         <Container className={classes.container} maxWidth="md">
           {schedules.map((schedule, index) => (
-            <DailySchedule
+            <Schedule
               activities={schedule.activities}
               date={schedule.date}
               key={index}

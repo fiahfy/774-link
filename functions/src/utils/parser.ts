@@ -68,9 +68,12 @@ export const parseMessage = (
 
     const hours = Number(match[1])
     const minutes = Number(match[2])
-    const names = match[3].replace('コラボ', '').split('/')
+    const title = match[3]
     const description1 = match[4]
     const description2 = match[5]
+
+    const m = `${title}/${description1}/${description2}`.match(/([ぁ-ん]+|[ァ-ヶ]+)/g)
+    const names = m ? Array.from(m) : []
 
     for (const name of names) {
       const member = groupMembers.find((member) => member.nameJa.match(name))
@@ -79,16 +82,17 @@ export const parseMessage = (
       }
 
       const memberId = member.id
-      let title = description1 ?? ''
-      if (title && description2) {
-        title += `(${description2})` ?? ''
+      let description = description1 ?? ''
+      if (description && description2) {
+        description += `(${description2})` ?? ''
       }
       const startedAt = addMinutes(addHours(date, hours), minutes)
 
       activities.push({
         groupId,
         memberId,
-        title,
+        title: '',
+        description,
         startedAt,
         source: 'twitter'
       })

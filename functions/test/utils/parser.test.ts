@@ -78,22 +78,25 @@ describe('parseMessage', () => {
     expect(result?.activities.length).toBe(3)
     expect(result?.activities[0]).toEqual({
       groupId: 'honeystrap',
-      ownerId: 'mary-saionji',
+      memberId: 'mary-saionji',
       title: '',
+      description: '',
       startedAt: new Date('2021-01-11T12:00:00.000Z'),
       source: 'twitter',
     })
     expect(result?.activities[1]).toEqual({
       groupId: 'honeystrap',
-      ownerId: 'charlotte-shimamura',
+      memberId: 'charlotte-shimamura',
       title: '',
+      description: '',
       startedAt: new Date('2021-01-11T13:00:00.000Z'),
       source: 'twitter',
     })
     expect(result?.activities[2]).toEqual({
       groupId: 'honeystrap',
-      ownerId: 'patra-suou',
+      memberId: 'patra-suou',
       title: '',
+      description: '',
       startedAt: new Date('2021-01-11T15:00:00.000Z'),
       source: 'twitter',
     })
@@ -104,8 +107,9 @@ describe('parseMessage', () => {
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
       groupId: 'honeystrap',
-      ownerId: 'mico-sekishiro',
+      memberId: 'mico-sekishiro',
       title: '',
+      description: '',
       startedAt: new Date('2021-01-11T16:00:00.000Z'),
       source: 'twitter',
     })
@@ -119,8 +123,9 @@ describe('parseMessage', () => {
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
       groupId: 'honeystrap',
-      ownerId: 'mico-sekishiro',
-      title: 'メンバー限定配信',
+      memberId: 'mico-sekishiro',
+      title: '',
+      description: 'メンバー限定配信',
       startedAt: new Date('2021-01-11T09:00:00.000Z'),
       source: 'twitter',
     })
@@ -134,8 +139,9 @@ describe('parseMessage', () => {
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
       groupId: 'honeystrap',
-      ownerId: 'mico-sekishiro',
-      title: 'メンバー限定配信',
+      memberId: 'mico-sekishiro',
+      title: '',
+      description: 'メンバー限定配信',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       source: 'twitter',
     })
@@ -149,8 +155,9 @@ describe('parseMessage', () => {
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
       groupId: 'honeystrap',
-      ownerId: 'mary-saionji',
-      title: '羽柴なつみさん企画参加(羽柴なつみさんch)',
+      memberId: 'mary-saionji',
+      title: '',
+      description: '羽柴なつみさん企画参加(羽柴なつみさんch)',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       source: 'twitter',
     })
@@ -163,14 +170,38 @@ describe('parseMessage', () => {
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
       groupId: 'animare',
-      ownerId: 'haneru-inaba',
-      title: 'コラボ(ルイス・キャミーさんch)',
+      memberId: 'haneru-inaba',
+      title: '',
+      description: 'コラボ(ルイス・キャミーさんch)',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       source: 'twitter',
     })
   })
   it('should work with collaboration', () => {
-    const result = parseMessage(
+    let result = parseMessage(
+      '1/11(水)\n19:00 らん(ひかりコラボ)\n\n',
+      'animare'
+    )
+    expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.activities.length).toBe(2)
+    expect(result?.activities[0]).toEqual({
+      groupId: 'animare',
+      memberId: 'ran-hinokuma',
+      title: '',
+      description: 'ひかりコラボ',
+      startedAt: new Date('2021-01-11T10:00:00.000Z'),
+      source: 'twitter',
+    })
+    expect(result?.activities[1]).toEqual({
+      groupId: 'animare',
+      memberId: 'hikari-hira',
+      title: '',
+      description: 'ひかりコラボ',
+      startedAt: new Date('2021-01-11T10:00:00.000Z'),
+      source: 'twitter',
+    })
+
+    result = parseMessage(
       '1/11(水)\n19:00 らん/ひかり/るいコラボ\n\n',
       'animare'
     )
@@ -178,22 +209,25 @@ describe('parseMessage', () => {
     expect(result?.activities.length).toBe(3)
     expect(result?.activities[0]).toEqual({
       groupId: 'animare',
-      ownerId: 'ran-hinokuma',
+      memberId: 'ran-hinokuma',
       title: '',
+      description: '',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       source: 'twitter',
     })
     expect(result?.activities[1]).toEqual({
       groupId: 'animare',
-      ownerId: 'hikari-hira',
+      memberId: 'hikari-hira',
       title: '',
+      description: '',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       source: 'twitter',
     })
     expect(result?.activities[2]).toEqual({
       groupId: 'animare',
-      ownerId: 'rui-seshima',
+      memberId: 'rui-seshima',
       title: '',
+      description: '',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       source: 'twitter',
     })

@@ -2,6 +2,7 @@ export type Activity = {
   groupId: string
   memberId: string
   title: string
+  description: string
   startedAt: Date
   source: string
 }

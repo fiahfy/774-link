@@ -2,6 +2,7 @@ import { CssBaseline, ThemeProvider } from '@material-ui/core'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import React from 'react'
+import Layout from '~/components/Layout'
 import theme from '~/theme'
 
 export default function MyApp(props: AppProps): JSX.Element {
@@ -27,7 +28,9 @@ export default function MyApp(props: AppProps): JSX.Element {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ThemeProvider>
     </React.Fragment>
   )

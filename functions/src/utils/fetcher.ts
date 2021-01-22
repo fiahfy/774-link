@@ -17,6 +17,6 @@ export const fetch = async (screenName: string): Promise<Timeline[]> => {
   })
   return data.map(d => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return { createdAt: new Date(d.created_at), fullText: (d as any).full_text }
+    return { id: d.id_str, createdAt: new Date(d.created_at), fullText: (d as any).full_text }
   })
 }

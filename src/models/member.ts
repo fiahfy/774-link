@@ -4,6 +4,6 @@ export type Member = {
   name: string
   nameJa: string
   themeHue: number
-  twitterScreenName: string
-  youtubeChannelId: string
+  screenName: string
+  channelId: string
 }

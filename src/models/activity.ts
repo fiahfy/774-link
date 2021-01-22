@@ -5,5 +5,6 @@ export type Activity = {
   title: string
   description: string
   startedAt: Date
-  source: string
+  timelineId: string
+  videoId: string
 }

@@ -1,44 +1,10 @@
-import {
-  AppBar,
-  Backdrop,
-  BottomNavigation,
-  BottomNavigationAction,
-  CircularProgress,
-  Container,
-  Toolbar,
-  Typography,
-  makeStyles,
-} from '@material-ui/core'
-import { Schedule as ScheduleIcon } from '@material-ui/icons'
+import { Backdrop, CircularProgress, Container } from '@material-ui/core'
 import { addDays, isSameDay, startOfDay, subDays } from 'date-fns'
 import { NextPage } from 'next'
 import React from 'react'
 import Schedule from '~/components/Schedule'
 import firebase from '~/firebase'
 import { Activity } from '~/models'
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    // display: 'flex',
-    // flexDirection: 'column',
-    // minHeight: '100vh',
-  },
-  icon: {
-    marginRight: theme.spacing(1),
-  },
-  toolbarSpacer: theme.mixins.toolbar,
-  content: {
-    // flexGrow: 1,
-    // // height: '100vh',
-    // overflow: 'auto',
-  },
-  container: {},
-  bottomNavigation: {
-    position: 'fixed',
-    bottom: 0,
-    width: '100%',
-  },
-}))
 
 const useSchedules = () => {
   const [loading, setLoading] = React.useState(true)
@@ -105,46 +71,25 @@ const useScrollToSelector = (selector: string) => {
 }
 
 const Index: NextPage = () => {
-  const classes = useStyles()
-
   const { loading, schedules } = useSchedules()
 
   useScrollToSelector('#primary-guideline')
 
   return (
-    <div className={classes.root}>
-      <AppBar position="fixed">
-        <Toolbar>
-          <img
-            className={classes.icon}
-            height="44"
-            src="/icon_transparent.png"
+    <>
+      <Container maxWidth="md">
+        {schedules.map((schedule, index) => (
+          <Schedule
+            activities={schedule.activities}
+            date={schedule.date}
+            key={index}
           />
-          <Typography noWrap variant="h6">
-            774.link (β)
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <main className={classes.content}>
-        <div className={classes.toolbarSpacer} />
-        <Container className={classes.container} maxWidth="md">
-          {schedules.map((schedule, index) => (
-            <Schedule
-              activities={schedule.activities}
-              date={schedule.date}
-              key={index}
-            />
-          ))}
-        </Container>
-        {/* <div className={classes.toolbarSpacer} /> */}
-      </main>
-      {/* <BottomNavigation className={classes.bottomNavigation} showLabels>
-        <BottomNavigationAction icon={<Schedule />} label="Schedule" />
-      </BottomNavigation> */}
+        ))}
+      </Container>
       <Backdrop open={loading}>
         <CircularProgress />
       </Backdrop>
-    </div>
+    </>
   )
 }
 

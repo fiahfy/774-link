@@ -1,15 +1,8 @@
-import { Box, Divider, makeStyles, Typography } from '@material-ui/core'
+import { Box, Divider, Typography, useTheme } from '@material-ui/core'
 import React from 'react'
 
 const labelWidth = 48
 const tileHeight = 66
-
-const useStyles = makeStyles((theme) => ({
-  primaryDivider: {
-    backgroundColor: theme.palette.primary.dark,
-    height: 1,
-  },
-}))
 
 type Props = {
   hideTitle?: boolean
@@ -20,7 +13,7 @@ type Props = {
 const ScheduleHorizontalLine: React.FC<Props> = (props) => {
   const { hideTitle, label, primary } = props
 
-  const classes = useStyles()
+  const theme = useTheme()
 
   return (
     <Box alignItems="center" display="flex" height={tileHeight}>
@@ -35,7 +28,16 @@ const ScheduleHorizontalLine: React.FC<Props> = (props) => {
         )}
       </Box>
       <Box clone flexGrow={1}>
-        <Divider className={primary ? classes.primaryDivider : undefined} />
+        <Divider
+          style={
+            primary
+              ? {
+                  backgroundColor: theme.palette.primary.dark,
+                  height: 1,
+                }
+              : undefined
+          }
+        />
       </Box>
     </Box>
   )

@@ -1,3 +1,4 @@
+import { time } from 'console'
 import { addHours, addMinutes, getMonth, getYear } from 'date-fns'
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 import { members } from '../data'
@@ -72,7 +73,9 @@ export const parseMessage = (
     const description1 = match[4]
     const description2 = match[5]
 
-    const m = `${title}/${description1}/${description2}`.match(/([ぁ-ん]+|[ァ-ヶ]+)/g)
+    const m = `${title}/${description1}/${description2}`.match(
+      /([ぁ-ん]+|[ァ-ヶ]+)/g
+    )
     const names = m ? Array.from(m) : []
 
     for (const name of names) {
@@ -91,16 +94,17 @@ export const parseMessage = (
       activities.push({
         groupId,
         memberId,
+        timelineId: '',
+        videoId: '',
         title: '',
         description,
         startedAt,
-        source: 'twitter'
       })
     }
   }
 
   return {
-    date,
+    scheduledAt: date,
     activities,
   }
 }
@@ -109,7 +113,19 @@ export const parse = (timeline: Timeline, groupId: string): Schedule[] => {
   const publishedAt = new Date(timeline.createdAt)
   const messages = parseFullMessage(timeline.fullText)
   return messages.reduce((carry, message) => {
-    const result = parseMessage(message, groupId)
-    return result ? [...carry, { ...result, publishedAt }] : carry
+    const schedule = parseMessage(message, groupId)
+    return schedule
+      ? [
+          ...carry,
+          {
+            ...schedule,
+            publishedAt,
+            activities: schedule.activities.map((activity) => ({
+              ...activity,
+              timelineId: timeline.id,
+            })),
+          },
+        ]
+      : carry
   }, [] as Schedule[])
 }

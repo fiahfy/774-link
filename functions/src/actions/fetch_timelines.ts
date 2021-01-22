@@ -18,7 +18,7 @@ const extractSchedule = (schedules: Schedule[]) => {
     schedules
       .reverse() // order by date asc
       .reduce((carry, schedule) => {
-        const timestamp = getTime(schedule.date)
+        const timestamp = getTime(schedule.scheduledAt)
         return {
           ...carry,
           [timestamp]: schedule, // overwrite with the latest schedule for each day
@@ -28,11 +28,11 @@ const extractSchedule = (schedules: Schedule[]) => {
 }
 
 const updateSchedule = async (schedule: Schedule, groupId: string) => {
-  console.log('updating activities at %s', format(schedule.date, 'P'))
+  console.log('updating activities at %s', format(schedule.scheduledAt, 'P'))
 
   // between 06:00 to 30:00
-  const from = max([schedule.publishedAt, addHours(schedule.date, 6)])
-  const to = addHours(addDays(schedule.date, 1), 6)
+  const from = max([schedule.publishedAt, addHours(schedule.scheduledAt, 6)])
+  const to = addHours(addDays(schedule.scheduledAt, 1), 6)
 
   console.log('between %s to %s', format(from, 'Pp'), format(to, 'Pp'))
 
@@ -135,7 +135,7 @@ export const fetchTimelines = async (groupId?: string): Promise<void> => {
       continue
     }
     console.log(green('fetching %s timelines'), group.id)
-    const timelines = await fetch(group.twitterScreenName)
+    const timelines = await fetch(group.screenName)
     const schedules = parseTimelines(timelines, group.id)
     const extracted = extractSchedule(schedules)
     for (const schedule of extracted) {

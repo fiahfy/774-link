@@ -1,14 +1,16 @@
 import { Box, Typography } from '@material-ui/core'
 import Color from 'color'
 import React from 'react'
-import Image from '~/components/Image'
 import { findMember } from '~/data'
+import { useSrcSet } from '~/hooks/useSrcSet'
 import { Activity } from '~/models'
 
 type Props = { activity: Activity; onClick?: () => void }
 
 const ActivityTile: React.FC<Props> = (props) => {
   const { activity, onClick } = props
+
+  const srcSet = useSrcSet()
 
   const member = findMember(activity.memberId)
   if (!member) {
@@ -36,8 +38,8 @@ const ActivityTile: React.FC<Props> = (props) => {
         px={1}
         zIndex={1}
       >
-        <Image
-          src={`/img/members/${member.id}_64x64.png`}
+        <img
+          {...srcSet(`/img/members/${member.id}_64x64.png`)}
           style={{ height: '100%' }}
         />
         <Box minWidth={0} ml={1}>
@@ -45,7 +47,7 @@ const ActivityTile: React.FC<Props> = (props) => {
             {member.nameJa}
           </Typography>
           <Typography noWrap variant="body2">
-            {activity.title}
+            {activity.title || activity.description}
           </Typography>
         </Box>
       </Box>

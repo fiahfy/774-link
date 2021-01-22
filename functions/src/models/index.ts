@@ -4,14 +4,15 @@ export type Activity = {
   title: string
   description: string
   startedAt: Date
-  source: string
+  timelineId: string
+  videoId: string
 }
 
 export type Group = {
   id: string
   name: string
   nameJa: string
-  twitterScreenName: string
+  screenName: string
 }
 
 export type Member = {
@@ -19,17 +20,18 @@ export type Member = {
   name: string
   nameJa: string
   groupId: string
-  twitterScreenName: string
-  youtubeChannelId: string
+  screenName: string
+  channelId: string
 }
 
 export type Schedule = {
-  date: Date
+  scheduledAt: Date
   publishedAt: Date
   activities: Activity[]
 }
 
 export type Timeline = {
+  id: string
   fullText: string
   createdAt: Date
 }

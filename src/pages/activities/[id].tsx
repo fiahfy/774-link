@@ -14,7 +14,7 @@ import { findMember } from '~/data'
 import firebase from '~/firebase'
 import { useSrcSet } from '~/hooks/useSrcSet'
 import { Activity } from '~/models'
-import Error from '../_error'
+import NotFound from '~/pages/404'
 
 const useActivity = (id: string | undefined) => {
   const [loading, setLoading] = React.useState(true)
@@ -60,13 +60,13 @@ const Detail: NextPage = () => {
   }
 
   if (!activity) {
-    return <Error statusCode={404} />
+    return <NotFound />
   }
 
   const member = findMember(activity?.memberId)
 
   if (!member) {
-    return <Error statusCode={500} />
+    return <NotFound />
   }
 
   return (

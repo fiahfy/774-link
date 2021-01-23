@@ -5,7 +5,7 @@ import React from 'react'
 import Layout from '~/components/Layout'
 import theme from '~/theme'
 
-export default function MyApp(props: AppProps): JSX.Element {
+const MyApp = (props: AppProps): JSX.Element => {
   const { Component, pageProps } = props
 
   React.useEffect(() => {
@@ -35,3 +35,5 @@ export default function MyApp(props: AppProps): JSX.Element {
     </React.Fragment>
   )
 }
+
+export default MyApp

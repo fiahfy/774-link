@@ -8,11 +8,11 @@ import {
   useTheme,
 } from '@material-ui/core'
 import { NextPage } from 'next'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { findMember } from '~/data'
 import firebase from '~/firebase'
-import { useSrcSet } from '~/hooks/useSrcSet'
 import { Activity } from '~/models'
 import NotFound from '~/pages/404'
 
@@ -44,7 +44,6 @@ const useActivity = (id: string | undefined) => {
 const Detail: NextPage = () => {
   const theme = useTheme()
   const router = useRouter()
-  const srcSet = useSrcSet()
 
   let { id } = router.query
   id = Array.isArray(id) ? id[0] : id
@@ -73,14 +72,19 @@ const Detail: NextPage = () => {
     <Container maxWidth="md">
       <Box alignItems="center" display="flex">
         <Avatar
-          alt={member.nameJa}
-          {...srcSet(`/img/members/${member.id}_64x64.png`)}
+          alt={member.name}
           style={{
             width: 64,
             height: 64,
             marginRight: theme.spacing(2),
           }}
-        />
+        >
+          <Image
+            height={64}
+            src={`/img/members/${member.id}_64x64@2x.png`}
+            width={64}
+          />
+        </Avatar>
         <Typography>{member.nameJa}</Typography>
       </Box>
     </Container>

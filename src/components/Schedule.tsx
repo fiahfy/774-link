@@ -20,7 +20,7 @@ import { Activity } from '~/models'
 import { calc } from '~/utils/calculator'
 
 const labelWidth = 48
-const tileHeight = 66
+const tileHeight = 64
 
 const useActivityItems = (activities: Activity[]) => {
   const unitsPerHour = 4

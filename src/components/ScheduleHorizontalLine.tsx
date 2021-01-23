@@ -2,7 +2,7 @@ import { Box, Divider, Typography, useTheme } from '@material-ui/core'
 import React from 'react'
 
 const labelWidth = 48
-const tileHeight = 66
+const tileHeight = 64
 
 type Props = {
   hideTitle?: boolean

@@ -1,10 +1,10 @@
 import { Box, Typography } from '@material-ui/core'
 import Color from 'color'
 import { addHours, isAfter, isBefore } from 'date-fns'
+import Image from 'next/image'
 import React from 'react'
 import { findMember } from '~/data'
 import { useNow } from '~/hooks/useNow'
-import { useSrcSet } from '~/hooks/useSrcSet'
 import { Activity } from '~/models'
 
 const useLive = (acitvity: Activity) => {
@@ -22,7 +22,6 @@ type Props = { activity: Activity; onClick?: () => void }
 const ScheduleActivityTile: React.FC<Props> = (props) => {
   const { activity, onClick } = props
 
-  const srcSet = useSrcSet()
   const live = useLive(activity)
 
   const member = findMember(activity.memberId)
@@ -32,8 +31,12 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
 
   return (
     <Box
+      alignItems="center"
       display="flex"
+      justifyContent="center"
       onClick={onClick}
+      overflow="hidden"
+      px={1}
       style={{
         backgroundColor: `${Color.hsl(
           member.themeHue,
@@ -45,28 +48,22 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
         width: '100%',
       }}
     >
-      <Box
-        alignItems="center"
-        display="flex"
-        flexGrow={1}
-        justifyContent="center"
-        minWidth={0}
-        overflow="hidden"
-        px={1}
-        zIndex={1}
-      >
-        <img
-          {...srcSet(`/img/members/${member.id}_64x64.png`)}
-          style={{ height: '100%' }}
+      <Box flexShrink={0} height={64} width={64} zIndex={1}>
+        <Image
+          alt={member.name}
+          height={64}
+          layout="intrinsic"
+          src={`/img/members/${member.id}_64x64@2x.png`}
+          width={64}
         />
-        <Box minWidth={0} ml={1}>
-          <Typography noWrap variant="subtitle2">
-            {member.nameJa}
-          </Typography>
-          <Typography noWrap variant="body2">
-            {activity.title || activity.description}
-          </Typography>
-        </Box>
+      </Box>
+      <Box minWidth={0} ml={1}>
+        <Typography noWrap variant="subtitle2">
+          {member.nameJa}
+        </Typography>
+        <Typography noWrap variant="body2">
+          {activity.title || activity.description}
+        </Typography>
       </Box>
     </Box>
   )

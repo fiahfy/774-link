@@ -1,4 +1,5 @@
 import { Box, Typography } from '@material-ui/core'
+import { useRouter } from 'next/router'
 import React from 'react'
 import {
   addDays,
@@ -14,25 +15,12 @@ import {
 } from 'date-fns'
 import ScheduleActivityTile from '~/components/ScheduleActivityTile'
 import ScheduleHorizontalLine from '~/components/ScheduleHorizontalLine'
+import { useNow } from '~/hooks/useNow'
 import { Activity } from '~/models'
 import { calc } from '~/utils/calculator'
-import { useRouter } from 'next/router'
 
 const labelWidth = 48
 const tileHeight = 66
-
-const useNow = (interval: number) => {
-  const [now, setNow] = React.useState(new Date())
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setNow(new Date())
-    }, interval)
-    return () => {
-      clearInterval(timer)
-    }
-  }, [interval, now, setNow])
-  return now
-}
 
 const useActivityItems = (activities: Activity[]) => {
   const unitsPerHour = 4
@@ -64,7 +52,7 @@ type Props = {
   activities: Activity[]
 }
 
-const DailySchedule: React.FC<Props> = (props) => {
+const Schedule: React.FC<Props> = (props) => {
   const { date: initialDate, activities } = props
 
   const date = startOfDay(initialDate)
@@ -153,4 +141,4 @@ const DailySchedule: React.FC<Props> = (props) => {
   )
 }
 
-export default DailySchedule
+export default Schedule

@@ -1,16 +1,29 @@
 import { Box, Typography } from '@material-ui/core'
 import Color from 'color'
+import { addHours, isAfter, isBefore } from 'date-fns'
 import React from 'react'
 import { findMember } from '~/data'
+import { useNow } from '~/hooks/useNow'
 import { useSrcSet } from '~/hooks/useSrcSet'
 import { Activity } from '~/models'
 
+const useLive = (acitvity: Activity) => {
+  const now = useNow(60 * 1000)
+  return React.useMemo(() => {
+    return (
+      isAfter(now, acitvity.startedAt) &&
+      isBefore(now, addHours(acitvity.startedAt, 1))
+    )
+  }, [acitvity.startedAt, now])
+}
+
 type Props = { activity: Activity; onClick?: () => void }
 
-const ActivityTile: React.FC<Props> = (props) => {
+const ScheduleActivityTile: React.FC<Props> = (props) => {
   const { activity, onClick } = props
 
   const srcSet = useSrcSet()
+  const live = useLive(activity)
 
   const member = findMember(activity.memberId)
   if (!member) {
@@ -22,7 +35,11 @@ const ActivityTile: React.FC<Props> = (props) => {
       display="flex"
       onClick={onClick}
       style={{
-        backgroundColor: `${Color.hsl(member.themeHue, 33, 50).hex()}99`,
+        backgroundColor: `${Color.hsl(
+          member.themeHue,
+          33,
+          live ? 50 : 33
+        ).hex()}`,
         cursor: onClick && 'pointer',
         height: '100%',
         width: '100%',
@@ -55,4 +72,4 @@ const ActivityTile: React.FC<Props> = (props) => {
   )
 }
 
-export default ActivityTile
+export default ScheduleActivityTile

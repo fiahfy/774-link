@@ -7,65 +7,36 @@ import {
   Typography,
   useTheme,
 } from '@material-ui/core'
-import { NextPage } from 'next'
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { findMember } from '~/data'
-import firebase from '~/firebase'
+import firebaseAdmin from '~/firebase-admin'
 import { Activity } from '~/models'
-import NotFound from '~/pages/404'
 
-const useActivity = (id: string | undefined) => {
-  const [loading, setLoading] = React.useState(true)
-  const [activity, setActivity] = React.useState<Activity>()
-  React.useEffect(() => {
-    ;(async () => {
-      const doc = await firebase
-        .firestore()
-        .collection('activities')
-        .doc(id)
-        .get()
-      const data = doc.data()
-      if (data) {
-        const activity = {
-          ...data,
-          id: doc.id,
-          startedAt: data.startedAt.toDate(),
-        } as Activity
-        setActivity(activity)
-      }
-      setLoading(false)
-    })()
-  }, [id])
-  return { loading, activity }
+type Props = {
+  activity: Activity
 }
 
-const Detail: NextPage = () => {
-  const theme = useTheme()
+const Detail: NextPage<Props> = (props) => {
+  const { activity } = props
+
   const router = useRouter()
+  const theme = useTheme()
 
-  let { id } = router.query
-  id = Array.isArray(id) ? id[0] : id
-
-  const { loading, activity } = useActivity(id)
-
-  if (loading) {
+  if (router.isFallback) {
     return (
-      <Backdrop open={loading}>
+      <Backdrop open>
         <CircularProgress />
       </Backdrop>
     )
   }
 
-  if (!activity) {
-    return <NotFound />
-  }
-
-  const member = findMember(activity?.memberId)
+  const member = findMember(activity.memberId)
 
   if (!member) {
-    return <NotFound />
+    return null
   }
 
   return (
@@ -92,3 +63,43 @@ const Detail: NextPage = () => {
 }
 
 export default Detail
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  }
+}
+
+export const getStaticProps: GetStaticProps<Props> = async (context) => {
+  const id = context.params?.id
+
+  if (Array.isArray(id) || !id) {
+    return {
+      notFound: true,
+    }
+  }
+
+  const doc = await firebaseAdmin
+    .firestore()
+    .collection('activities')
+    .doc(id)
+    .get()
+  const data = doc.data()
+
+  if (!data) {
+    return {
+      notFound: true,
+    }
+  }
+
+  const activity = {
+    ...data,
+    id: doc.id,
+    startedAt: data.startedAt.toDate(),
+    createdAt: data.createdAt.toDate(),
+    updatedAt: data.updatedAt.toDate(),
+  } as Activity
+
+  return { props: { activity }, revalidate: 60 * 60 }
+}

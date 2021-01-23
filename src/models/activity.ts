@@ -7,4 +7,6 @@ export type Activity = {
   startedAt: Date
   timelineId: string
   videoId: string
+  createdAt: Date
+  updatedAt: Date
 }

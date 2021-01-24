@@ -101,6 +101,7 @@ const Schedule: React.FC<Props> = (props) => {
           <Box
             id="primary-guideline"
             position="absolute"
+            style={{ pointerEvents: 'none' }}
             top={tileHeight * nowY}
             width="100%"
             zIndex={1}
@@ -128,9 +129,7 @@ const Schedule: React.FC<Props> = (props) => {
               >
                 <ScheduleActivityTile
                   activity={activity}
-                  onClick={() => {
-                    router.push(`/activities/${activity.id}`)
-                  }}
+                  href={`/activities/${activity.id}`}
                 />
               </Box>
             ))}

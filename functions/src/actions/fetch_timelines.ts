@@ -1,5 +1,5 @@
 import { addDays, addHours, format, getTime, isAfter, max } from 'date-fns'
-import { groups } from '../data'
+import { findGroups } from '../data'
 import firebase from '../firebase'
 import { fetch } from '../utils/fetcher'
 import { parse } from '../utils/parser'
@@ -52,7 +52,7 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
   const snapshot = await firebase
     .firestore()
     .collection('activities')
-    .where('groupId', '==', groupId)
+    .where('sourceGroupId', '==', groupId)
     .where('startedAt', '>=', from)
     .where('startedAt', '<', to)
     .get()
@@ -130,12 +130,13 @@ const getUid = (activity: Activity) =>
 
 export const fetchTimelines = async (groupId?: string): Promise<void> => {
   console.log(green('fetching timelines'))
+  const groups = findGroups({ sourceable: true })
   for (const group of groups) {
     if (groupId && group.id !== groupId) {
       continue
     }
     console.log(green('fetching %s timelines'), group.id)
-    const timelines = await fetch(group.screenName)
+    const timelines = await fetch(group.twitterScreenName)
     const schedules = parseTimelines(timelines, group.id)
     const extracted = extractSchedule(schedules)
     for (const schedule of extracted) {

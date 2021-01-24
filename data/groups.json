@@ -3,24 +3,28 @@
     "id": "animare",
     "name": "AniMare",
     "nameJa": "有閑喫茶あにまーれ",
-    "screenName": "AniMare_cafe"
+    "sourceable": true,
+    "twitterScreenName": "AniMare_cafe"
   },
   {
     "id": "honeystrap",
     "name": "HoneyStrap",
     "nameJa": "ハニーストラップ",
-    "screenName": "HNST_official"
+    "sourceable": true,
+    "twitterScreenName": "HNST_official"
   },
   {
     "id": "sugarlyric",
     "name": "SugarLyric",
     "nameJa": "シュガーリリック",
-    "screenName": "SugarLyric_PI"
+    "sourceable": true,
+    "twitterScreenName": "SugarLyric_PI"
   },
   {
     "id": "vapart",
     "name": "VApArt",
     "nameJa": "ブイアパ",
-    "screenName": "Vtuber_ApArt"
+    "sourceable": false,
+    "twitterScreenName": "Vtuber_ApArt"
   }
 ]

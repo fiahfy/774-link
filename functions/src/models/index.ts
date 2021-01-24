@@ -1,18 +1,19 @@
 export type Activity = {
-  groupId: string
   memberId: string
   title: string
   description: string
   startedAt: Date
-  timelineId: string
-  videoId: string
+  sourceGroupId: string
+  twitterTimelineId: string
+  youtubeVideoId: string
 }
 
 export type Group = {
   id: string
   name: string
   nameJa: string
-  screenName: string
+  sourceable: boolean
+  twitterScreenName: string
 }
 
 export type Member = {
@@ -20,8 +21,8 @@ export type Member = {
   name: string
   nameJa: string
   groupId: string
-  screenName: string
-  channelId: string
+  twitterScreenName: string
+  youtubeChannelId: string
 }
 
 export type Schedule = {

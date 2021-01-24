@@ -26,9 +26,9 @@ const useActivityItems = (activities: Activity[]) => {
   const unitsPerHour = 4
   return React.useMemo(() => {
     const ys = activities.map((activity) => {
-      return (
+      return Math.floor(
         (getHours(activity.startedAt) * 60 + getMinutes(activity.startedAt)) /
-        (60 / unitsPerHour)
+          (60 / unitsPerHour)
       )
     }, [] as number[])
     const data = calc(ys, unitsPerHour, 24 * unitsPerHour)

@@ -1,7 +1,6 @@
-import { time } from 'console'
 import { addHours, addMinutes, getMonth, getYear } from 'date-fns'
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
-import { members } from '../data'
+import { findMembers } from '../data'
 import { Activity, Schedule, Timeline } from '../models'
 
 export const parseFullMessage = (message: string): string[] => {
@@ -56,7 +55,7 @@ export const parseMessage = (
     return undefined
   }
 
-  const groupMembers = members.filter((member) => member.groupId === groupId)
+  const groupMembers = findMembers({ groupIds: [groupId] })
 
   const activities: Activity[] = []
   // eslint-disable-next-line no-irregular-whitespace
@@ -76,10 +75,14 @@ export const parseMessage = (
     const m = `${title}/${description1}/${description2}`.match(
       /([ぁ-ん]+|[ァ-ヶ]+)/g
     )
-    const names = m ? Array.from(m) : []
+    const names = (m ? Array.from(m) : []).reduce((carry, name) => {
+      const replaced = name.replace(/(さん|コラボ)/g, '')
+      return replaced.length > 1 ? [...carry, replaced] : carry
+    }, [] as string[])
 
     for (const name of names) {
-      const member = groupMembers.find((member) => member.nameJa.match(name))
+      const trimmed = name.replace(/(さん|コラボ)/g, '')
+      const member = groupMembers.find((member) => member.nameJa.match(trimmed))
       if (!member) {
         continue
       }
@@ -92,13 +95,13 @@ export const parseMessage = (
       const startedAt = addMinutes(addHours(date, hours), minutes)
 
       activities.push({
-        groupId,
         memberId,
-        timelineId: '',
-        videoId: '',
         title: '',
         description,
         startedAt,
+        sourceGroupId: groupId,
+        twitterTimelineId: '',
+        youtubeVideoId: '',
       })
     }
   }
@@ -122,7 +125,7 @@ export const parse = (timeline: Timeline, groupId: string): Schedule[] => {
             publishedAt,
             activities: schedule.activities.map((activity) => ({
               ...activity,
-              timelineId: timeline.id,
+              twitterTimelineId: timeline.id,
             })),
           },
         ]

@@ -15,21 +15,46 @@ const useScrollToSelector = (selector: string) => {
       }
       clearInterval(timer)
 
-      const rect = e.getBoundingClientRect()
-      window.scrollTo(0, rect.top + rect.height / 2 - window.innerHeight / 2)
+      setTimeout(() => {
+        const rect = e.getBoundingClientRect()
+        window.scrollTo(
+          0,
+          rect.top + rect.height / 2 - window.innerHeight / 2 + window.scrollY
+        )
+      }, 300)
     })
     return () => clearInterval(timer)
   }, [selector])
 }
 
 type Props = {
-  schedules: { date: Date; activities: Activity[] }[]
+  activities: Activity[]
 }
 
 const Index: NextPage<Props> = (props) => {
-  const { schedules } = props
+  const { activities } = props
 
   useScrollToSelector('#primary-guideline')
+
+  const startedAt = subDays(startOfDay(new Date()), 1)
+
+  const schedules = activities.reduce(
+    (carry, activity) => {
+      return carry.map((schedule) => {
+        if (!isSameDay(schedule.date, activity.startedAt)) {
+          return schedule
+        }
+        return {
+          ...schedule,
+          activities: [...schedule.activities, activity],
+        }
+      })
+    },
+    [...Array<number>(3).keys()].reduce((carry, i) => {
+      const date = addDays(startedAt, i)
+      return [...carry, { date, activities: [] }]
+    }, [] as { date: Date; activities: Activity[] }[])
+  )
 
   return (
     <Container maxWidth="md">
@@ -47,7 +72,7 @@ const Index: NextPage<Props> = (props) => {
 export default Index
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const startedAt = subDays(startOfDay(new Date()), 1)
+  const startedAt = subDays(startOfDay(new Date()), 2)
 
   const snapshot = await firebaseAdmin
     .firestore()
@@ -56,34 +81,16 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     .orderBy('startedAt', 'asc')
     .get()
 
-  const schedules = snapshot.docs
-    .map((doc) => {
-      const data = doc.data()
-      return {
-        ...data,
-        id: doc.id,
-        startedAt: data.startedAt.toDate(),
-        createdAt: data.createdAt.toDate(),
-        updatedAt: data.updatedAt.toDate(),
-      } as Activity
-    })
-    .reduce(
-      (carry, activity) => {
-        return carry.map((schedule) => {
-          if (!isSameDay(schedule.date, activity.startedAt)) {
-            return schedule
-          }
-          return {
-            ...schedule,
-            activities: [...schedule.activities, activity],
-          }
-        })
-      },
-      [...Array<number>(3).keys()].reduce((carry, i) => {
-        const date = addDays(startedAt, i)
-        return [...carry, { date, activities: [] }]
-      }, [] as { date: Date; activities: Activity[] }[])
-    )
+  const activities = snapshot.docs.map((doc) => {
+    const data = doc.data()
+    return {
+      ...data,
+      id: doc.id,
+      startedAt: data.startedAt.toDate(),
+      createdAt: data.createdAt.toDate(),
+      updatedAt: data.updatedAt.toDate(),
+    } as Activity
+  })
 
-  return { props: { schedules }, revalidate: 15 * 60 }
+  return { props: { activities }, revalidate: 15 * 60 }
 }

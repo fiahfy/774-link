@@ -13,6 +13,7 @@ import {
   startOfDay,
   subMinutes,
 } from 'date-fns'
+import Link from '~/components/Link'
 import ScheduleActivityTile from '~/components/ScheduleActivityTile'
 import ScheduleHorizontalLine from '~/components/ScheduleHorizontalLine'
 import { useNow } from '~/hooks/useNow'
@@ -127,10 +128,15 @@ const Schedule: React.FC<Props> = (props) => {
                 top={rect.y}
                 width={`${rect.w * 100}%`}
               >
-                <ScheduleActivityTile
-                  activity={activity}
+                <Link
                   href={`/activities/${activity.id}`}
-                />
+                  style={{
+                    color: 'inherit',
+                    textDecoration: 'inherit',
+                  }}
+                >
+                  <ScheduleActivityTile activity={activity} />
+                </Link>
               </Box>
             ))}
           </Box>

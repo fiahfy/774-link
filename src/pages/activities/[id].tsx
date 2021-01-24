@@ -85,6 +85,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     .collection('activities')
     .doc(id)
     .get()
+
   const data = doc.data()
 
   if (!data) {

@@ -1,7 +1,7 @@
 import { addHours, addMinutes, getMonth, getYear } from 'date-fns'
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
-import { findMembers } from '../data'
-import { Activity, Schedule, Timeline } from '../models'
+import { listMembers } from '../data'
+import { Activity, Member, Schedule, Timeline } from '../models'
 
 export const parseFullMessage = (message: string): string[] => {
   const messages: string[] = []
@@ -55,7 +55,8 @@ export const parseMessage = (
     return undefined
   }
 
-  const groupMembers = findMembers({ groupIds: [groupId] })
+  const allMembers = listMembers()
+  const groupMembers = listMembers({ groupIds: [groupId] })
 
   const activities: Activity[] = []
   // eslint-disable-next-line no-irregular-whitespace
@@ -73,21 +74,34 @@ export const parseMessage = (
     const description2 = match[5]
 
     const m = `${title}/${description1}/${description2}`.match(
-      /([ぁ-ん]+|[ァ-ヶ]+)/g
+      /([ぁ-んー]+|[ァ-ヶー]+)/g
     )
-    const names = (m ? Array.from(m) : []).reduce((carry, name) => {
-      const replaced = name.replace(/(さん|コラボ)/g, '')
-      return replaced.length > 1 ? [...carry, replaced] : carry
-    }, [] as string[])
 
-    for (const name of names) {
-      const trimmed = name.replace(/(さん|コラボ)/g, '')
-      const member = groupMembers.find((member) => member.nameJa.match(trimmed))
-      if (!member) {
+    const members = (m ? Array.from(m) : [])
+      .reduce((carry, name) => {
+        const replaced = name.replace(/(さん|コラボ|メンバー)/g, '')
+        if (replaced.length < 2) {
+          return carry
+        }
+        const member = allMembers.find((member) =>
+          member.nameJa.match(replaced)
+        )
+        return member ? [...carry, member] : carry
+      }, [] as Member[])
+      .filter((member, index, array) => {
+        return array.findIndex((item) => member.id === item.id) === index
+      })
+
+    for (const owner of members) {
+      const exists = groupMembers.some((member) => member.id === owner.id)
+      if (!exists) {
         continue
       }
 
-      const memberId = member.id
+      const ownerId = owner.id
+      const memberIds = members
+        .filter((member) => member.id !== owner.id)
+        .map((member) => member.id)
       let description = description1 ?? ''
       if (description && description2) {
         description += `(${description2})` ?? ''
@@ -95,7 +109,8 @@ export const parseMessage = (
       const startedAt = addMinutes(addHours(date, hours), minutes)
 
       activities.push({
-        memberId,
+        ownerId,
+        memberIds,
         title: '',
         description,
         startedAt,

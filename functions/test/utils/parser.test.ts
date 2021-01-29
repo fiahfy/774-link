@@ -74,44 +74,52 @@ describe('parseMessage', () => {
       '1/11(月)\nシャル 配信中です\n21:00 メアリ\n22:00 シャル\n24:00 パトラ\n\n',
       'honeystrap'
     )
-    expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(3)
     expect(result?.activities[0]).toEqual({
-      groupId: 'honeystrap',
-      memberId: 'mary-saionji',
-      title: '',
       description: '',
+      memberIds: [],
+      ownerId: 'mary-saionji',
+      sourceGroupId: 'honeystrap',
       startedAt: new Date('2021-01-11T12:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
     expect(result?.activities[1]).toEqual({
-      groupId: 'honeystrap',
-      memberId: 'charlotte-shimamura',
-      title: '',
       description: '',
+      memberIds: [],
+      ownerId: 'charlotte-shimamura',
+      sourceGroupId: 'honeystrap',
       startedAt: new Date('2021-01-11T13:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
     expect(result?.activities[2]).toEqual({
-      groupId: 'honeystrap',
-      memberId: 'patra-suou',
-      title: '',
       description: '',
+      memberIds: [],
+      ownerId: 'patra-suou',
+      sourceGroupId: 'honeystrap',
       startedAt: new Date('2021-01-11T15:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
   })
   it('should work with over 24:00', () => {
     const result = parseMessage('1/11(水)\n25:00 ミコ\n\n', 'honeystrap')
-    expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
-      groupId: 'honeystrap',
-      memberId: 'mico-sekishiro',
-      title: '',
       description: '',
+      memberIds: [],
+      ownerId: 'mico-sekishiro',
+      sourceGroupId: 'honeystrap',
       startedAt: new Date('2021-01-11T16:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
   })
   it('should work with title', () => {
@@ -119,15 +127,17 @@ describe('parseMessage', () => {
       '1/11(水)\n18:00 ミコ(メンバー限定配信)\n\n',
       'honeystrap'
     )
-    expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
-      groupId: 'honeystrap',
-      memberId: 'mico-sekishiro',
-      title: '',
       description: 'メンバー限定配信',
+      memberIds: [],
+      ownerId: 'mico-sekishiro',
+      sourceGroupId: 'honeystrap',
       startedAt: new Date('2021-01-11T09:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
   })
   it('should work with title', () => {
@@ -135,15 +145,17 @@ describe('parseMessage', () => {
       '1/11(水)\n19:00 ミコ(メンバー限定配信)\n\n',
       'honeystrap'
     )
-    expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
-      groupId: 'honeystrap',
-      memberId: 'mico-sekishiro',
-      title: '',
       description: 'メンバー限定配信',
+      memberIds: [],
+      ownerId: 'mico-sekishiro',
+      sourceGroupId: 'honeystrap',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
   })
   it('should work with title and description', () => {
@@ -151,30 +163,34 @@ describe('parseMessage', () => {
       '1/11(水)\n19:00 メアリ(羽柴なつみさん企画参加)＊羽柴なつみさんch\n\n',
       'honeystrap'
     )
-    expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
-      groupId: 'honeystrap',
-      memberId: 'mary-saionji',
-      title: '',
       description: '羽柴なつみさん企画参加(羽柴なつみさんch)',
+      memberIds: ['natsumi-hashiba'],
+      ownerId: 'mary-saionji',
+      sourceGroupId: 'honeystrap',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
 
     result = parseMessage(
       '1/11(水)\n19:00 はねる(コラボ)\n＊ルイス・キャミーさんch\n\n',
       'animare'
     )
-    expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
-      groupId: 'animare',
-      memberId: 'haneru-inaba',
-      title: '',
       description: 'コラボ(ルイス・キャミーさんch)',
+      memberIds: [],
+      ownerId: 'haneru-inaba',
+      sourceGroupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
   })
   it('should work with collaboration', () => {
@@ -182,54 +198,91 @@ describe('parseMessage', () => {
       '1/11(水)\n19:00 らん(ひかりコラボ)\n\n',
       'animare'
     )
-    expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(2)
     expect(result?.activities[0]).toEqual({
-      groupId: 'animare',
-      memberId: 'ran-hinokuma',
-      title: '',
       description: 'ひかりコラボ',
+      memberIds: ['hikari-hira'],
+      ownerId: 'ran-hinokuma',
+      sourceGroupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
     expect(result?.activities[1]).toEqual({
-      groupId: 'animare',
-      memberId: 'hikari-hira',
-      title: '',
       description: 'ひかりコラボ',
+      memberIds: ['ran-hinokuma'],
+      ownerId: 'hikari-hira',
+      sourceGroupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
 
     result = parseMessage(
       '1/11(水)\n19:00 らん/ひかり/るいコラボ\n\n',
       'animare'
     )
-    expect(result?.date).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(3)
     expect(result?.activities[0]).toEqual({
-      groupId: 'animare',
-      memberId: 'ran-hinokuma',
-      title: '',
       description: '',
+      memberIds: ['hikari-hira', 'rui-seshima'],
+      ownerId: 'ran-hinokuma',
+      sourceGroupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
     expect(result?.activities[1]).toEqual({
-      groupId: 'animare',
-      memberId: 'hikari-hira',
-      title: '',
       description: '',
+      memberIds: ['ran-hinokuma', 'rui-seshima'],
+      ownerId: 'hikari-hira',
+      sourceGroupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
     expect(result?.activities[2]).toEqual({
-      groupId: 'animare',
-      memberId: 'rui-seshima',
-      title: '',
       description: '',
+      memberIds: ['ran-hinokuma', 'hikari-hira'],
+      ownerId: 'rui-seshima',
+      sourceGroupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
-      source: 'twitter',
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
+    })
+
+    result = parseMessage(
+      `1/11(水)\n21:00 シャル(ドーラさん コラボ)＊ドーラさんch\n24:00 メアリ(メンバー限定配信)\n\n`,
+      'honeystrap'
+    )
+    expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
+    expect(result?.activities.length).toBe(2)
+    expect(result?.activities[0]).toEqual({
+      description: 'ドーラさん コラボ(ドーラさんch)',
+      memberIds: [],
+      ownerId: 'charlotte-shimamura',
+      sourceGroupId: 'honeystrap',
+      startedAt: new Date('2021-01-11T12:00:00.000Z'),
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
+    })
+    expect(result?.activities[1]).toEqual({
+      description: 'メンバー限定配信',
+      memberIds: [],
+      ownerId: 'mary-saionji',
+      sourceGroupId: 'honeystrap',
+      startedAt: new Date('2021-01-11T15:00:00.000Z'),
+      title: '',
+      twitterTimelineId: '',
+      youtubeVideoId: '',
     })
   })
 })

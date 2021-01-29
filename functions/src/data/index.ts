@@ -1,11 +1,11 @@
-import groupsJson from '774-link-data/groups.json'
-import membersJson from '774-link-data/members.json'
+import groupsJson from '774-link-common/groups.json'
+import membersJson from '774-link-common/members.json'
 import { Group, Member } from '../models'
 
 export const groups = groupsJson as Group[]
 export const members = membersJson as Member[]
 
-export const findGroups = ({
+export const listGroups = ({
   sourceable,
 }: {
   sourceable: boolean
@@ -13,6 +13,6 @@ export const findGroups = ({
   return groups.filter((group) => group.sourceable === sourceable)
 }
 
-export const findMembers = ({ groupIds }: { groupIds: string[] }): Member[] => {
-  return members.filter((member) => groupIds.includes(member.groupId))
+export const listMembers = ({ groupIds }: { groupIds?: string[] } = {}): Member[] => {
+  return members.filter((member) => !groupIds || groupIds.includes(member.groupId))
 }

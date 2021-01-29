@@ -1,5 +1,5 @@
 import { addDays, addHours, format, getTime, isAfter, max } from 'date-fns'
-import { findGroups } from '../data'
+import { listGroups } from '../data'
 import firebase from '../firebase'
 import { fetch } from '../utils/fetcher'
 import { parse } from '../utils/parser'
@@ -126,11 +126,11 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
 }
 
 const getUid = (activity: Activity) =>
-  `${activity.memberId}_${getTime(activity.startedAt)}`
+  `${activity.ownerId}_${getTime(activity.startedAt)}`
 
 export const fetchTimelines = async (groupId?: string): Promise<void> => {
   console.log(green('fetching timelines'))
-  const groups = findGroups({ sourceable: true })
+  const groups = listGroups({ sourceable: true })
   for (const group of groups) {
     if (groupId && group.id !== groupId) {
       continue

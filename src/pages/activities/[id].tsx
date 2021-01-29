@@ -33,7 +33,7 @@ const Detail: NextPage<Props> = (props) => {
     )
   }
 
-  const member = findMember(activity.memberId)
+  const member = findMember(activity.ownerId)
 
   if (!member) {
     return null

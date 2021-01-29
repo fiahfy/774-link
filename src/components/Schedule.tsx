@@ -1,5 +1,4 @@
 import { Box, Typography } from '@material-ui/core'
-import { useRouter } from 'next/router'
 import React from 'react'
 import {
   addDays,
@@ -9,6 +8,7 @@ import {
   getMinutes,
   isAfter,
   isBefore,
+  isEqual,
   setHours,
   startOfDay,
   subMinutes,
@@ -23,17 +23,53 @@ import { calc } from '~/utils/calculator'
 const labelWidth = 48
 const tileHeight = 64
 
-const useActivityItems = (activities: Activity[]) => {
+const useSummaries = (activities: Activity[]) => {
+  return React.useMemo(() => {
+    const { summaries } = activities.reduce(
+      ({ summaries, picked }, activity, _index, array) => {
+        if (picked.includes(activity.id)) {
+          return { summaries, picked }
+        }
+        const startedAt = activity.startedAt
+        const activities = array.filter(
+          (item) =>
+            item.id !== activity.id &&
+            isEqual(item.startedAt, activity.startedAt) &&
+            item.memberIds.includes(activity.ownerId)
+        )
+        return {
+          summaries: [
+            ...summaries,
+            {
+              startedAt,
+              activities: [activity, ...activities],
+            },
+          ],
+          picked: [...picked, ...activities.map((activity) => activity.id)],
+        }
+      },
+      { summaries: [], picked: [] } as {
+        summaries: { startedAt: Date; activities: Activity[] }[]
+        picked: string[]
+      }
+    )
+    return summaries
+  }, [activities])
+}
+
+const useCalculatePosition = (
+  summaries: { startedAt: Date; activities: Activity[] }[]
+) => {
   const unitsPerHour = 4
   return React.useMemo(() => {
-    const ys = activities.map((activity) => {
+    const ys = summaries.map((summary) => {
       return Math.floor(
-        (getHours(activity.startedAt) * 60 + getMinutes(activity.startedAt)) /
+        (getHours(summary.startedAt) * 60 + getMinutes(summary.startedAt)) /
           (60 / unitsPerHour)
       )
     }, [] as number[])
     const data = calc(ys, unitsPerHour, 24 * unitsPerHour)
-    return activities.map((activity, i) => {
+    return summaries.map((summary, i) => {
       const { x, w } = data[i]
       return {
         rect: {
@@ -42,10 +78,10 @@ const useActivityItems = (activities: Activity[]) => {
           y: (ys[i] * tileHeight) / unitsPerHour,
           h: tileHeight,
         },
-        activity,
+        summary,
       }
     })
-  }, [activities])
+  }, [summaries])
 }
 
 type Props = {
@@ -58,7 +94,6 @@ const Schedule: React.FC<Props> = (props) => {
 
   const date = startOfDay(initialDate)
 
-  const router = useRouter()
   const now = useNow(1000)
 
   const nowY = React.useMemo(() => {
@@ -79,7 +114,8 @@ const Schedule: React.FC<Props> = (props) => {
     [now]
   )
 
-  const items = useActivityItems(activities)
+  const summaries = useSummaries(activities)
+  const items = useCalculatePosition(summaries)
 
   return (
     <Box my={3}>
@@ -119,7 +155,7 @@ const Schedule: React.FC<Props> = (props) => {
           width="100%"
         >
           <Box position="relative">
-            {items.map(({ rect, activity }, index) => (
+            {items.map(({ rect, summary }, index) => (
               <Box
                 height={rect.h}
                 key={index}
@@ -129,13 +165,13 @@ const Schedule: React.FC<Props> = (props) => {
                 width={`${rect.w * 100}%`}
               >
                 <Link
-                  href={`/activities/${activity.id}`}
+                  href={`/activities/${summary.activities[0].id}`}
                   style={{
                     color: 'inherit',
                     textDecoration: 'inherit',
                   }}
                 >
-                  <ScheduleActivityTile activity={activity} />
+                  <ScheduleActivityTile summary={summary} />
                 </Link>
               </Box>
             ))}

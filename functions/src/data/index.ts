@@ -13,6 +13,10 @@ export const listGroups = ({
   return groups.filter((group) => group.sourceable === sourceable)
 }
 
-export const listMembers = ({ groupIds }: { groupIds?: string[] } = {}): Member[] => {
-  return members.filter((member) => !groupIds || groupIds.includes(member.groupId))
+export const listMembers = ({
+  groupIds,
+}: { groupIds?: string[] } = {}): Member[] => {
+  return members.filter(
+    (member) => !groupIds || groupIds.includes(member.groupId)
+  )
 }

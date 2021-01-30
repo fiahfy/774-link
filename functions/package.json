@@ -32,7 +32,7 @@
     "dev": "tsc -w",
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "lint:eslint": "eslint -f codeframe --ext .js,.ts --ignore-path .gitignore .",
-    "lint:prettier": "prettier -c --ignore-path .gitignore **/*.{js,ts}",
+    "lint:prettier": "prettier -c --ignore-path .gitignore .",
     "logs": "firebase functions:log",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",

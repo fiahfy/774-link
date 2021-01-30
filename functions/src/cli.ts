@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 
-dotenv.config({ path: '../.env.local'})
+dotenv.config({ path: '../.env.local' })
 
 const main = async () => {
   const { fetchTimelines } = await import('./actions/fetch_timelines')

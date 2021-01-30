@@ -34,6 +34,12 @@ type Props = {
 const Index: NextPage<Props> = (props) => {
   const { activities } = props
 
+  // TODO:
+  const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void
+  React.useEffect(() => {
+    forceUpdate()
+  }, [forceUpdate])
+
   useScrollToSelector('#primary-guideline')
 
   const startedAt = subDays(startOfDay(new Date()), 1)

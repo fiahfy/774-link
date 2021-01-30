@@ -1,5 +1,4 @@
 import { Avatar, Box, Typography, useTheme } from '@material-ui/core'
-import { AvatarGroup } from '@material-ui/lab'
 import Color from 'color'
 import { addHours, isAfter, isBefore } from 'date-fns'
 import Image from 'next/image'
@@ -8,11 +7,29 @@ import { findMember, listMembers } from '~/data'
 import { useNow } from '~/hooks/useNow'
 import { Activity } from '~/models'
 
+const avatarSize = 56
+
 const useLive = (date: Date) => {
   const now = useNow(60 * 1000)
   return React.useMemo(() => {
     return isAfter(now, date) && isBefore(now, addHours(date, 1))
   }, [date, now])
+}
+
+const useResizeObserver = (
+  target: React.RefObject<HTMLElement | undefined>,
+  callback: ResizeObserverCallback
+) => {
+  React.useEffect(() => {
+    if (!target.current) {
+      return
+    }
+    const observer = new ResizeObserver(callback)
+    observer.observe(target.current)
+    return () => {
+      observer.disconnect()
+    }
+  }, [callback, target])
 }
 
 type Props = { summary: { startedAt: Date; activities: Activity[] } }
@@ -22,6 +39,13 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
 
   const theme = useTheme()
   const live = useLive(summary.startedAt)
+  const [maxAvatars, setMaxAvatars] = React.useState(1)
+  const ref = React.useRef<HTMLDivElement>()
+  const callback = React.useCallback((entries: ResizeObserverEntry[]) => {
+    const maxAvatars = Math.floor(entries[0].contentRect.width / avatarSize)
+    setMaxAvatars(Math.max(1, maxAvatars))
+  }, [])
+  useResizeObserver(ref, callback)
 
   const activity = summary.activities[0]
   if (!activity) {
@@ -34,9 +58,14 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
   }
 
   const members = listMembers({ ids: activity.memberIds })
+  const others = 1 + members.length - maxAvatars
+  const avatars = Math.max(1, others > 0 ? maxAvatars - 1 : members.length + 1)
+  const hasOthers = others > 0 && maxAvatars !== 1
 
   return (
     <Box
+      // @see https://github.com/mui-org/material-ui/issues/17010
+      {...({ ref } as any)}
       alignItems="center"
       display="flex"
       justifyContent="center"
@@ -48,30 +77,47 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
           33,
           live ? 50 : 33
         ).hex()}`,
+        boxSizing: 'border-box',
+        borderColor: theme.palette.background.default,
+        borderStyle: 'solid',
+        borderWidth: 0.5,
         height: '100%',
         width: '100%',
       }}
     >
-      <Box flexShrink={0} height={56} zIndex={1}>
-        <AvatarGroup>
-          {[owner, ...members].map((member) => (
-            <Avatar
-              alt={member.name}
-              key={member.id}
-              style={{
-                backgroundColor: theme.palette.background.default,
-                height: 56,
-                width: 56,
-              }}
-            >
-              <Image
-                height={56}
-                src={`/img/members/${member.id}_64x64@2x.png`}
-                width={56}
-              />
-            </Avatar>
-          ))}
-        </AvatarGroup>
+      <Box display="flex" flexShrink={0} height={avatarSize} zIndex={1}>
+        {[owner, ...members].slice(0, avatars).map((member) => (
+          <Avatar
+            alt={member.name}
+            key={member.id}
+            style={{
+              borderColor: theme.palette.background.default,
+              borderStyle: 'solid',
+              borderWidth: 2,
+              backgroundColor: theme.palette.background.default,
+              height: avatarSize,
+              width: avatarSize,
+            }}
+          >
+            <Image
+              height={avatarSize}
+              src={`/img/members/${member.id}_64x64@2x.png`}
+              width={avatarSize}
+            />
+          </Avatar>
+        ))}
+        {hasOthers && (
+          <Avatar
+            style={{
+              backgroundColor: theme.palette.background.default,
+              color: theme.palette.text.secondary,
+              height: avatarSize,
+              width: avatarSize,
+            }}
+          >
+            +{others + 1}
+          </Avatar>
+        )}
       </Box>
       <Box minWidth={0} ml={1}>
         <Typography noWrap variant="subtitle2">

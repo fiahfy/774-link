@@ -3,7 +3,7 @@ import { fetchTimelines } from './actions/fetch_timelines'
 
 exports.fetchTimelines = functions
   .region('asia-northeast1')
-  .pubsub.schedule('every 1 hour')
+  .pubsub.schedule('every 1 hours')
   .timeZone('Asia/Tokyo')
   .onRun(async () => {
     try {

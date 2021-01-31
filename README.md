@@ -36,10 +36,10 @@ FIREBASE_PRIVATE_KEY=<privateKey>
 
 ```bash
 # import
-firebase functions:config:set $(jq -r 'to_entries[] | [.key, (.value | tojson)] | join("=")' < .runtimeconfig.json)
+firebase functions:config:set $(jq -r 'to_entries[] | [.key, (.value | tojson)] | join("=")' < functions/.runtimeconfig.json)
 
 # export
-firebase functions:config:get > .runtimeconfig.json
+firebase functions:config:get > functions/.runtimeconfig.json
 ```
 
 ### Deploy to Firebase

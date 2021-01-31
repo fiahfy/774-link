@@ -3,6 +3,7 @@
   "description": "Firebase Functions",
   "version": "0.0.1",
   "dependencies": {
+    "774-link-common": "file:774-link-common-0.0.1.tgz",
     "chalk": "^4.1.0",
     "date-fns": "^2.16.1",
     "date-fns-tz": "^1.1.1",
@@ -34,11 +35,9 @@
     "lint:eslint": "eslint -f codeframe --ext .js,.ts --ignore-path .gitignore .",
     "lint:prettier": "prettier -c --ignore-path .gitignore .",
     "logs": "firebase functions:log",
+    "preinstall": "if [ -d ../data ]; then npm pack ../data; fi",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell"
-  },
-  "workspaces": [
-    "../data"
-  ]
+  }
 }

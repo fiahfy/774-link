@@ -16,10 +16,10 @@ export const fetch = async (screenName: string): Promise<Timeline[]> => {
     count: 10,
   })
   return data.map((d) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return {
       id: d.id_str,
       createdAt: new Date(d.created_at),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fullText: (d as any).full_text,
     }
   })

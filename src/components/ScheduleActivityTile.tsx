@@ -86,7 +86,7 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
       }}
     >
       <Box display="flex" flexShrink={0} height={avatarSize} zIndex={1}>
-        {[owner, ...members].slice(0, avatars).map((member) => (
+        {[owner, ...members].slice(0, avatars).map((member, i) => (
           <Avatar
             alt={member.name}
             key={member.id}
@@ -96,7 +96,9 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
               borderWidth: 2,
               backgroundColor: theme.palette.background.default,
               height: avatarSize,
+              marginLeft: i > 0 ? -1 * theme.spacing(1) : 0,
               width: avatarSize,
+              zIndex: -i,
             }}
           >
             <Image

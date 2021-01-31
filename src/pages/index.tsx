@@ -1,10 +1,12 @@
 import { Container } from '@material-ui/core'
 import { addDays, isSameDay, startOfDay, subDays } from 'date-fns'
 import { GetStaticProps, NextPage } from 'next'
+import dynamic from 'next/dynamic'
 import React from 'react'
-import Schedule from '~/components/Schedule'
 import firebaseAdmin from '~/firebase-admin'
 import { Activity } from '~/models'
+
+const Schedule = dynamic(() => import('~/components/Schedule'), { ssr: false })
 
 const useScrollToSelector = (selector: string) => {
   React.useEffect(() => {
@@ -33,12 +35,6 @@ type Props = {
 
 const Index: NextPage<Props> = (props) => {
   const { activities } = props
-
-  // TODO:
-  const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void
-  React.useEffect(() => {
-    forceUpdate()
-  }, [forceUpdate])
 
   useScrollToSelector('#primary-guideline')
 

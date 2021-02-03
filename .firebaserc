@@ -1,6 +1,7 @@
 {
   "projects": {
+    "default": "fiahfy-774-development",
     "development": "fiahfy-774-development",
-    "default": "fiahfy-774-development"
+    "production": "fiahfy-774"
   }
 }

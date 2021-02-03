@@ -1,5 +1,5 @@
 import { addDays, addHours, format, getTime, isAfter, max } from 'date-fns'
-import { groups } from '../data'
+import { listGroups } from '../data'
 import firebase from '../firebase'
 import { fetch } from '../utils/fetcher'
 import { parse } from '../utils/parser'
@@ -18,7 +18,7 @@ const extractSchedule = (schedules: Schedule[]) => {
     schedules
       .reverse() // order by date asc
       .reduce((carry, schedule) => {
-        const timestamp = getTime(schedule.date)
+        const timestamp = getTime(schedule.scheduledAt)
         return {
           ...carry,
           [timestamp]: schedule, // overwrite with the latest schedule for each day
@@ -28,11 +28,11 @@ const extractSchedule = (schedules: Schedule[]) => {
 }
 
 const updateSchedule = async (schedule: Schedule, groupId: string) => {
-  console.log('updating activities at %s', format(schedule.date, 'P'))
+  console.log('updating activities at %s', format(schedule.scheduledAt, 'P'))
 
   // between 06:00 to 30:00
-  const from = max([schedule.publishedAt, addHours(schedule.date, 6)])
-  const to = addHours(addDays(schedule.date, 1), 6)
+  const from = max([schedule.publishedAt, addHours(schedule.scheduledAt, 6)])
+  const to = addHours(addDays(schedule.scheduledAt, 1), 6)
 
   console.log('between %s to %s', format(from, 'Pp'), format(to, 'Pp'))
 
@@ -52,7 +52,7 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
   const snapshot = await firebase
     .firestore()
     .collection('activities')
-    .where('groupId', '==', groupId)
+    .where('sourceGroupId', '==', groupId)
     .where('startedAt', '>=', from)
     .where('startedAt', '<', to)
     .get()
@@ -126,10 +126,11 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
 }
 
 const getUid = (activity: Activity) =>
-  `${activity.memberId}_${getTime(activity.startedAt)}`
+  `${activity.ownerId}_${getTime(activity.startedAt)}`
 
 export const fetchTimelines = async (groupId?: string): Promise<void> => {
   console.log(green('fetching timelines'))
+  const groups = listGroups({ sourceable: true })
   for (const group of groups) {
     if (groupId && group.id !== groupId) {
       continue

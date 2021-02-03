@@ -3,21 +3,23 @@
   "description": "Firebase Functions",
   "version": "0.0.1",
   "dependencies": {
+    "774-link-data": "file:774-link-data-0.0.1.tgz",
     "chalk": "^4.1.0",
     "date-fns": "^2.16.1",
-    "date-fns-tz": "^1.0.12",
+    "date-fns-tz": "^1.1.1",
     "firebase-admin": "^9.4.2",
-    "firebase-functions": "^3.13.0",
-    "twitter-api-client": "^1.2.4"
+    "firebase-functions": "^3.13.1",
+    "twitter-api-client": "^1.2.9"
   },
   "devDependencies": {
     "@fiahfy/eslint-config": "^0.0.11",
     "@types/jest": "^26.0.20",
-    "eslint": "^7.17.0",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.18.0",
     "jest": "^26.6.3",
     "jest-date-mock": "^1.0.8",
     "prettier": "^2.2.1",
-    "ts-jest": "^26.4.4",
+    "ts-jest": "^26.5.0",
     "typescript": "^4.1.3"
   },
   "engines": {
@@ -31,13 +33,12 @@
     "dev": "tsc -w",
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "lint:eslint": "eslint -f codeframe --ext .js,.ts --ignore-path .gitignore .",
-    "lint:prettier": "prettier -c --ignore-path .gitignore **/*.{js,ts}",
+    "lint:prettier": "prettier -c --ignore-path .gitignore .",
     "logs": "firebase functions:log",
+    "package": "if [ -d ../data ]; then npm pack ../data; fi",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell"
-  },
-  "workspaces": [
-    "../data"
-  ]
+    "start": "npm run shell",
+    "test": "npm run lint && jest"
+  }
 }

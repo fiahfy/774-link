@@ -1,7 +1,7 @@
 import { addHours, addMinutes, getMonth, getYear } from 'date-fns'
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
-import { members } from '../data'
-import { Activity, Schedule, Timeline } from '../models'
+import { listMembers } from '../data'
+import { Activity, Member, Schedule, Timeline } from '../models'
 
 export const parseFullMessage = (message: string): string[] => {
   const messages: string[] = []
@@ -55,7 +55,8 @@ export const parseMessage = (
     return undefined
   }
 
-  const groupMembers = members.filter((member) => member.groupId === groupId)
+  const allMembers = listMembers()
+  const groupMembers = listMembers({ groupIds: [groupId] })
 
   const activities: Activity[] = []
   // eslint-disable-next-line no-irregular-whitespace
@@ -68,35 +69,60 @@ export const parseMessage = (
 
     const hours = Number(match[1])
     const minutes = Number(match[2])
-    const names = match[3].replace('コラボ', '').split('/')
+    const title = match[3]
     const description1 = match[4]
     const description2 = match[5]
 
-    for (const name of names) {
-      const member = groupMembers.find((member) => member.nameJa.match(name))
-      if (!member) {
+    const m = `${title}/${description1}/${description2}`.match(
+      /([ぁ-んー]+|[ァ-ヶー]+)/g
+    )
+
+    const members = (m ? Array.from(m) : [])
+      .reduce((carry, name) => {
+        const replaced = name.replace(/(さん|コラボ|メンバー)/g, '')
+        if (replaced.length < 2) {
+          return carry
+        }
+        const member = allMembers.find((member) =>
+          member.nameJa.match(replaced)
+        )
+        return member ? [...carry, member] : carry
+      }, [] as Member[])
+      .filter((member, index, array) => {
+        return array.findIndex((item) => member.id === item.id) === index
+      })
+
+    for (const owner of members) {
+      const exists = groupMembers.some((member) => member.id === owner.id)
+      if (!exists) {
         continue
       }
 
-      const memberId = member.id
-      let title = description1 ?? ''
-      if (title && description2) {
-        title += `(${description2})` ?? ''
+      const ownerId = owner.id
+      const memberIds = members
+        .filter((member) => member.id !== owner.id)
+        .map((member) => member.id)
+      let description = description1 ?? ''
+      if (description && description2) {
+        description += `(${description2})` ?? ''
       }
       const startedAt = addMinutes(addHours(date, hours), minutes)
 
       activities.push({
-        groupId,
-        memberId,
-        title,
+        ownerId,
+        memberIds,
+        title: '',
+        description,
         startedAt,
-        source: 'twitter'
+        sourceGroupId: groupId,
+        twitterTimelineId: '',
+        youtubeVideoId: '',
       })
     }
   }
 
   return {
-    date,
+    scheduledAt: date,
     activities,
   }
 }
@@ -105,7 +131,19 @@ export const parse = (timeline: Timeline, groupId: string): Schedule[] => {
   const publishedAt = new Date(timeline.createdAt)
   const messages = parseFullMessage(timeline.fullText)
   return messages.reduce((carry, message) => {
-    const result = parseMessage(message, groupId)
-    return result ? [...carry, { ...result, publishedAt }] : carry
+    const schedule = parseMessage(message, groupId)
+    return schedule
+      ? [
+          ...carry,
+          {
+            ...schedule,
+            publishedAt,
+            activities: schedule.activities.map((activity) => ({
+              ...activity,
+              twitterTimelineId: timeline.id,
+            })),
+          },
+        ]
+      : carry
   }, [] as Schedule[])
 }

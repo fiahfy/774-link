@@ -1,92 +1,12 @@
-import React from 'react'
-import { NextPage } from 'next'
-import {
-  AppBar,
-  Backdrop,
-  BottomNavigation,
-  BottomNavigationAction,
-  CircularProgress,
-  Container,
-  makeStyles,
-  Toolbar,
-  Typography,
-} from '@material-ui/core'
-import { Schedule } from '@material-ui/icons'
+import { Container } from '@material-ui/core'
 import { addDays, isSameDay, startOfDay, subDays } from 'date-fns'
-import firebase from '~/firebase'
-import DailySchedule from '~/components/DailySchedule'
+import { GetStaticProps, NextPage } from 'next'
+import dynamic from 'next/dynamic'
+import React from 'react'
+import firebaseAdmin from '~/firebase-admin'
 import { Activity } from '~/models'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    // display: 'flex',
-    // flexDirection: 'column',
-    // minHeight: '100vh',
-  },
-  icon: {
-    marginRight: theme.spacing(1),
-  },
-  toolbarSpacer: theme.mixins.toolbar,
-  content: {
-    // flexGrow: 1,
-    // // height: '100vh',
-    // overflow: 'auto',
-  },
-  container: {},
-  bottomNavigation: {
-    position: 'fixed',
-    bottom: 0,
-    width: '100%',
-  },
-}))
-
-const useSchedules = () => {
-  const [loading, setLoading] = React.useState(true)
-  const [schedules, setSchedules] = React.useState<
-    { date: Date; activities: Activity[] }[]
-  >([])
-  React.useEffect(() => {
-    ;(async () => {
-      const startedAt = subDays(startOfDay(new Date()), 1)
-
-      const schedules = [...Array<number>(3).keys()].reduce((carry, i) => {
-        const date = addDays(startedAt, i)
-        return [...carry, { date, activities: [] }]
-      }, [] as { date: Date; activities: Activity[] }[])
-
-      const snapshot = await firebase
-        .firestore()
-        .collection('activities')
-        .where('startedAt', '>', startedAt)
-        .orderBy('startedAt', 'asc')
-        .get()
-      const activities = snapshot.docs
-        .map((doc) => {
-          const data = doc.data()
-          return {
-            ...data,
-            id: doc.id,
-            startedAt: data.startedAt.toDate(),
-          } as Activity
-        })
-        .reduce((carry, activity) => {
-          return carry.map((schedule) => {
-            if (!isSameDay(schedule.date, activity.startedAt)) {
-              return schedule
-            }
-            return {
-              ...schedule,
-              activities: [...schedule.activities, activity],
-            }
-          })
-        }, schedules)
-
-      setSchedules(activities)
-      setLoading(false)
-    })()
-  }, [])
-  return { loading, schedules }
-}
+const Schedule = dynamic(() => import('~/components/Schedule'), { ssr: false })
 
 const useScrollToSelector = (selector: string) => {
   React.useEffect(() => {
@@ -97,55 +17,82 @@ const useScrollToSelector = (selector: string) => {
       }
       clearInterval(timer)
 
-      const rect = e.getBoundingClientRect()
-      window.scrollTo(0, rect.top + rect.height / 2 - window.innerHeight / 2)
+      setTimeout(() => {
+        const rect = e.getBoundingClientRect()
+        window.scrollTo(
+          0,
+          rect.top + rect.height / 2 - window.innerHeight / 2 + window.scrollY
+        )
+      }, 300)
     })
     return () => clearInterval(timer)
   }, [selector])
 }
 
-const Index: NextPage = () => {
-  const classes = useStyles()
+type Props = {
+  activities: Activity[]
+}
 
-  const { loading, schedules } = useSchedules()
+const Index: NextPage<Props> = (props) => {
+  const { activities } = props
 
   useScrollToSelector('#primary-guideline')
 
+  const startedAt = subDays(startOfDay(new Date()), 1)
+
+  const schedules = activities.reduce(
+    (carry, activity) => {
+      return carry.map((schedule) => {
+        if (!isSameDay(schedule.date, activity.startedAt)) {
+          return schedule
+        }
+        return {
+          ...schedule,
+          activities: [...schedule.activities, activity],
+        }
+      })
+    },
+    [...Array<number>(3).keys()].reduce((carry, i) => {
+      const date = addDays(startedAt, i)
+      return [...carry, { date, activities: [] }]
+    }, [] as { date: Date; activities: Activity[] }[])
+  )
+
   return (
-    <div className={classes.root}>
-      <AppBar position="fixed">
-        <Toolbar>
-          <img
-            className={classes.icon}
-            height="44"
-            src="/icon_transparent.png"
-          />
-          <Typography noWrap variant="h6">
-            774.link
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <main className={classes.content}>
-        <div className={classes.toolbarSpacer} />
-        <Container className={classes.container} maxWidth="md">
-          {schedules.map((schedule, index) => (
-            <DailySchedule
-              activities={schedule.activities}
-              date={schedule.date}
-              key={index}
-            />
-          ))}
-        </Container>
-        {/* <div className={classes.toolbarSpacer} /> */}
-      </main>
-      {/* <BottomNavigation className={classes.bottomNavigation} showLabels>
-        <BottomNavigationAction icon={<Schedule />} label="Schedule" />
-      </BottomNavigation> */}
-      <Backdrop open={loading}>
-        <CircularProgress />
-      </Backdrop>
-    </div>
+    <Container maxWidth="md">
+      {schedules.map((schedule, index) => (
+        <Schedule
+          activities={schedule.activities}
+          date={schedule.date}
+          key={index}
+        />
+      ))}
+    </Container>
   )
 }
 
 export default Index
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  const startedAt = subDays(startOfDay(new Date()), 2)
+
+  const snapshot = await firebaseAdmin
+    .firestore()
+    .collection('activities')
+    .where('startedAt', '>', startedAt)
+    .orderBy('startedAt', 'asc')
+    .get()
+
+  const activities = snapshot.docs.map((doc) => {
+    const data = doc.data()
+    return {
+      ...data,
+      id: doc.id,
+      startedAt: data.startedAt.toDate(),
+      createdAt: data.createdAt.toDate(),
+      updatedAt: data.updatedAt.toDate(),
+    } as Activity
+  })
+
+  return { props: { activities }, revalidate: 15 * 60 }
+}

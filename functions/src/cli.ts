@@ -1,8 +1,8 @@
-import fs from 'fs'
+import dotenv from 'dotenv'
+
+dotenv.config({ path: '../.env.local' })
 
 const main = async () => {
-  process.env.FIREBASE_SERVICE_ACCOUNT = fs.readFileSync('./key.json', 'utf8')
-
   const { fetchTimelines } = await import('./actions/fetch_timelines')
   await fetchTimelines()
 }

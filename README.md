@@ -10,16 +10,6 @@ yarn
 
 # serve with hot reload at localhost:3000
 yarn dev
-
-# build for production and launch server
-yarn build
-yarn start
-
-# generate static project
-yarn export
-
-# deploy to Firebase Hosting
-yarn deploy
 ```
 
 ## Firebase Setup
@@ -32,31 +22,31 @@ FIREBASE_CLIENT_EMAIL=<clientEmail>
 FIREBASE_PRIVATE_KEY=<privateKey>
 ```
 
-### Functions Config
+### Export Configs
 
 ```bash
-# import
-firebase functions:config:set $(jq -r 'to_entries[] | [.key, (.value | tojson)] | join("=")' < functions/.runtimeconfig.json)
-
-# export
+# function config
 firebase functions:config:get > functions/.runtimeconfig.json
+
+# firestore indexes
+firebase firestore:indexes > firestore.indexes.json
 ```
 
-### Deploy to Firebase
+### Import Configs
 
 ```bash
+# function config
+firebase functions:config:set $(jq -r 'to_entries[] | [.key, (.value | tojson)] | join("=")' < functions/.runtimeconfig.json)
+
 # functions (all functions)
 firebase deploy --only functions
 # functions (specified function)
 firebase deploy --only functions:function1
 
-# firestore (rules and indexes)
+# firestore rules and indexes
 firebase deploy --only firestore
-# firestore (rules)
+# firestore rules
 firebase deploy --only firestore:rules
-# firestore (indexes)
+# firestore indexes
 firebase deploy --only firestore:indexes
-
-# hosting
-firebase deploy --only hosting
 ```

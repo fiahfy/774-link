@@ -65,6 +65,7 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
   return (
     <Box
       // @see https://github.com/mui-org/material-ui/issues/17010
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       {...({ ref } as any)}
       alignItems="center"
       display="flex"
@@ -114,6 +115,7 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
               backgroundColor: theme.palette.background.default,
               color: theme.palette.text.secondary,
               height: avatarSize,
+              marginLeft: -1 * theme.spacing(1),
               width: avatarSize,
             }}
           >
@@ -121,7 +123,7 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
           </Avatar>
         )}
       </Box>
-      <Box minWidth={0} ml={1}>
+      <Box minWidth={0} ml={1} zIndex={1}>
         <Typography noWrap variant="subtitle2">
           {owner.nameJa}
         </Typography>

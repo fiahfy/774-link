@@ -81,6 +81,33 @@
     "youtubeChannelId": "UC_WOBIopwUih0rytRnr_1Ag"
   },
   {
+    "id": "rukako-oura",
+    "groupId": "animare",
+    "name": "Rukako Oura",
+    "nameJa": "大浦るかこ",
+    "themeHue": 189,
+    "twitterScreenName": "Rukako_Oura",
+    "youtubeChannelId": "UC3xG1XWzAKt5dxSxktJvtxg"
+  },
+  {
+    "id": "tirol-tsukinoki",
+    "groupId": "animare",
+    "name": "Tirol Tsukinoki",
+    "nameJa": "月野木ちろる",
+    "themeHue": 172,
+    "twitterScreenName": "tirol0_0lorit",
+    "youtubeChannelId": "UCqskJ0nmw-_eweWfsKvbrzQ"
+  },
+  {
+    "id": "mia-konan",
+    "groupId": "animare",
+    "name": "Mia Konan",
+    "nameJa": "湖南みあ",
+    "themeHue": 47,
+    "twitterScreenName": "Mia_Konan",
+    "youtubeChannelId": "UC4PrHgUcAtOoj_LKmUL-uLQ"
+  },
+  {
     "id": "patra-suou",
     "groupId": "honeystrap",
     "name": "Patra Suou",

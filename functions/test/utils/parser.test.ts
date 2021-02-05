@@ -69,6 +69,14 @@ describe('extractDate', () => {
 })
 
 describe('parseMessage', () => {
+  beforeEach(() => {
+    advanceTo(new Date('2021-01-10T15:00:00.000Z'))
+  })
+
+  afterEach(() => {
+    clear()
+  })
+
   it('should work', () => {
     const result = parseMessage(
       '1/11(月)\nシャル 配信中です\n21:00 メアリ\n22:00 シャル\n24:00 パトラ\n\n',

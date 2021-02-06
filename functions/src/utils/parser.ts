@@ -69,11 +69,11 @@ export const parseMessage = (
 
     const hours = Number(match[1])
     const minutes = Number(match[2])
-    const title = match[3]
+    const memberName = match[3]
     const description1 = match[4]
     const description2 = match[5]
 
-    const m = `${title}/${description1}/${description2}`.match(
+    const m = `${memberName}/${description1}/${description2}`.match(
       /([ぁ-んー]+|[ァ-ヶー]+)/g
     )
 
@@ -102,21 +102,21 @@ export const parseMessage = (
       const memberIds = members
         .filter((member) => member.id !== owner.id)
         .map((member) => member.id)
-      let description = description1 ?? ''
-      if (description && description2) {
-        description += `(${description2})` ?? ''
+      let title = description1 ?? ''
+      if (title && description2) {
+        title += `(${description2})`
       }
       const startedAt = addMinutes(addHours(date, hours), minutes)
 
       activities.push({
         ownerId,
         memberIds,
-        title: '',
-        description,
         startedAt,
         sourceGroupId: groupId,
-        twitterTimelineId: '',
-        youtubeVideoId: '',
+        twitter: {
+          timelineId: '',
+          text: title,
+        },
       })
     }
   }
@@ -140,7 +140,10 @@ export const parse = (timeline: Timeline, groupId: string): Schedule[] => {
             publishedAt,
             activities: schedule.activities.map((activity) => ({
               ...activity,
-              twitterTimelineId: timeline.id,
+              twitter: {
+                ...activity.twitter,
+                timelineId: timeline.id,
+              },
             })),
           },
         ]

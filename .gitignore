@@ -33,5 +33,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Logs
+logs
+*.log
+npm-debug.log*
+
 # Transpiled files
 dist

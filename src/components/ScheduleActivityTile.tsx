@@ -128,7 +128,7 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
           {owner.nameJa}
         </Typography>
         <Typography noWrap variant="body2">
-          {activity.title || activity.description}
+          {activity.twitter.text}
         </Typography>
       </Box>
     </Box>

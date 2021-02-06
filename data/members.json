@@ -5,8 +5,12 @@
     "name": "Haneru Inaba",
     "nameJa": "因幡はねる",
     "themeHue": 33,
-    "twitterScreenName": "Haneru_Inaba",
-    "youtubeChannelId": "UC0Owc36U9lOyi9Gx9Ic-4qg"
+    "twitter": {
+      "screenName": "Haneru_Inaba"
+    },
+    "youtube": {
+      "channelId": "UC0Owc36U9lOyi9Gx9Ic-4qg"
+    }
   },
   {
     "id": "ichika-souya",
@@ -14,8 +18,12 @@
     "name": "Ichika Souya",
     "nameJa": "宗谷いちか",
     "themeHue": 213,
-    "twitterScreenName": "Ichika_Souya",
-    "youtubeChannelId": "UC2kyQhzGOB-JPgcQX9OMgEw"
+    "twitter": {
+      "screenName": "Ichika_Souya"
+    },
+    "youtube": {
+      "channelId": "UC2kyQhzGOB-JPgcQX9OMgEw"
+    }
   },
   {
     "id": "ran-hinokuma",
@@ -23,8 +31,12 @@
     "name": "Ran Hinokuma",
     "nameJa": "日ノ隈らん",
     "themeHue": 100,
-    "twitterScreenName": "Ran_Hinokuma",
-    "youtubeChannelId": "UCRvpMpzAXBRKJQuk-8-Sdvg"
+    "twitter": {
+      "screenName": "Ran_Hinokuma"
+    },
+    "youtube": {
+      "channelId": "UCRvpMpzAXBRKJQuk-8-Sdvg"
+    }
   },
   {
     "id": "kuku-kazami",
@@ -32,8 +44,12 @@
     "name": "Kuku Kazami",
     "nameJa": "風見くく",
     "themeHue": 20,
-    "twitterScreenName": "Kuku_Kazami",
-    "youtubeChannelId": "UCXp7sNC0F_qkjickvlYkg-Q"
+    "twitter": {
+      "screenName": "Kuku_Kazami"
+    },
+    "youtube": {
+      "channelId": "UCXp7sNC0F_qkjickvlYkg-Q"
+    }
   },
   {
     "id": "izumi-yunohara",
@@ -41,8 +57,12 @@
     "name": "Izumi Yunohara",
     "nameJa": "柚原いづみ",
     "themeHue": 21,
-    "twitterScreenName": "Izumi_Yunohara",
-    "youtubeChannelId": "UCW8WKciBixmaqaGqrlTITRQ"
+    "twitter": {
+      "screenName": "Izumi_Yunohara"
+    },
+    "youtube": {
+      "channelId": "UCW8WKciBixmaqaGqrlTITRQ"
+    }
   },
   {
     "id": "mimi-shiromiya",
@@ -50,8 +70,12 @@
     "name": "Mimi Shiromiya",
     "nameJa": "白宮みみ",
     "themeHue": 35,
-    "twitterScreenName": "shiromiya_mimi",
-    "youtubeChannelId": "UCtzCQnCT9E4o6U3mHHSHbQQ"
+    "twitter": {
+      "screenName": "shiromiya_mimi"
+    },
+    "youtube": {
+      "channelId": "UCtzCQnCT9E4o6U3mHHSHbQQ"
+    }
   },
   {
     "id": "natsumi-hashiba",
@@ -59,8 +83,12 @@
     "name": "Natsumi Hashiba",
     "nameJa": "羽柴なつみ",
     "themeHue": 94,
-    "twitterScreenName": "Natsumi_Hashiba",
-    "youtubeChannelId": "UC_BlXOQe5OcRC7o0GX8kp8A"
+    "twitter": {
+      "screenName": "Natsumi_Hashiba"
+    },
+    "youtube": {
+      "channelId": "UC_BlXOQe5OcRC7o0GX8kp8A"
+    }
   },
   {
     "id": "hikari-hira",
@@ -68,8 +96,12 @@
     "name": "Hikari Hira",
     "nameJa": "飛良ひかり",
     "themeHue": 10,
-    "twitterScreenName": "Hikari_Hira",
-    "youtubeChannelId": "UCFsWaTQ7kT76jNNGeGIKNSA"
+    "twitter": {
+      "screenName": "Hikari_Hira"
+    },
+    "youtube": {
+      "channelId": "UCFsWaTQ7kT76jNNGeGIKNSA"
+    }
   },
   {
     "id": "rui-seshima",
@@ -77,8 +109,12 @@
     "name": "Rui Seshima",
     "nameJa": "瀬島るい",
     "themeHue": 353,
-    "twitterScreenName": "Rui_Seshima",
-    "youtubeChannelId": "UC_WOBIopwUih0rytRnr_1Ag"
+    "twitter": {
+      "screenName": "Rui_Seshima"
+    },
+    "youtube": {
+      "channelId": "UC_WOBIopwUih0rytRnr_1Ag"
+    }
   },
   {
     "id": "rukako-oura",
@@ -86,8 +122,12 @@
     "name": "Rukako Oura",
     "nameJa": "大浦るかこ",
     "themeHue": 189,
-    "twitterScreenName": "Rukako_Oura",
-    "youtubeChannelId": "UC3xG1XWzAKt5dxSxktJvtxg"
+    "twitter": {
+      "screenName": "Rukako_Oura"
+    },
+    "youtube": {
+      "channelId": "UC3xG1XWzAKt5dxSxktJvtxg"
+    }
   },
   {
     "id": "tirol-tsukinoki",
@@ -95,8 +135,12 @@
     "name": "Tirol Tsukinoki",
     "nameJa": "月野木ちろる",
     "themeHue": 172,
-    "twitterScreenName": "tirol0_0lorit",
-    "youtubeChannelId": "UCqskJ0nmw-_eweWfsKvbrzQ"
+    "twitter": {
+      "screenName": "tirol0_0lorit"
+    },
+    "youtube": {
+      "channelId": "UCqskJ0nmw-_eweWfsKvbrzQ"
+    }
   },
   {
     "id": "mia-konan",
@@ -104,8 +148,12 @@
     "name": "Mia Konan",
     "nameJa": "湖南みあ",
     "themeHue": 47,
-    "twitterScreenName": "Mia_Konan",
-    "youtubeChannelId": "UC4PrHgUcAtOoj_LKmUL-uLQ"
+    "twitter": {
+      "screenName": "Mia_Konan"
+    },
+    "youtube": {
+      "channelId": "UC4PrHgUcAtOoj_LKmUL-uLQ"
+    }
   },
   {
     "id": "patra-suou",
@@ -113,8 +161,12 @@
     "name": "Patra Suou",
     "nameJa": "周防パトラ",
     "themeHue": 340,
-    "twitterScreenName": "Patra_HNST",
-    "youtubeChannelId": "UCeLzT-7b2PBcunJplmWtoDg"
+    "twitter": {
+      "screenName": "Patra_HNST"
+    },
+    "youtube": {
+      "channelId": "UCeLzT-7b2PBcunJplmWtoDg"
+    }
   },
   {
     "id": "charlotte-shimamura",
@@ -122,8 +174,12 @@
     "name": "Charlotte Shimamura",
     "nameJa": "島村シャルロット",
     "themeHue": 219,
-    "twitterScreenName": "Charlotte_HNST",
-    "youtubeChannelId": "UCYTz3uIgwVY3ZU-IQJS8r3A"
+    "twitter": {
+      "screenName": "Charlotte_HNST"
+    },
+    "youtube": {
+      "channelId": "UCYTz3uIgwVY3ZU-IQJS8r3A"
+    }
   },
   {
     "id": "mary-saionji",
@@ -131,8 +187,12 @@
     "name": "Mary Saionji",
     "nameJa": "西園寺メアリ",
     "themeHue": 311,
-    "twitterScreenName": "Mary_HNST",
-    "youtubeChannelId": "UCwePpiw1ocZRSNSkpKvVISw"
+    "twitter": {
+      "screenName": "Mary_HNST"
+    },
+    "youtube": {
+      "channelId": "UCwePpiw1ocZRSNSkpKvVISw"
+    }
   },
   {
     "id": "mico-sekishiro",
@@ -140,8 +200,12 @@
     "name": "Mico Sekishiro",
     "nameJa": "堰代ミコ",
     "themeHue": 78,
-    "twitterScreenName": "Mico_HNST",
-    "youtubeChannelId": "UCDh2bWI5EDu7PavqwICkVpA"
+    "twitter": {
+      "screenName": "Mico_HNST"
+    },
+    "youtube": {
+      "channelId": "UCDh2bWI5EDu7PavqwICkVpA"
+    }
   },
   {
     "id": "rene-ryugasaki",
@@ -149,8 +213,12 @@
     "name": "Rene Ryugasaki",
     "nameJa": "龍ヶ崎リン",
     "themeHue": 3,
-    "twitterScreenName": "Rene_Ryugasaki",
-    "youtubeChannelId": "UC2hc-00y-MSR6eYA4eQ4tjQ"
+    "twitter": {
+      "screenName": "Rene_Ryugasaki"
+    },
+    "youtube": {
+      "channelId": "UC2hc-00y-MSR6eYA4eQ4tjQ"
+    }
   },
   {
     "id": "anna-kojo",
@@ -158,16 +226,24 @@
     "name": "Anna Kojo",
     "nameJa": "虎城アンナ",
     "themeHue": 268,
-    "twitterScreenName": "Anna_Kojo",
-    "youtubeChannelId": "UCvPPBoTOor5gm8zSlE2tg4w"
+    "twitter": {
+      "screenName": "Anna_Kojo"
+    },
+    "youtube": {
+      "channelId": "UCvPPBoTOor5gm8zSlE2tg4w"
+    }
   },
   {
     "id": "chris-shishio",
     "groupId": "sugarlyric",
     "nameJa": "獅子王クリス",
     "themeHue": 180,
-    "twitterScreenName": "ChrisShishio",
-    "youtubeChannelId": "UC--A2dwZW7-M2kID0N6_lfA"
+    "twitter": {
+      "screenName": "ChrisShishio"
+    },
+    "youtube": {
+      "channelId": "UC--A2dwZW7-M2kID0N6_lfA"
+    }
   },
   {
     "id": "uge-and",
@@ -175,8 +251,12 @@
     "name": "Uge And",
     "nameJa": "杏戸ゆげ",
     "themeHue": 192,
-    "twitterScreenName": "Uge_And",
-    "youtubeChannelId": "UC3EhsuKdEkI99TWZwZgWutg"
+    "twitter": {
+      "screenName": "Uge_And"
+    },
+    "youtube": {
+      "channelId": "UC3EhsuKdEkI99TWZwZgWutg"
+    }
   },
   {
     "id": "kanon-kanade",
@@ -184,8 +264,12 @@
     "name": "Kanon Kanade",
     "nameJa": "花奏かのん",
     "themeHue": 168,
-    "twitterScreenName": "_kanade_kanon",
-    "youtubeChannelId": "UCmqrvfLMws-GLGHQcB5dasg"
+    "twitter": {
+      "screenName": "_kanade_kanon"
+    },
+    "youtube": {
+      "channelId": "UCmqrvfLMws-GLGHQcB5dasg"
+    }
   },
   {
     "id": "anko-kisaki",
@@ -193,8 +277,12 @@
     "name": "Anko Kisaki",
     "nameJa": "季咲あんこ",
     "themeHue": 0,
-    "twitterScreenName": "Anko_Kisaki",
-    "youtubeChannelId": "UChXm-xAYPfygrbyLo2yCASQ"
+    "twitter": {
+      "screenName": "Anko_Kisaki"
+    },
+    "youtube": {
+      "channelId": "UChXm-xAYPfygrbyLo2yCASQ"
+    }
   },
   {
     "id": "wat-huma",
@@ -202,8 +290,12 @@
     "name": "Wat Huma",
     "nameJa": "不磨わっと",
     "themeHue": 313,
-    "twitterScreenName": "Wat_Huma",
-    "youtubeChannelId": "UCV4EoK6BVNl7wxuxpUvvSWA"
+    "twitter": {
+      "screenName": "Wat_Huma"
+    },
+    "youtube": {
+      "channelId": "UCV4EoK6BVNl7wxuxpUvvSWA"
+    }
   },
   {
     "id": "met-komori",
@@ -211,7 +303,11 @@
     "name": "Met Komori",
     "nameJa": "小森めと",
     "themeHue": 4,
-    "twitterScreenName": "Met_Komori",
-    "youtubeChannelId": "UCzUNASdzI4PV5SlqtYwAkKQ"
+    "twitter": {
+      "screenName": "Met_Komori"
+    },
+    "youtube": {
+      "channelId": "UCzUNASdzI4PV5SlqtYwAkKQ"
+    }
   }
 ]

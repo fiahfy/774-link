@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"774-link-data@file:774-link-data-0.0.1.tgz":
-  version "0.0.1"
-  resolved "file:774-link-data-0.0.1.tgz#afc7a513952b443735ab7d63ff3b8c64373f6bd5"
+"774-link-data@file:774-link-data-0.0.2.tgz":
+  version "0.0.2"
+  resolved "file:774-link-data-0.0.2.tgz#4c1c4e886c01046e5c3c4ccba5fc1ef6f4021c77"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.12.11":
   version "7.12.11"

@@ -85,6 +85,7 @@ describe('parseMessage', () => {
     expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(3)
     expect(result?.activities[0]).toEqual({
+      isHost: true,
       memberIds: [],
       ownerId: 'mary-saionji',
       sourceGroupId: 'honeystrap',
@@ -92,6 +93,7 @@ describe('parseMessage', () => {
       twitter: { timelineId: '', text: '' },
     })
     expect(result?.activities[1]).toEqual({
+      isHost: true,
       memberIds: [],
       ownerId: 'charlotte-shimamura',
       sourceGroupId: 'honeystrap',
@@ -99,6 +101,7 @@ describe('parseMessage', () => {
       twitter: { timelineId: '', text: '' },
     })
     expect(result?.activities[2]).toEqual({
+      isHost: true,
       memberIds: [],
       ownerId: 'patra-suou',
       sourceGroupId: 'honeystrap',
@@ -111,6 +114,7 @@ describe('parseMessage', () => {
     expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
+      isHost: true,
       memberIds: [],
       ownerId: 'mico-sekishiro',
       sourceGroupId: 'honeystrap',
@@ -126,6 +130,7 @@ describe('parseMessage', () => {
     expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
+      isHost: true,
       memberIds: [],
       ownerId: 'mico-sekishiro',
       sourceGroupId: 'honeystrap',
@@ -141,6 +146,7 @@ describe('parseMessage', () => {
     expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
+      isHost: true,
       memberIds: [],
       ownerId: 'mico-sekishiro',
       sourceGroupId: 'honeystrap',
@@ -156,6 +162,7 @@ describe('parseMessage', () => {
     expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
+      isHost: false,
       memberIds: ['natsumi-hashiba'],
       ownerId: 'mary-saionji',
       sourceGroupId: 'honeystrap',
@@ -173,6 +180,7 @@ describe('parseMessage', () => {
     expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(1)
     expect(result?.activities[0]).toEqual({
+      isHost: false,
       memberIds: [],
       ownerId: 'haneru-inaba',
       sourceGroupId: 'animare',
@@ -188,6 +196,7 @@ describe('parseMessage', () => {
     expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(2)
     expect(result?.activities[0]).toEqual({
+      isHost: true,
       memberIds: ['hikari-hira'],
       ownerId: 'ran-hinokuma',
       sourceGroupId: 'animare',
@@ -195,6 +204,7 @@ describe('parseMessage', () => {
       twitter: { timelineId: '', text: 'ひかりコラボ' },
     })
     expect(result?.activities[1]).toEqual({
+      isHost: false,
       memberIds: ['ran-hinokuma'],
       ownerId: 'hikari-hira',
       sourceGroupId: 'animare',
@@ -209,6 +219,7 @@ describe('parseMessage', () => {
     expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(3)
     expect(result?.activities[0]).toEqual({
+      isHost: true,
       memberIds: ['hikari-hira', 'rui-seshima'],
       ownerId: 'ran-hinokuma',
       sourceGroupId: 'animare',
@@ -216,6 +227,7 @@ describe('parseMessage', () => {
       twitter: { timelineId: '', text: '' },
     })
     expect(result?.activities[1]).toEqual({
+      isHost: false,
       memberIds: ['ran-hinokuma', 'rui-seshima'],
       ownerId: 'hikari-hira',
       sourceGroupId: 'animare',
@@ -223,6 +235,7 @@ describe('parseMessage', () => {
       twitter: { timelineId: '', text: '' },
     })
     expect(result?.activities[2]).toEqual({
+      isHost: false,
       memberIds: ['ran-hinokuma', 'hikari-hira'],
       ownerId: 'rui-seshima',
       sourceGroupId: 'animare',
@@ -237,6 +250,7 @@ describe('parseMessage', () => {
     expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
     expect(result?.activities.length).toBe(2)
     expect(result?.activities[0]).toEqual({
+      isHost: false,
       memberIds: [],
       ownerId: 'charlotte-shimamura',
       sourceGroupId: 'honeystrap',
@@ -244,6 +258,7 @@ describe('parseMessage', () => {
       twitter: { timelineId: '', text: 'ドーラさん コラボ(ドーラさんch)' },
     })
     expect(result?.activities[1]).toEqual({
+      isHost: true,
       memberIds: [],
       ownerId: 'mary-saionji',
       sourceGroupId: 'honeystrap',

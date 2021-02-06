@@ -46,6 +46,13 @@ const useSummaries = (activities: Activity[]) => {
         if (!largest) {
           return { summaries, picked }
         }
+        // 一番 memberIds が多い activity の中に host があれば skip
+        const host = !activities.some(
+          (a) => activity.memberIds.length <= a.memberIds.length && a.isHost
+        )
+        if (!host) {
+          return { summaries, picked }
+        }
         return {
           summaries: [
             ...summaries,

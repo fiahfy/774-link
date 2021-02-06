@@ -27,16 +27,25 @@ const useSummaries = (activities: Activity[]) => {
   return React.useMemo(() => {
     const { summaries } = activities.reduce(
       ({ summaries, picked }, activity, _index, array) => {
+        // ピック済みだったら skip する
         if (picked.includes(activity.id)) {
           return { summaries, picked }
         }
         const startedAt = activity.startedAt
+        // 同じ開始時間 かつ お互いに memberId を所有している activity を取得
         const activities = array.filter(
           (item) =>
             item.id !== activity.id &&
             isEqual(item.startedAt, activity.startedAt) &&
             item.memberIds.includes(activity.ownerId)
         )
+        // 一番 memberIds が多くなければ skip
+        const largest = activities.every(
+          (a) => activity.memberIds.length >= a.memberIds.length
+        )
+        if (!largest) {
+          return { summaries, picked }
+        }
         return {
           summaries: [
             ...summaries,
@@ -45,6 +54,7 @@ const useSummaries = (activities: Activity[]) => {
               activities: [activity, ...activities],
             },
           ],
+          // 同じ開始時間の activity はピック済みに追加する
           picked: [...picked, ...activities.map((activity) => activity.id)],
         }
       },
@@ -62,13 +72,16 @@ const useCalculatePosition = (
 ) => {
   const unitsPerHour = 4
   return React.useMemo(() => {
+    // summaries を開始時間に応じて y 軸の値に変換
     const ys = summaries.map((summary) => {
       return Math.floor(
         (getHours(summary.startedAt) * 60 + getMinutes(summary.startedAt)) /
           (60 / unitsPerHour)
       )
     }, [] as number[])
+    // y 軸の値から x 軸の値と width を取得
     const data = calc(ys, unitsPerHour, 24 * unitsPerHour)
+    // summaries に位置情報を付与する
     return summaries.map((summary, i) => {
       const { x, w } = data[i]
       return {

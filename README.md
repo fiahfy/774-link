@@ -1,6 +1,6 @@
 # 774-link
 
-> WIP
+> Unofficial schedule site for 774 inc.
 
 ## Build Setup
 

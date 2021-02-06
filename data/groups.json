@@ -4,31 +4,39 @@
     "name": "AniMare",
     "nameJa": "有閑喫茶あにまーれ",
     "sourceable": true,
-    "twitterName": "あにまーれ公式🍩黒猫ななし",
-    "twitterScreenName": "AniMare_cafe"
+    "twitter": {
+      "name": "あにまーれ公式🍩黒猫ななし",
+      "screenName": "AniMare_cafe"
+    }
   },
   {
     "id": "honeystrap",
     "name": "HoneyStrap",
     "nameJa": "ハニーストラップ",
     "sourceable": true,
-    "twitterName": "ハニーストラップ公式🍩灰猫ななし",
-    "twitterScreenName": "HNST_official"
+    "twitter": {
+      "name": "ハニーストラップ公式🍩灰猫ななし",
+      "screenName": "HNST_official"
+    }
   },
   {
     "id": "sugarlyric",
     "name": "SugarLyric",
     "nameJa": "シュガーリリック",
     "sourceable": true,
-    "twitterName": "シュガーリリック公式🍩三毛猫ななし",
-    "twitterScreenName": "SugarLyric_PI"
+    "twitter": {
+      "name": "シュガーリリック公式🍩三毛猫ななし",
+      "screenName": "SugarLyric_PI"
+    }
   },
   {
     "id": "vapart",
     "name": "VApArt",
     "nameJa": "ブイアパ",
     "sourceable": false,
-    "twitterName": "ブイアパ公式🏠銀猫ななし",
-    "twitterScreenName": "Vtuber_ApArt"
+    "twitter": {
+      "name": "ブイアパ公式🏠銀猫ななし",
+      "screenName": "Vtuber_ApArt"
+    }
   }
 ]

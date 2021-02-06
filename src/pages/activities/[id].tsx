@@ -60,7 +60,7 @@ const Detail: NextPage<Props> = (props) => {
         width="256"
       /> */}
       <Box m={2}>
-        <Typography variant="h6">{activity.description}</Typography>
+        <Typography variant="h6">{activity.twitter.text}</Typography>
         <Typography color="textSecondary" variant="body2">
           {format(activity.startedAt, 'Pp')}
         </Typography>
@@ -101,7 +101,7 @@ const Detail: NextPage<Props> = (props) => {
         <ListItem
           button
           component="a"
-          href={`https://twitter.com/${group.twitterScreenName}/status/${activity.twitterTimelineId}`}
+          href={`https://twitter.com/${group.twitter.screenName}/status/${activity.twitter.timelineId}`}
           target="_blank"
         >
           <ListItemIcon>
@@ -109,7 +109,7 @@ const Detail: NextPage<Props> = (props) => {
           </ListItemIcon>
           <ListItemText
             disableTypography
-            primary={<Typography noWrap>{group.twitterName}</Typography>}
+            primary={<Typography noWrap>{group.twitter.name}</Typography>}
           />
           <ListItemSecondaryAction>
             <OpenInNew />

@@ -136,7 +136,7 @@ export const fetchTimelines = async (groupId?: string): Promise<void> => {
       continue
     }
     console.log(green('fetching %s timelines'), group.id)
-    const timelines = await fetch(group.twitterScreenName)
+    const timelines = await fetch(group.twitter.screenName)
     const schedules = parseTimelines(timelines, group.id)
     const extracted = extractSchedule(schedules)
     for (const schedule of extracted) {

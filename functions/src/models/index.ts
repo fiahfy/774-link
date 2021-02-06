@@ -26,6 +26,7 @@ export type Member = {
 export type Activity = {
   ownerId: string
   memberIds: string[]
+  isHost: boolean
   startedAt: Date
   sourceGroupId: string
   twitter: {

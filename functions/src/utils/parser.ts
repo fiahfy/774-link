@@ -69,9 +69,16 @@ export const parseMessage = (
 
     const hours = Number(match[1])
     const minutes = Number(match[2])
-    const memberName = match[3]
-    const description1 = match[4]
-    const description2 = match[5]
+    const memberName = match[3] ?? ''
+    const description1 = match[4] ?? ''
+    const description2 = match[5] ?? ''
+
+    const startedAt = addMinutes(addHours(date, hours), minutes)
+    let title = description1
+    if (title && description2) {
+      title += `(${description2})`
+    }
+    const mayHost = !description2.includes('ch')
 
     const m = `${memberName}/${description1}/${description2}`.match(
       /([ぁ-んー]+|[ァ-ヶー]+)/g
@@ -92,7 +99,7 @@ export const parseMessage = (
         return array.findIndex((item) => member.id === item.id) === index
       })
 
-    for (const owner of members) {
+    for (const [index, owner] of members.entries()) {
       const exists = groupMembers.some((member) => member.id === owner.id)
       if (!exists) {
         continue
@@ -102,15 +109,12 @@ export const parseMessage = (
       const memberIds = members
         .filter((member) => member.id !== owner.id)
         .map((member) => member.id)
-      let title = description1 ?? ''
-      if (title && description2) {
-        title += `(${description2})`
-      }
-      const startedAt = addMinutes(addHours(date, hours), minutes)
+      const isHost = mayHost && index === 0
 
       activities.push({
         ownerId,
         memberIds,
+        isHost,
         startedAt,
         sourceGroupId: groupId,
         twitter: {

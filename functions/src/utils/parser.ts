@@ -51,6 +51,7 @@ export const parseMessage = (
   groupId: string
 ): Omit<Schedule, 'publishedAt'> | undefined => {
   const date = extractDate(message)
+  // skip if date is not parsed
   if (!date) {
     return undefined
   }
@@ -123,6 +124,11 @@ export const parseMessage = (
         },
       })
     }
+  }
+
+  // skip if activity is not found
+  if (!activities.length) {
+    return undefined
   }
 
   return {

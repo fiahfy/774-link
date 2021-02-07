@@ -13,25 +13,13 @@ const parseTimelines = (timelines: Timeline[], groupId: string) => {
   }, [] as Schedule[])
 }
 
-const extractSchedule = (schedules: Schedule[]) => {
-  return Object.values(
-    schedules
-      .reverse() // order by date asc
-      .reduce((carry, schedule) => {
-        const timestamp = getTime(schedule.scheduledAt)
-        return {
-          ...carry,
-          [timestamp]: schedule, // overwrite with the latest schedule for each day
-        }
-      }, {} as { [timestamp: number]: Schedule })
-  )
-}
-
 const updateSchedule = async (schedule: Schedule, groupId: string) => {
   console.log('updating activities at %s', format(schedule.scheduledAt, 'P'))
 
   // between 06:00 to 30:00
+  // スケジュールに記載されている日付の6:00、ただしスケジュールが公開された日時がそれ以降の場合は後者
   const from = max([schedule.publishedAt, addHours(schedule.scheduledAt, 6)])
+  // スケジュールに記載されている日付の次の日の6:00まで
   const to = addHours(addDays(schedule.scheduledAt, 1), 6)
 
   console.log('between %s to %s', format(from, 'Pp'), format(to, 'Pp'))
@@ -138,8 +126,7 @@ export const fetchTimelines = async (groupId?: string): Promise<void> => {
     console.log(green('fetching %s timelines'), group.id)
     const timelines = await fetch(group.twitter.screenName)
     const schedules = parseTimelines(timelines, group.id)
-    const extracted = extractSchedule(schedules)
-    for (const schedule of extracted) {
+    for (const schedule of schedules) {
       await updateSchedule(schedule, group.id)
     }
     console.log(green('fetched %s timelines'), group.id)

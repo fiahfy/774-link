@@ -32,6 +32,29 @@ const useResizeObserver = (
   }, [callback, target])
 }
 
+const useHover = (target: React.RefObject<HTMLElement | undefined>) => {
+  const [hovered, setHovered] = React.useState(false)
+  React.useEffect(() => {
+    if (!target.current) {
+      return
+    }
+    const mouseenter = () => {
+      setHovered(true)
+    }
+    const mouseleave = () => {
+      setHovered(false)
+    }
+    const el = target.current
+    el.addEventListener('mouseenter', mouseenter)
+    el.addEventListener('mouseleave', mouseleave)
+    return () => {
+      el.removeEventListener('mouseenter', mouseenter)
+      el.removeEventListener('mouseleave', mouseleave)
+    }
+  }, [target])
+  return hovered
+}
+
 type Props = { summary: { startedAt: Date; activities: Activity[] } }
 
 const ScheduleActivityTile: React.FC<Props> = (props) => {
@@ -41,6 +64,7 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
   const live = useLive(summary.startedAt)
   const [maxAvatars, setMaxAvatars] = React.useState(1)
   const ref = React.useRef<HTMLDivElement>()
+  const hovered = useHover(ref)
   const callback = React.useCallback((entries: ResizeObserverEntry[]) => {
     const maxAvatars = Math.floor(entries[0].contentRect.width / avatarSize)
     setMaxAvatars(Math.max(1, maxAvatars))
@@ -75,8 +99,8 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
       style={{
         backgroundColor: `${Color.hsl(
           owner.themeHue,
-          33,
-          live ? 50 : 33
+          owner.themeHue === -1 ? 0 : 33,
+          hovered ? 40 : live ? 50 : 30
         ).hex()}`,
         boxSizing: 'border-box',
         borderColor: theme.palette.background.default,

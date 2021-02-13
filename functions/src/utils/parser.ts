@@ -37,6 +37,7 @@ export const extractDate = (message: string): Date | undefined => {
   const months = Number(match[1]) - 1
   const days = Number(match[2])
 
+  // スケジュール日の月が現在の月よりも小さい場合は来年のスケジュール日と推定する
   const jst = utcToZonedTime(new Date(), 'Asia/Tokyo')
   let years = getYear(jst)
   if (months < getMonth(jst)) {
@@ -50,7 +51,9 @@ export const parseMessage = (
   message: string,
   groupId: string
 ): Omit<Schedule, 'publishedAt'> | undefined => {
+  // スケジュール日を取得
   const date = extractDate(message)
+  // skip if date is not parsed
   if (!date) {
     return undefined
   }
@@ -58,6 +61,7 @@ export const parseMessage = (
   const allMembers = listMembers()
   const groupMembers = listMembers({ groupIds: [groupId] })
 
+  // 時間を含んだテキストからアクティビティを取得
   const activities: Activity[] = []
   // eslint-disable-next-line no-irregular-whitespace
   const reg = /(\d+):(\d+)-?\s?([ぁ-んァ-ヶ/]+)(?:[\s　]*[(（](.+)[）)])?(?:\n?＊([^\n\s]+))?/g
@@ -78,24 +82,30 @@ export const parseMessage = (
     if (title && description2) {
       title += `(${description2})`
     }
+    // 特定の文字列を含んでいなければ host の可能性がある
     const mayHost = !description2.includes('ch')
 
+    // ひらがな、カタカナのまとまり毎にメンバーを抽出
     const m = `${memberName}/${description1}/${description2}`.match(
       /([ぁ-んー]+|[ァ-ヶー]+)/g
     )
-
     const members = (m ? Array.from(m) : [])
       .reduce((carry, name) => {
+        // 抽出のノイズになりそうな文字列を除去
         const replaced = name.replace(/(さん|コラボ|メンバー)/g, '')
+        // 除去した結果、2文字に満たない場合は無視
         if (replaced.length < 2) {
           return carry
         }
+        // 名前から対象のメンバーを見つける
+        // e.g. はねる -> 因幡はねる
         const member = allMembers.find((member) =>
           member.nameJa.match(replaced)
         )
         return member ? [...carry, member] : carry
       }, [] as Member[])
       .filter((member, index, array) => {
+        // 重複を除去
         return array.findIndex((item) => member.id === item.id) === index
       })
 
@@ -107,8 +117,9 @@ export const parseMessage = (
 
       const ownerId = owner.id
       const memberIds = members
-        .filter((member) => member.id !== owner.id)
+        .filter((member) => member.id !== owner.id) // メンバーから自分自身を取り除く
         .map((member) => member.id)
+      // 特定の文字列を含んでいない かつ 一番最初に見つかったメンバーは host 扱いとする
       const isHost = mayHost && index === 0
 
       activities.push({
@@ -125,6 +136,11 @@ export const parseMessage = (
     }
   }
 
+  // skip if activity is not found
+  if (!activities.length) {
+    return undefined
+  }
+
   return {
     scheduledAt: date,
     activities,
@@ -132,16 +148,21 @@ export const parseMessage = (
 }
 
 export const parse = (timeline: Timeline, groupId: string): Schedule[] => {
+  // ツイートの投稿日
   const publishedAt = new Date(timeline.createdAt)
+  // ツイートを日別のスケジュール日単位のテキストに分割する
   const messages = parseFullMessage(timeline.fullText)
   return messages.reduce((carry, message) => {
+    // ツイートからスケジュールを取得する
     const schedule = parseMessage(message, groupId)
     return schedule
       ? [
           ...carry,
           {
             ...schedule,
+            // ソースの投稿日を設定
             publishedAt,
+            // 各アクティビティにソース元の timeline id を設定
             activities: schedule.activities.map((activity) => ({
               ...activity,
               twitter: {

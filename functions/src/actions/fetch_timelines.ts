@@ -1,4 +1,13 @@
-import { addDays, addHours, format, getTime, isAfter, max } from 'date-fns'
+import {
+  addDays,
+  addHours,
+  differenceInMinutes,
+  format,
+  getTime,
+  isAfter,
+  isEqual,
+  max,
+} from 'date-fns'
 import { listGroups } from '../data'
 import firebase from '../firebase'
 import { fetch } from '../utils/fetcher'
@@ -7,31 +16,40 @@ import { Activity, Schedule, Timeline } from '../models'
 import { cyan, green, red, yellow } from 'chalk'
 
 const parseTimelines = (timelines: Timeline[], groupId: string) => {
-  return timelines.reduce((carry, timeline) => {
-    const schedules = parse(timeline, groupId)
-    return [...carry, ...schedules]
-  }, [] as Schedule[])
-}
-
-const extractSchedule = (schedules: Schedule[]) => {
-  return Object.values(
-    schedules
-      .reverse() // order by date asc
-      .reduce((carry, schedule) => {
-        const timestamp = getTime(schedule.scheduledAt)
-        return {
-          ...carry,
-          [timestamp]: schedule, // overwrite with the latest schedule for each day
-        }
-      }, {} as { [timestamp: number]: Schedule })
-  )
+  return timelines
+    .reverse() // order by date asc
+    .reduce((carry, timeline) => {
+      // ツイートから1つ以上のスケジュールを取得
+      const schedules = parse(timeline, groupId)
+      return [...carry, ...schedules]
+    }, [] as Schedule[])
+    .reduce((carry, schedule) => {
+      // 1つ前のスケジュールと比較し、スケジュール日が同じ かつ 投稿日が5分未満 の場合に同じスケジュールとみなしマージする
+      const prev = carry[carry.length - 1]
+      if (
+        prev &&
+        isEqual(schedule.scheduledAt, prev.scheduledAt) &&
+        differenceInMinutes(schedule.publishedAt, prev.publishedAt) < 5
+      ) {
+        return [
+          ...carry.slice(0, carry.length - 1),
+          {
+            ...prev,
+            activities: [...prev.activities, ...schedule.activities],
+          },
+        ]
+      }
+      return [...carry, schedule]
+    }, [] as Schedule[])
 }
 
 const updateSchedule = async (schedule: Schedule, groupId: string) => {
   console.log('updating activities at %s', format(schedule.scheduledAt, 'P'))
 
   // between 06:00 to 30:00
+  // スケジュールに記載されている日付の6:00、ただしスケジュールが公開された日時がそれ以降の場合は後者
   const from = max([schedule.publishedAt, addHours(schedule.scheduledAt, 6)])
+  // スケジュールに記載されている日付の次の日の6:00まで
   const to = addHours(addDays(schedule.scheduledAt, 1), 6)
 
   console.log('between %s to %s', format(from, 'Pp'), format(to, 'Pp'))
@@ -138,8 +156,7 @@ export const fetchTimelines = async (groupId?: string): Promise<void> => {
     console.log(green('fetching %s timelines'), group.id)
     const timelines = await fetch(group.twitter.screenName)
     const schedules = parseTimelines(timelines, group.id)
-    const extracted = extractSchedule(schedules)
-    for (const schedule of extracted) {
+    for (const schedule of schedules) {
       await updateSchedule(schedule, group.id)
     }
     console.log(green('fetched %s timelines'), group.id)

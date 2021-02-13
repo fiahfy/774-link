@@ -11,8 +11,9 @@ import {
   ListItemText,
   ListSubheader,
   Typography,
+  useTheme,
 } from '@material-ui/core'
-import { OpenInNew, Twitter } from '@material-ui/icons'
+import { OpenInNew, Twitter, YouTube } from '@material-ui/icons'
 import { format } from 'date-fns'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Image from 'next/image'
@@ -29,6 +30,7 @@ type Props = {
 const Detail: NextPage<Props> = (props) => {
   const { activity } = props
 
+  const theme = useTheme()
   const router = useRouter()
 
   if (router.isFallback) {
@@ -60,7 +62,9 @@ const Detail: NextPage<Props> = (props) => {
         width="256"
       /> */}
       <Box m={2}>
-        <Typography variant="h6">{activity.twitter.text}</Typography>
+        <Typography variant="h6">
+          {activity.twitter.text || 'Untitled'}
+        </Typography>
         <Typography color="textSecondary" variant="body2">
           {format(activity.startedAt, 'Pp')}
         </Typography>
@@ -68,15 +72,18 @@ const Detail: NextPage<Props> = (props) => {
       <List>
         <ListItem>
           <ListItemIcon>
-            <Avatar alt={owner.name}>
+            <Avatar alt={owner.name} style={{ height: 56, width: 56 }}>
               <Image
-                height={40}
+                height={56}
                 src={`/img/members/${owner.id}_64x64@2x.png`}
-                width={40}
+                width={56}
               />
             </Avatar>
           </ListItemIcon>
-          <ListItemText primary={owner.nameJa} />
+          <ListItemText
+            primary={owner.name}
+            style={{ marginLeft: theme.spacing(2) }}
+          />
         </ListItem>
       </List>
       {members.length > 0 && (
@@ -92,12 +99,29 @@ const Detail: NextPage<Props> = (props) => {
                   />
                 </Avatar>
               </ListItemIcon>
-              <ListItemText primary={member.nameJa} />
+              <ListItemText primary={member.name} />
             </ListItem>
           ))}
         </List>
       )}
-      <List subheader={<ListSubheader>Source</ListSubheader>}>
+      <List>
+        <ListItem
+          button
+          component="a"
+          href={`https://www.youtube.com/channel/${owner.youtube.channelId}/live`}
+          target="_blank"
+        >
+          <ListItemIcon>
+            <YouTube />
+          </ListItemIcon>
+          <ListItemText
+            disableTypography
+            primary={<Typography noWrap>Open Streamimg Page</Typography>}
+          />
+          <ListItemSecondaryAction>
+            <OpenInNew />
+          </ListItemSecondaryAction>
+        </ListItem>
         <ListItem
           button
           component="a"
@@ -109,7 +133,7 @@ const Detail: NextPage<Props> = (props) => {
           </ListItemIcon>
           <ListItemText
             disableTypography
-            primary={<Typography noWrap>{group.twitter.name}</Typography>}
+            primary={<Typography noWrap>Open Source Tweet</Typography>}
           />
           <ListItemSecondaryAction>
             <OpenInNew />
@@ -160,5 +184,5 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     updatedAt: data.updatedAt.toDate(),
   } as Activity
 
-  return { props: { activity }, revalidate: 60 * 60 }
+  return { props: { activity }, revalidate: 15 * 60 }
 }

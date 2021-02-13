@@ -88,7 +88,7 @@ describe('parseMessage', () => {
       isHost: true,
       memberIds: [],
       ownerId: 'mary-saionji',
-      sourceGroupId: 'honeystrap',
+      groupId: 'honeystrap',
       startedAt: new Date('2021-01-11T12:00:00.000Z'),
       twitter: { timelineId: '', text: '' },
     })
@@ -96,7 +96,7 @@ describe('parseMessage', () => {
       isHost: true,
       memberIds: [],
       ownerId: 'charlotte-shimamura',
-      sourceGroupId: 'honeystrap',
+      groupId: 'honeystrap',
       startedAt: new Date('2021-01-11T13:00:00.000Z'),
       twitter: { timelineId: '', text: '' },
     })
@@ -104,7 +104,7 @@ describe('parseMessage', () => {
       isHost: true,
       memberIds: [],
       ownerId: 'patra-suou',
-      sourceGroupId: 'honeystrap',
+      groupId: 'honeystrap',
       startedAt: new Date('2021-01-11T15:00:00.000Z'),
       twitter: { timelineId: '', text: '' },
     })
@@ -117,7 +117,7 @@ describe('parseMessage', () => {
       isHost: true,
       memberIds: [],
       ownerId: 'mico-sekishiro',
-      sourceGroupId: 'honeystrap',
+      groupId: 'honeystrap',
       startedAt: new Date('2021-01-11T16:00:00.000Z'),
       twitter: { timelineId: '', text: '' },
     })
@@ -133,7 +133,7 @@ describe('parseMessage', () => {
       isHost: true,
       memberIds: [],
       ownerId: 'mico-sekishiro',
-      sourceGroupId: 'honeystrap',
+      groupId: 'honeystrap',
       startedAt: new Date('2021-01-11T09:00:00.000Z'),
       twitter: { timelineId: '', text: 'メンバー限定配信' },
     })
@@ -149,7 +149,7 @@ describe('parseMessage', () => {
       isHost: true,
       memberIds: [],
       ownerId: 'mico-sekishiro',
-      sourceGroupId: 'honeystrap',
+      groupId: 'honeystrap',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       twitter: { timelineId: '', text: 'メンバー限定配信' },
     })
@@ -165,7 +165,7 @@ describe('parseMessage', () => {
       isHost: false,
       memberIds: ['natsumi-hashiba'],
       ownerId: 'mary-saionji',
-      sourceGroupId: 'honeystrap',
+      groupId: 'honeystrap',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       twitter: {
         timelineId: '',
@@ -183,7 +183,7 @@ describe('parseMessage', () => {
       isHost: false,
       memberIds: [],
       ownerId: 'haneru-inaba',
-      sourceGroupId: 'animare',
+      groupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       twitter: { timelineId: '', text: 'コラボ(ルイス・キャミーさんch)' },
     })
@@ -199,7 +199,7 @@ describe('parseMessage', () => {
       isHost: true,
       memberIds: ['hikari-hira'],
       ownerId: 'ran-hinokuma',
-      sourceGroupId: 'animare',
+      groupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       twitter: { timelineId: '', text: 'ひかりコラボ' },
     })
@@ -207,7 +207,7 @@ describe('parseMessage', () => {
       isHost: false,
       memberIds: ['ran-hinokuma'],
       ownerId: 'hikari-hira',
-      sourceGroupId: 'animare',
+      groupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       twitter: { timelineId: '', text: 'ひかりコラボ' },
     })
@@ -222,7 +222,7 @@ describe('parseMessage', () => {
       isHost: true,
       memberIds: ['hikari-hira', 'rui-seshima'],
       ownerId: 'ran-hinokuma',
-      sourceGroupId: 'animare',
+      groupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       twitter: { timelineId: '', text: '' },
     })
@@ -230,7 +230,7 @@ describe('parseMessage', () => {
       isHost: false,
       memberIds: ['ran-hinokuma', 'rui-seshima'],
       ownerId: 'hikari-hira',
-      sourceGroupId: 'animare',
+      groupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       twitter: { timelineId: '', text: '' },
     })
@@ -238,7 +238,7 @@ describe('parseMessage', () => {
       isHost: false,
       memberIds: ['ran-hinokuma', 'hikari-hira'],
       ownerId: 'rui-seshima',
-      sourceGroupId: 'animare',
+      groupId: 'animare',
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       twitter: { timelineId: '', text: '' },
     })
@@ -253,7 +253,7 @@ describe('parseMessage', () => {
       isHost: false,
       memberIds: [],
       ownerId: 'charlotte-shimamura',
-      sourceGroupId: 'honeystrap',
+      groupId: 'honeystrap',
       startedAt: new Date('2021-01-11T12:00:00.000Z'),
       twitter: { timelineId: '', text: 'ドーラさん コラボ(ドーラさんch)' },
     })
@@ -261,7 +261,7 @@ describe('parseMessage', () => {
       isHost: true,
       memberIds: [],
       ownerId: 'mary-saionji',
-      sourceGroupId: 'honeystrap',
+      groupId: 'honeystrap',
       startedAt: new Date('2021-01-11T15:00:00.000Z'),
       twitter: { timelineId: '', text: 'メンバー限定配信' },
     })

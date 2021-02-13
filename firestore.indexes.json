@@ -5,7 +5,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "sourceGroupId",
+          "fieldPath": "groupId",
           "order": "ASCENDING"
         },
         {

@@ -124,10 +124,10 @@ export const parseMessage = (
 
       activities.push({
         ownerId,
+        groupId,
         memberIds,
         isHost,
         startedAt,
-        sourceGroupId: groupId,
         twitter: {
           timelineId: '',
           text: title,
@@ -169,8 +169,9 @@ export const parseTimeline = (
             activities: schedule.activities.map((activity) => ({
               ...activity,
               twitter: {
-                ...activity.twitter,
                 timelineId: timeline.id,
+                text: '',
+                ...activity.twitter,
               },
             })),
           },

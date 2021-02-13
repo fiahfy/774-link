@@ -25,16 +25,20 @@ const main = async () => {
           default: false,
           alias: 'v',
         },
-        group: {
+        groupId: {
           type: 'string',
           alias: 'g',
+        },
+        memberId: {
+          type: 'string',
+          alias: 'm',
         },
       },
     }
   )
 
   const [command] = cli.input
-  const { help, version, group } = cli.flags
+  const { help, version, groupId, memberId } = cli.flags
 
   if (version) {
     return cli.showVersion()
@@ -46,12 +50,12 @@ const main = async () => {
   switch (command) {
     case 'fetch-timelines': {
       const { fetchTimelines } = await import('./actions/fetch-timelines')
-      await fetchTimelines(group)
+      await fetchTimelines(groupId)
       break
     }
     case 'fetch-videos': {
       const { fetchVideos } = await import('./actions/fetch-videos')
-      await fetchVideos()
+      await fetchVideos(memberId)
       break
     }
     default:

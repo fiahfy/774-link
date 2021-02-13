@@ -59,7 +59,7 @@ const parse = (timelines: Timeline[], groupId: string) => {
     }, [] as Schedule[])
 }
 
-const updateSchedule = async (schedule: Schedule, groupId: string) => {
+const updateActivities = async (schedule: Schedule, groupId: string) => {
   console.log('updating activities at %s', format(schedule.scheduledAt, 'P'))
 
   // between 06:00 to 30:00
@@ -86,7 +86,7 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
   const snapshot = await firebase
     .firestore()
     .collection('activities')
-    .where('sourceGroupId', '==', groupId)
+    .where('groupId', '==', groupId)
     .where('startedAt', '>=', from)
     .where('startedAt', '<', to)
     .get()
@@ -173,7 +173,7 @@ export const fetchTimelines = async (groupId?: string): Promise<void> => {
     const timelines = await fetch(group.twitter.screenName)
     const schedules = parse(timelines, group.id)
     for (const schedule of schedules) {
-      await updateSchedule(schedule, group.id)
+      await updateActivities(schedule, group.id)
     }
     console.log(green('fetched %s timelines'), group.id)
   }

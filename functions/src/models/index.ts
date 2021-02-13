@@ -25,11 +25,11 @@ export type Member = {
 
 export type Activity = {
   ownerId: string
+  groupId: string
   memberIds: string[]
   isHost: boolean
   startedAt: Date
-  sourceGroupId: string
-  twitter: {
+  twitter?: {
     timelineId: string
     text: string
   }
@@ -50,4 +50,11 @@ export type Timeline = {
   id: string
   fullText: string
   createdAt: Date
+}
+
+export type Video = {
+  id: string
+  title: string
+  description: string
+  startedAt: Date
 }

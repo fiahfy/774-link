@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions'
-import { fetchTimelines } from './actions/fetch_timelines'
+import { fetchTimelines } from './actions/fetch-timelines'
 
 exports.fetchTimelines = functions
   .region('asia-northeast1')

@@ -17,13 +17,12 @@ const useScrollToSelector = (selector: string) => {
       }
       clearInterval(timer)
 
-      setTimeout(() => {
-        const rect = e.getBoundingClientRect()
-        window.scrollTo(
-          0,
-          rect.top + rect.height / 2 - window.innerHeight / 2 + window.scrollY
-        )
-      }, 300)
+      const rect = e.getBoundingClientRect()
+      window.history.scrollRestoration = 'manual'
+      window.scrollTo(
+        0,
+        rect.top + rect.height / 2 - window.innerHeight / 2 + window.scrollY
+      )
     })
     return () => clearInterval(timer)
   }, [selector])

@@ -185,7 +185,8 @@ const Schedule: React.FC<Props> = (props) => {
                 width={`${rect.w * 100}%`}
               >
                 <Link
-                  href={`/activities/${summary.activities[0].id}`}
+                  as={`/activities/${summary.activities[0].id}`}
+                  href="/activities/[id]"
                   style={{
                     color: 'inherit',
                     textDecoration: 'inherit',

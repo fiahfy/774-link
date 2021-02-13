@@ -49,6 +49,11 @@ const main = async () => {
       await fetchTimelines(group)
       break
     }
+    case 'fetch-videos': {
+      const { fetchVideos } = await import('./actions/fetch-videos')
+      await fetchVideos()
+      break
+    }
     default:
       throw new Error(`Invalid Command: ${command}`)
   }

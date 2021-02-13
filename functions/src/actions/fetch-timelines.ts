@@ -1,3 +1,4 @@
+import { cyan, green, red, yellow } from 'chalk'
 import {
   addDays,
   addHours,
@@ -10,17 +11,32 @@ import {
 } from 'date-fns'
 import { listGroups } from '../data'
 import firebase from '../firebase'
-import { fetch } from '../utils/fetcher'
-import { parse } from '../utils/parser'
 import { Activity, Schedule, Timeline } from '../models'
-import { cyan, green, red, yellow } from 'chalk'
+import { twitterClient } from '../utils/client'
+import { parseTimeline } from '../utils/parser'
 
-const parseTimelines = (timelines: Timeline[], groupId: string) => {
+const fetch = async (screenName: string): Promise<Timeline[]> => {
+  const data = await twitterClient.tweets.statusesUserTimeline({
+    screen_name: screenName,
+    tweet_mode: 'extended',
+    count: 10,
+  })
+  return data.map((d) => {
+    return {
+      id: d.id_str,
+      createdAt: new Date(d.created_at),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      fullText: (d as any).full_text,
+    }
+  })
+}
+
+const parse = (timelines: Timeline[], groupId: string) => {
   return timelines
     .reverse() // order by date asc
     .reduce((carry, timeline) => {
       // ツイートから1つ以上のスケジュールを取得
-      const schedules = parse(timeline, groupId)
+      const schedules = parseTimeline(timeline, groupId)
       return [...carry, ...schedules]
     }, [] as Schedule[])
     .reduce((carry, schedule) => {
@@ -59,7 +75,7 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
     return isAfter(activity.startedAt, from)
   })
   const hash = activities.reduce((carry, activity) => {
-    const uid = getUid(activity)
+    const uid = createUid(activity)
     return {
       ...carry,
       [uid]: activity,
@@ -83,7 +99,7 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
     } as Activity & { id: string }
   })
   const storedHash = stored.reduce((carry, activity) => {
-    const uid = getUid(activity)
+    const uid = createUid(activity)
     return {
       ...carry,
       [uid]: activity,
@@ -91,16 +107,16 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
   }, {} as { [uid: string]: Activity & { id: string } })
 
   const deletings = stored.filter((activity) => {
-    const uid = getUid(activity)
+    const uid = createUid(activity)
     return !hash[uid]
   })
   const updatings = activities.reduce((carry, activity) => {
-    const uid = getUid(activity)
+    const uid = createUid(activity)
     const stored = storedHash[uid]
     return stored ? [...carry, { ...stored, ...activity }] : carry
   }, [] as (Activity & { id: string })[])
   const insertings = activities.reduce((carry, activity) => {
-    const uid = getUid(activity)
+    const uid = createUid(activity)
     const stored = storedHash[uid]
     return stored ? carry : [...carry, activity]
   }, [] as Activity[])
@@ -143,7 +159,7 @@ const updateSchedule = async (schedule: Schedule, groupId: string) => {
   )
 }
 
-const getUid = (activity: Activity) =>
+const createUid = (activity: Activity) =>
   `${activity.ownerId}_${getTime(activity.startedAt)}`
 
 export const fetchTimelines = async (groupId?: string): Promise<void> => {
@@ -155,7 +171,7 @@ export const fetchTimelines = async (groupId?: string): Promise<void> => {
     }
     console.log(green('fetching %s timelines'), group.id)
     const timelines = await fetch(group.twitter.screenName)
-    const schedules = parseTimelines(timelines, group.id)
+    const schedules = parse(timelines, group.id)
     for (const schedule of schedules) {
       await updateSchedule(schedule, group.id)
     }

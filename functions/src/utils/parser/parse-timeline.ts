@@ -1,7 +1,7 @@
 import { addHours, addMinutes, getMonth, getYear } from 'date-fns'
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
-import { listMembers } from '../data'
-import { Activity, Member, Schedule, Timeline } from '../models'
+import { listMembers } from '../../data'
+import { Activity, Member, Schedule, Timeline } from '../../models'
 
 export const parseFullMessage = (message: string): string[] => {
   const messages: string[] = []
@@ -147,7 +147,10 @@ export const parseMessage = (
   }
 }
 
-export const parse = (timeline: Timeline, groupId: string): Schedule[] => {
+export const parseTimeline = (
+  timeline: Timeline,
+  groupId: string
+): Schedule[] => {
   // ツイートの投稿日
   const publishedAt = new Date(timeline.createdAt)
   // ツイートを日別のスケジュール日単位のテキストに分割する

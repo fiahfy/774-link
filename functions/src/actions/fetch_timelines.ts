@@ -1,4 +1,13 @@
-import { addDays, addHours, format, getTime, isAfter, max } from 'date-fns'
+import {
+  addDays,
+  addHours,
+  differenceInMinutes,
+  format,
+  getTime,
+  isAfter,
+  isEqual,
+  max,
+} from 'date-fns'
 import { listGroups } from '../data'
 import firebase from '../firebase'
 import { fetch } from '../utils/fetcher'
@@ -7,10 +16,31 @@ import { Activity, Schedule, Timeline } from '../models'
 import { cyan, green, red, yellow } from 'chalk'
 
 const parseTimelines = (timelines: Timeline[], groupId: string) => {
-  return timelines.reduce((carry, timeline) => {
-    const schedules = parse(timeline, groupId)
-    return [...carry, ...schedules]
-  }, [] as Schedule[])
+  return timelines
+    .reverse() // order by date asc
+    .reduce((carry, timeline) => {
+      // ツイートから1つ以上のスケジュールを取得
+      const schedules = parse(timeline, groupId)
+      return [...carry, ...schedules]
+    }, [] as Schedule[])
+    .reduce((carry, schedule) => {
+      // 1つ前のスケジュールと比較し、スケジュール日が同じ かつ 投稿日が5分未満 の場合に同じスケジュールとみなしマージする
+      const prev = carry[carry.length - 1]
+      if (
+        prev &&
+        isEqual(schedule.scheduledAt, prev.scheduledAt) &&
+        differenceInMinutes(schedule.publishedAt, prev.publishedAt) < 5
+      ) {
+        return [
+          ...carry.slice(0, carry.length - 1),
+          {
+            ...prev,
+            activities: [...prev.activities, ...schedule.activities],
+          },
+        ]
+      }
+      return [...carry, schedule]
+    }, [] as Schedule[])
 }
 
 const updateSchedule = async (schedule: Schedule, groupId: string) => {

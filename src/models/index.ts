@@ -27,12 +27,12 @@ export type Activity = {
   id: string
   ownerId: string
   groupId: string
-  memberIds: string[]
-  isHost: boolean
   startedAt: Date
   twitter?: {
     timelineId: string
     text: string
+    memberIds: string[]
+    isHost: boolean
   }
   youtube?: {
     videoId: string

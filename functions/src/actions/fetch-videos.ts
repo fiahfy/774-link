@@ -1,19 +1,16 @@
 import { cyan, green, red, yellow } from 'chalk'
-import {
-  addDays,
-  addHours,
-  differenceInMinutes,
-  format,
-  getTime,
-  isAfter,
-  isEqual,
-  max,
-} from 'date-fns'
-import { listGroups, listMembers } from '../data'
+import { format, getTime } from 'date-fns'
+import { listMembers } from '../data'
 import firebase from '../firebase'
-import * as parser from '../utils/parser'
-import { Activity, Member, Schedule, Timeline, Video } from '../models'
+import { Activity, Member } from '../models'
 import { youtubeClient } from '../utils/client'
+
+type Video = {
+  id: string
+  title: string
+  description: string
+  startedAt: Date
+}
 
 const fetch = async (channelId: string): Promise<Video[]> => {
   const results = await youtubeClient.search.list({
@@ -21,7 +18,7 @@ const fetch = async (channelId: string): Promise<Video[]> => {
     channelId,
     order: 'date',
     type: ['video'],
-    maxResults: 5,
+    maxResults: 10,
   })
   const videoIds =
     results.data.items?.reduce((carry, item) => {
@@ -57,8 +54,6 @@ const convert = (video: Video, member: Member): Activity => {
   return {
     ownerId: member.id,
     groupId: member.groupId,
-    memberIds: [],
-    isHost: true,
     startedAt: video.startedAt,
     youtube: {
       videoId: video.id,
@@ -71,35 +66,100 @@ const convert = (video: Video, member: Member): Activity => {
 const updateActivities = async (activities: Activity[], memberId: string) => {
   console.log('updating activities for %s', memberId)
 
-  // // upserting activities
-  // const activities = schedule.activities.filter((activity) => {
-  //   return isAfter(activity.startedAt, from)
-  // })
-  // const hash = activities.reduce((carry, activity) => {
-  //   const uid = createUid(activity)
-  //   return {
-  //     ...carry,
-  //     [uid]: activity,
-  //   }
-  // }, {} as { [uid: string]: Activity })
+  const from = activities[0].startedAt
 
-  // // stored activities
-  // const snapshot = await firebase
-  //   .firestore()
-  //   .collection('activities')
-  //   .where('groupId', '==', groupId)
-  //   .where('startedAt', '>=', from)
-  //   .where('startedAt', '<', to)
-  //   .get()
-  // const stored = snapshot.docs.map((doc) => {
-  //   const data = doc.data()
-  //   return {
-  //     ...data,
-  //     id: doc.id,
-  //     startedAt: data.startedAt.toDate(),
-  //   } as Activity & { id: string }
-  // })
+  console.log('from %s', format(from, 'Pp'))
+
+  // upserting activities
+  const hash = activities.reduce((carry, activity) => {
+    const uid = createUid(activity)
+    return {
+      ...carry,
+      [uid]: activity,
+    }
+  }, {} as { [uid: string]: Activity })
+
+  // stored activities
+  const snapshot = await firebase
+    .firestore()
+    .collection('activities')
+    .where('ownerId', '==', memberId)
+    .where('startedAt', '>=', from)
+    .get()
+  const stored = snapshot.docs.map((doc) => {
+    const data = doc.data()
+    return {
+      ...data,
+      id: doc.id,
+      startedAt: data.startedAt.toDate(),
+    } as Activity & { id: string }
+  })
+  const storedHash = stored.reduce((carry, activity) => {
+    const uid = createUid(activity)
+    return {
+      ...carry,
+      [uid]: activity,
+    }
+  }, {} as { [uid: string]: Activity & { id: string } })
+
+  const deletings = stored.filter((activity) => {
+    // youtube の情報がある場合 かつ upsert の対象になっていない場合は削除対象とする
+    const uid = createUid(activity)
+    return activity.youtube && !hash[uid]
+  })
+  const updatings = activities.reduce((carry, activity) => {
+    const uid = createUid(activity)
+    const stored = storedHash[uid]
+    // すでに store にある場合は上書きしつつ更新対象とする
+    return stored ? [...carry, { ...stored, ...activity }] : carry
+  }, [] as (Activity & { id: string })[])
+  const insertings = activities.reduce((carry, activity) => {
+    const uid = createUid(activity)
+    const stored = storedHash[uid]
+    // まだ store にない場合は追加対象とする
+    return stored ? carry : [...carry, activity]
+  }, [] as Activity[])
+
+  await deletings
+    .reduce((carry, { id }) => {
+      const ref = firebase.firestore().collection('activities').doc(id)
+      return carry.delete(ref)
+    }, firebase.firestore().batch())
+    .commit()
+  await updatings
+    .reduce((carry, { id, ...activity }) => {
+      const ref = firebase.firestore().collection('activities').doc(id)
+      return carry.update(ref, {
+        ...activity,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+    }, firebase.firestore().batch())
+    .commit()
+  await insertings
+    .reduce((carry, activity) => {
+      const ref = firebase.firestore().collection('activities').doc()
+      return carry.set(ref, {
+        ...activity,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+    }, firebase.firestore().batch())
+    .commit()
+
+  console.log(
+    red('%d activities deleted') +
+      ', ' +
+      yellow('%d activities updated') +
+      ' and ' +
+      cyan('%d activities inserted'),
+    deletings.length,
+    updatings.length,
+    insertings.length
+  )
 }
+
+const createUid = (activity: Activity) =>
+  `${activity.ownerId}_${getTime(activity.startedAt)}`
 
 export const fetchVideos = async (memberId?: string): Promise<void> => {
   console.log(green('fetching videos'))
@@ -110,8 +170,12 @@ export const fetchVideos = async (memberId?: string): Promise<void> => {
     }
     console.log(green('fetching %s videos'), member.id)
     const videos = await fetch(member.youtube.channelId)
-    const activities = videos.map((video) => convert(video, member))
-    await updateActivities(activities, member.id)
+    const activities = videos
+      .map((video) => convert(video, member))
+      .sort((a, b) => (a.startedAt > b.startedAt ? 1 : -1)) // order by startedAt asc
+    if (activities.length) {
+      await updateActivities(activities, member.id)
+    }
     console.log(green('fetched %s videos'), member.id)
   }
   console.log(green('fetched videos'))

@@ -46,7 +46,7 @@ const Detail: NextPage<Props> = (props) => {
     return null
   }
 
-  const members = listMembers({ ids: activity.memberIds })
+  const members = listMembers({ ids: activity.twitter?.memberIds ?? [] })
 
   const group = findGroup(activity.groupId)
   if (!group) {
@@ -63,7 +63,7 @@ const Detail: NextPage<Props> = (props) => {
       /> */}
       <Box m={2}>
         <Typography variant="h6">
-          {activity.twitter?.text || 'Untitled'}
+          {activity.youtube?.title || activity.twitter?.text || 'Untitled'}
         </Typography>
         <Typography color="textSecondary" variant="body2">
           {format(activity.startedAt, 'Pp')}
@@ -108,7 +108,11 @@ const Detail: NextPage<Props> = (props) => {
         <ListItem
           button
           component="a"
-          href={`https://www.youtube.com/channel/${owner.youtube.channelId}/live`}
+          href={
+            activity.youtube
+              ? `https://www.youtube.com/watch?v=${activity.youtube.videoId}`
+              : `https://www.youtube.com/channel/${owner.youtube.channelId}/live`
+          }
           target="_blank"
         >
           <ListItemIcon>

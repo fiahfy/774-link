@@ -81,7 +81,7 @@ const Detail: NextPage<Props> = (props) => {
             </Avatar>
           </ListItemIcon>
           <ListItemText
-            primary={owner.nameJa}
+            primary={owner.name}
             style={{ marginLeft: theme.spacing(2) }}
           />
         </ListItem>
@@ -99,7 +99,7 @@ const Detail: NextPage<Props> = (props) => {
                   />
                 </Avatar>
               </ListItemIcon>
-              <ListItemText primary={member.nameJa} />
+              <ListItemText primary={member.name} />
             </ListItem>
           ))}
         </List>

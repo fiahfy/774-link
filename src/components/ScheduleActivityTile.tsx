@@ -149,7 +149,7 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
       </Box>
       <Box minWidth={0} ml={1} zIndex={1}>
         <Typography noWrap variant="subtitle2">
-          {owner.nameJa}
+          {owner.name}
         </Typography>
         <Typography noWrap variant="body2">
           {activity.twitter.text}

@@ -26,11 +26,11 @@ export type Member = {
 export type Activity = {
   id: string
   ownerId: string
+  groupId: string
   memberIds: string[]
   isHost: boolean
   startedAt: Date
-  sourceGroupId: string
-  twitter: {
+  twitter?: {
     timelineId: string
     text: string
   }

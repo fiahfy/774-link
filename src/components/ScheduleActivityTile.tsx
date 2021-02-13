@@ -152,7 +152,7 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
           {owner.name}
         </Typography>
         <Typography noWrap variant="body2">
-          {activity.twitter.text}
+          {activity.twitter?.text}
         </Typography>
       </Box>
     </Box>

@@ -48,7 +48,7 @@ const Detail: NextPage<Props> = (props) => {
 
   const members = listMembers({ ids: activity.memberIds })
 
-  const group = findGroup(activity.sourceGroupId)
+  const group = findGroup(activity.groupId)
   if (!group) {
     return null
   }
@@ -63,7 +63,7 @@ const Detail: NextPage<Props> = (props) => {
       /> */}
       <Box m={2}>
         <Typography variant="h6">
-          {activity.twitter.text || 'Untitled'}
+          {activity.twitter?.text || 'Untitled'}
         </Typography>
         <Typography color="textSecondary" variant="body2">
           {format(activity.startedAt, 'Pp')}
@@ -122,23 +122,25 @@ const Detail: NextPage<Props> = (props) => {
             <OpenInNew />
           </ListItemSecondaryAction>
         </ListItem>
-        <ListItem
-          button
-          component="a"
-          href={`https://twitter.com/${group.twitter.screenName}/status/${activity.twitter.timelineId}`}
-          target="_blank"
-        >
-          <ListItemIcon>
-            <Twitter />
-          </ListItemIcon>
-          <ListItemText
-            disableTypography
-            primary={<Typography noWrap>Open Source Tweet</Typography>}
-          />
-          <ListItemSecondaryAction>
-            <OpenInNew />
-          </ListItemSecondaryAction>
-        </ListItem>
+        {activity.twitter && (
+          <ListItem
+            button
+            component="a"
+            href={`https://twitter.com/${group.twitter.screenName}/status/${activity.twitter.timelineId}`}
+            target="_blank"
+          >
+            <ListItemIcon>
+              <Twitter />
+            </ListItemIcon>
+            <ListItemText
+              disableTypography
+              primary={<Typography noWrap>Open Source Tweet</Typography>}
+            />
+            <ListItemSecondaryAction>
+              <OpenInNew />
+            </ListItemSecondaryAction>
+          </ListItem>
+        )}
       </List>
     </Container>
   )

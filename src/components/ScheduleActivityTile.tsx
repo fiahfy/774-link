@@ -81,7 +81,7 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
     return null
   }
 
-  const members = listMembers({ ids: activity.memberIds })
+  const members = listMembers({ ids: activity.twitter?.memberIds ?? [] })
   const others = 1 + members.length - maxAvatars
   const avatars = Math.max(1, others > 0 ? maxAvatars - 1 : members.length + 1)
   const hasOthers = others > 0 && maxAvatars !== 1
@@ -152,7 +152,7 @@ const ScheduleActivityTile: React.FC<Props> = (props) => {
           {owner.name}
         </Typography>
         <Typography noWrap variant="body2">
-          {activity.twitter?.text}
+          {activity.youtube?.title || activity.twitter?.text}
         </Typography>
       </Box>
     </Box>

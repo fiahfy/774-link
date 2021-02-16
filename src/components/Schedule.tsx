@@ -37,18 +37,22 @@ const useSummaries = (activities: Activity[]) => {
           (item) =>
             item.id !== activity.id &&
             isEqual(item.startedAt, activity.startedAt) &&
-            item.memberIds.includes(activity.ownerId)
+            (item.twitter?.memberIds ?? []).includes(activity.ownerId)
         )
         // 一番 memberIds が多くなければ skip
         const largest = activities.every(
-          (a) => activity.memberIds.length >= a.memberIds.length
+          (a) =>
+            (activity.twitter?.memberIds ?? []).length >=
+            (a.twitter?.memberIds ?? []).length
         )
         if (!largest) {
           return { summaries, picked }
         }
         // 一番 memberIds が多い activity の中に host があれば skip
         const host = !activities.some(
-          (a) => activity.memberIds.length <= a.memberIds.length && a.isHost
+          (a) =>
+            (activity.twitter?.memberIds ?? []).length <=
+              (a.twitter?.memberIds ?? []).length && a.twitter?.isHost
         )
         if (!host) {
           return { summaries, picked }

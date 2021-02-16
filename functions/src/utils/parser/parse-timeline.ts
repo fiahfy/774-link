@@ -1,7 +1,18 @@
 import { addHours, addMinutes, getMonth, getYear } from 'date-fns'
 import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz'
 import { listMembers } from '../../data'
-import { Activity, Member, Schedule, Timeline } from '../../models'
+import { Activity, Member } from '../../models'
+
+export type Timeline = {
+  id: string
+  fullText: string
+  createdAt: Date
+}
+export type Schedule = {
+  scheduledAt: Date
+  publishedAt: Date
+  activities: Activity[]
+}
 
 export const parseFullMessage = (message: string): string[] => {
   const messages: string[] = []
@@ -125,12 +136,12 @@ export const parseMessage = (
       activities.push({
         ownerId,
         groupId,
-        memberIds,
-        isHost,
         startedAt,
         twitter: {
           timelineId: '',
           text: title,
+          memberIds,
+          isHost,
         },
       })
     }
@@ -169,10 +180,9 @@ export const parseTimeline = (
             activities: schedule.activities.map((activity) => ({
               ...activity,
               twitter: {
-                timelineId: timeline.id,
-                text: '',
                 ...activity.twitter,
-              },
+                timelineId: timeline.id,
+              } as Activity['twitter'],
             })),
           },
         ]

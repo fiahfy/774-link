@@ -26,35 +26,16 @@ export type Member = {
 export type Activity = {
   ownerId: string
   groupId: string
-  memberIds: string[]
-  isHost: boolean
   startedAt: Date
   twitter?: {
     timelineId: string
     text: string
+    memberIds: string[]
+    isHost: boolean
   }
   youtube?: {
     videoId: string
     title: string
     description: string
   }
-}
-
-export type Schedule = {
-  scheduledAt: Date
-  publishedAt: Date
-  activities: Activity[]
-}
-
-export type Timeline = {
-  id: string
-  fullText: string
-  createdAt: Date
-}
-
-export type Video = {
-  id: string
-  title: string
-  description: string
-  startedAt: Date
 }

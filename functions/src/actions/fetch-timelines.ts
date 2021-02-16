@@ -11,9 +11,9 @@ import {
 } from 'date-fns'
 import { listGroups } from '../data'
 import firebase from '../firebase'
-import { Activity, Schedule, Timeline } from '../models'
+import { Activity } from '../models'
 import { twitterClient } from '../utils/client'
-import { parseTimeline } from '../utils/parser'
+import { Schedule, Timeline, parseTimeline } from '../utils/parser'
 
 const fetch = async (screenName: string): Promise<Timeline[]> => {
   const data = await twitterClient.tweets.statusesUserTimeline({
@@ -107,17 +107,20 @@ const updateActivities = async (schedule: Schedule, groupId: string) => {
   }, {} as { [uid: string]: Activity & { id: string } })
 
   const deletings = stored.filter((activity) => {
+    // youtube の情報がない場合 かつ upsert の対象になっていない場合は削除対象とする
     const uid = createUid(activity)
-    return !hash[uid]
+    return !activity.youtube && !hash[uid]
   })
   const updatings = activities.reduce((carry, activity) => {
     const uid = createUid(activity)
     const stored = storedHash[uid]
+    // すでに store にある場合は上書きしつつ更新対象とする
     return stored ? [...carry, { ...stored, ...activity }] : carry
   }, [] as (Activity & { id: string })[])
   const insertings = activities.reduce((carry, activity) => {
     const uid = createUid(activity)
     const stored = storedHash[uid]
+    // まだ store にない場合は追加対象とする
     return stored ? carry : [...carry, activity]
   }, [] as Activity[])
 

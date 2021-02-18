@@ -17,7 +17,7 @@ exports.fetchTimelines = functions
 
 exports.fetchVideos = functions
   .region('asia-northeast1')
-  .pubsub.schedule('every 1 hours')
+  .pubsub.schedule('every 6 hours')
   .timeZone('Asia/Tokyo')
   .onRun(async () => {
     try {

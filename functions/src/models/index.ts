@@ -27,6 +27,7 @@ export type Activity = {
   ownerId: string
   groupId: string
   startedAt: Date
+  thumbnailUrl?: string
   twitter?: {
     timelineId: string
     text: string

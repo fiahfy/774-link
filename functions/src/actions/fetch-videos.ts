@@ -10,6 +10,7 @@ type Video = {
   title: string
   description: string
   startedAt: Date
+  thumbnailUrl?: string
 }
 
 const fetch = async (channelId: string): Promise<Video[]> => {
@@ -32,17 +33,16 @@ const fetch = async (channelId: string): Promise<Video[]> => {
   return (
     videos.data.items?.reduce((carry, item) => {
       const id = item.id
-      const title = item.snippet?.title ?? ''
-      const description = item.snippet?.description ?? ''
       const startTime = item.liveStreamingDetails?.scheduledStartTime
       return id && startTime
         ? [
             ...carry,
             {
               id,
-              title,
-              description,
+              title: item.snippet?.title ?? '',
+              description: item.snippet?.description ?? '',
               startedAt: new Date(startTime),
+              thumbnailUrl: item.snippet?.thumbnails?.standard?.url ?? undefined
             },
           ]
         : carry
@@ -55,12 +55,19 @@ const convert = (video: Video, member: Member): Activity => {
     ownerId: member.id,
     groupId: member.groupId,
     startedAt: video.startedAt,
+    thumbnailUrl: video.thumbnailUrl,
     youtube: {
       videoId: video.id,
       title: video.title,
       description: video.description,
     },
   }
+}
+
+const upload = async (activity: Activity): Activity => {
+  const { thumbnailUrl: originalUrl } = activity
+  await firebase.storage().bucket().file('activities/id').save(blob)
+  return { ...activity, thumbnailUrl: undefined }
 }
 
 const updateActivities = async (activities: Activity[], memberId: string) => {
@@ -112,13 +119,13 @@ const updateActivities = async (activities: Activity[], memberId: string) => {
     const stored = storedHash[uid]
     // すでに store にある場合は上書きしつつ更新対象とする
     return stored ? [...carry, { ...stored, ...activity }] : carry
-  }, [] as (Activity & { id: string })[])
+  }, [] as (Activity & { id: string })[]).map(upload)
   const insertings = activities.reduce((carry, activity) => {
     const uid = createUid(activity)
     const stored = storedHash[uid]
     // まだ store にない場合は追加対象とする
     return stored ? carry : [...carry, activity]
-  }, [] as Activity[])
+  }, [] as Activity[]).map(upload)
 
   await deletings
     .reduce((carry, { id }) => {

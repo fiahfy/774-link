@@ -49,4 +49,7 @@ firebase deploy --only firestore
 firebase deploy --only firestore:rules
 # firestore indexes
 firebase deploy --only firestore:indexes
+
+# storage rules
+firebase deploy --only storage
 ```

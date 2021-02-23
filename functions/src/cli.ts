@@ -11,7 +11,8 @@ const main = async () => {
     -v, --version   output the version number
     -h, --help      output usage information
 	Examples:
-    $ cli fetch-timelines
+    $ cli activity:update -s timeline -g animare
+    $ cli activity:update -s video -m haneru-inaba
 `,
     {
       flags: {
@@ -24,6 +25,10 @@ const main = async () => {
           type: 'boolean',
           default: false,
           alias: 'v',
+        },
+        source: {
+          type: 'string',
+          alias: 's',
         },
         groupId: {
           type: 'string',
@@ -38,7 +43,7 @@ const main = async () => {
   )
 
   const [command] = cli.input
-  const { help, version, groupId, memberId } = cli.flags
+  const { help, version, source, groupId, memberId } = cli.flags
 
   if (version) {
     return cli.showVersion()
@@ -48,14 +53,25 @@ const main = async () => {
   }
 
   switch (command) {
-    case 'fetch-timelines': {
-      const { fetchTimelines } = await import('./actions/fetch-timelines')
-      await fetchTimelines(groupId)
-      break
-    }
-    case 'fetch-videos': {
-      const { fetchVideos } = await import('./actions/fetch-videos')
-      await fetchVideos(memberId)
+    case 'activity:update': {
+      switch (source) {
+        case 'timeline': {
+          const { updateActivitiesWithTimelines } = await import(
+            './actions/update-activities-with-timelines'
+          )
+          await updateActivitiesWithTimelines(groupId)
+          break
+        }
+        case 'video': {
+          const { updateActivitiesWithVideos } = await import(
+            './actions/update-activities-with-videos'
+          )
+          await updateActivitiesWithVideos(memberId)
+          break
+        }
+        default:
+          throw new Error(`Invalid Source: ${source}`)
+      }
       break
     }
     default:

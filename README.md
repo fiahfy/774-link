@@ -20,6 +20,7 @@ yarn dev
 FIREBASE_PROJECT_ID=<projectId>
 FIREBASE_CLIENT_EMAIL=<clientEmail>
 FIREBASE_PRIVATE_KEY=<privateKey>
+FIREBASE_STORAGE_BUCKET=<storageBucket>
 ```
 
 ### Export Configs

@@ -184,6 +184,7 @@ const updateActivities = async (activities: Activity[], member: Member) => {
   return [...updatingUrls, ...insertingUrls]
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const uploadThumbnails = async (
   urls: { id: string; thumbnailUrl: string | undefined }[]
 ) => {
@@ -245,8 +246,9 @@ export const updateActivitiesWithVideos = async (
     const videos = await fetchVideos(member)
     const activities = convertVideos(videos, member)
     if (activities.length) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const urls = await updateActivities(activities, member)
-      await uploadThumbnails(urls)
+      // await uploadThumbnails(urls)
     }
     console.log(green('updated %s activities'), member.id)
   }

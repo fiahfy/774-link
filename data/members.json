@@ -78,19 +78,6 @@
     }
   },
   {
-    "id": "natsumi-hashiba",
-    "groupId": "animare",
-    "name": "Natsumi Hashiba",
-    "nameJa": "羽柴なつみ",
-    "themeHue": 94,
-    "twitter": {
-      "screenName": "Natsumi_Hashiba"
-    },
-    "youtube": {
-      "channelId": "UC_BlXOQe5OcRC7o0GX8kp8A"
-    }
-  },
-  {
     "id": "hikari-hira",
     "groupId": "animare",
     "name": "Hikari Hira",
@@ -244,6 +231,84 @@
     },
     "youtube": {
       "channelId": "UC--A2dwZW7-M2kID0N6_lfA"
+    }
+  },
+  {
+    "id": "nemo-suzumi",
+    "groupId": "hiyocro",
+    "name": "Nemo Suzumi",
+    "nameJa": "凉海ネモ",
+    "themeHue": 225,
+    "twitter": {
+      "screenName": "Nemo_Suzumi"
+    },
+    "youtube": {
+      "channelId": "UCBJ6nejlzes6mm9UruaxQsA"
+    }
+  },
+  {
+    "id": "canna-akane",
+    "groupId": "hiyocro",
+    "name": "Canna　Akane",
+    "nameJa": "茜音カンナ",
+    "themeHue": 348,
+    "twitter": {
+      "screenName": "Canna_Akane"
+    },
+    "youtube": {
+      "channelId": "UCkpqb53xiOvOgNYEbNpFSyw"
+    }
+  },
+  {
+    "id": "sei-touri",
+    "groupId": "hiyocro",
+    "name": "Sei Touri",
+    "nameJa": "橙里セイ",
+    "themeHue": 33,
+    "twitter": {
+      "screenName": "Sei_Touri"
+    },
+    "youtube": {
+      "channelId": "UCBxw5bdrbKO7E60E4s3KgQg"
+    }
+  },
+  {
+    "id": "popo-ieiri",
+    "groupId": "hiyocro",
+    "name": "Popo Ieiri",
+    "nameJa": "家入ポポ",
+    "themeHue": 51,
+    "twitter": {
+      "screenName": "Popo_Ieiri"
+    },
+    "youtube": {
+      "channelId": "UC_hjHmi-ODGhHlSzD16p5Pw"
+    }
+  },
+  {
+    "id": "yuri-kohaku",
+    "groupId": "hiyocro",
+    "name": "Yuri Kohaku",
+    "nameJa": "瑚白ユリ",
+    "themeHue": 240,
+    "twitter": {
+      "screenName": "Yuri_Kohakuu"
+    },
+    "youtube": {
+      "channelId": "UCGyywYAJd2O5Y7yUyr7qBRQ"
+    }
+  },
+  {
+    "id": "kiki-shisui",
+    "groupId": "hiyocro",
+    "name": "Kiki Shisui",
+    "nameJa": "紫水キキ",
+    "themeHue": 288,
+    "twitter": {
+      "screenName": "Kiki_Shisui"
+    },
+    "youtube": {
+      "channelId": "UC3MBUvkVTI9p-p0be7y7TQA"
     }
   },
   {

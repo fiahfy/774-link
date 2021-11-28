@@ -1,16 +1,5 @@
-import {
-  AppBar,
-  Backdrop,
-  BottomNavigation,
-  BottomNavigationAction,
-  CircularProgress,
-  Container,
-  Toolbar,
-  Typography,
-  makeStyles,
-  useTheme,
-} from '@material-ui/core'
-import { Schedule } from '@material-ui/icons'
+import { AppBar, Box, Toolbar, Typography, makeStyles } from '@material-ui/core'
+import Image from 'next/image'
 import React from 'react'
 
 const useStyles = makeStyles((theme) => ({
@@ -40,17 +29,15 @@ const Layout: React.FC = (props) => {
   const { children } = props
 
   const classes = useStyles()
-  const theme = useTheme()
+  // const theme = useTheme()
 
   return (
     <div>
       <AppBar position="fixed">
         <Toolbar>
-          <img
-            height="44"
-            src="/icon_transparent.png"
-            style={{ marginRight: theme.spacing(1) }}
-          />
+          <Box mr={1}>
+            <Image height="44" src="/icon_transparent.png" width="44" />
+          </Box>
           <Typography noWrap variant="h6">
             774.link (β)
           </Typography>

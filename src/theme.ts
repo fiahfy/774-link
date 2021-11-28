@@ -1,8 +1,8 @@
 import { pink } from '@material-ui/core/colors'
-import { createMuiTheme } from '@material-ui/core/styles'
+import { createTheme } from '@material-ui/core/styles'
 
 // Create a theme instance.
-const theme = createMuiTheme({
+const theme = createTheme({
   // @see https://github.com/mui-org/material-ui/issues/18308
   overrides: {
     MuiAppBar: {

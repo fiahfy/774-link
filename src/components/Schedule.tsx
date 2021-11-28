@@ -39,7 +39,7 @@ const useSummaries = (activities: Activity[]) => {
             isEqual(item.startedAt, activity.startedAt) &&
             (item.twitter?.memberIds ?? []).includes(activity.ownerId)
         )
-        // 一番 memberIds が多くなければ skip
+        // 一番 memberIds が多いかどうか
         const largest = activities.every(
           (a) =>
             (activity.twitter?.memberIds ?? []).length >=
@@ -48,12 +48,14 @@ const useSummaries = (activities: Activity[]) => {
         if (!largest) {
           return { summaries, picked }
         }
-        // 一番 memberIds が多い activity の中に host があれば skip
-        const host = !activities.some(
-          (a) =>
-            (activity.twitter?.memberIds ?? []).length <=
-              (a.twitter?.memberIds ?? []).length && a.twitter?.isHost
-        )
+        // 自分が host または 同じ memberIds size の activity の中に host がいないかどうか
+        const host =
+          activity.twitter?.isHost ||
+          !activities.some(
+            (a) =>
+              (activity.twitter?.memberIds ?? []).length ===
+                (a.twitter?.memberIds ?? []).length && a.twitter?.isHost
+          )
         if (!host) {
           return { summaries, picked }
         }

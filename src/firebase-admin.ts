@@ -10,6 +10,7 @@ const initializeApp = () => {
         '\n'
       ),
     }),
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   })
 }
 

@@ -11,13 +11,13 @@ import {
 } from 'date-fns'
 import { listGroups } from '../data'
 import firebase from '../firebase'
-import { Activity } from '../models'
+import { Activity, Group } from '../models'
 import { twitterClient } from '../utils/client'
 import { Schedule, Timeline, parseTimeline } from '../utils/parser'
 
-const fetch = async (screenName: string): Promise<Timeline[]> => {
+const fetchTimelines = async (group: Group): Promise<Timeline[]> => {
   const data = await twitterClient.tweets.statusesUserTimeline({
-    screen_name: screenName,
+    screen_name: group.twitter.screenName,
     tweet_mode: 'extended',
     count: 10,
   })
@@ -31,12 +31,12 @@ const fetch = async (screenName: string): Promise<Timeline[]> => {
   })
 }
 
-const parse = (timelines: Timeline[], groupId: string) => {
+const convertTimelines = (timelines: Timeline[], group: Group) => {
   return timelines
     .reverse() // order by date asc
     .reduce((carry, timeline) => {
       // ツイートから1つ以上のスケジュールを取得
-      const schedules = parseTimeline(timeline, groupId)
+      const schedules = parseTimeline(timeline, group.id)
       return [...carry, ...schedules]
     }, [] as Schedule[])
     .reduce((carry, schedule) => {
@@ -59,7 +59,10 @@ const parse = (timelines: Timeline[], groupId: string) => {
     }, [] as Schedule[])
 }
 
-const updateActivities = async (schedule: Schedule, groupId: string) => {
+const createUid = (activity: Activity) =>
+  `${activity.ownerId}_${getTime(activity.startedAt)}`
+
+const updateActivities = async (schedule: Schedule, group: Group) => {
   console.log('updating activities at %s', format(schedule.scheduledAt, 'P'))
 
   // between 06:00 to 30:00
@@ -86,7 +89,7 @@ const updateActivities = async (schedule: Schedule, groupId: string) => {
   const snapshot = await firebase
     .firestore()
     .collection('activities')
-    .where('groupId', '==', groupId)
+    .where('groupId', '==', group.id)
     .where('startedAt', '>=', from)
     .where('startedAt', '<', to)
     .get()
@@ -162,23 +165,25 @@ const updateActivities = async (schedule: Schedule, groupId: string) => {
   )
 }
 
-const createUid = (activity: Activity) =>
-  `${activity.ownerId}_${getTime(activity.startedAt)}`
+export const updateActivitiesWithTimelines = async (
+  groupId?: string
+): Promise<void> => {
+  console.log(green('updating activities'))
 
-export const fetchTimelines = async (groupId?: string): Promise<void> => {
-  console.log(green('fetching timelines'))
   const groups = listGroups({ sourceable: true })
   for (const group of groups) {
     if (groupId && group.id !== groupId) {
       continue
     }
-    console.log(green('fetching %s timelines'), group.id)
-    const timelines = await fetch(group.twitter.screenName)
-    const schedules = parse(timelines, group.id)
+
+    console.log(green('updating %s activities'), group.id)
+    const timelines = await fetchTimelines(group)
+    const schedules = convertTimelines(timelines, group)
     for (const schedule of schedules) {
-      await updateActivities(schedule, group.id)
+      await updateActivities(schedule, group)
     }
-    console.log(green('fetched %s timelines'), group.id)
+    console.log(green('updated %s activities'), group.id)
   }
-  console.log(green('fetched timelines'))
+
+  console.log(green('updated activities'))
 }

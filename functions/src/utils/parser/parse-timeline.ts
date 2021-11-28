@@ -74,8 +74,9 @@ export const parseMessage = (
 
   // 時間を含んだテキストからアクティビティを取得
   const activities: Activity[] = []
-  // eslint-disable-next-line no-irregular-whitespace
-  const reg = /(\d+):(\d+)-?\s?([ぁ-んァ-ヶ/]+)(?:[\s　]*[(（](.+)[）)])?(?:\n?＊([^\n\s]+))?/g
+  const reg =
+    // eslint-disable-next-line no-irregular-whitespace
+    /(\d+):(\d+)-?\s?([ぁ-んァ-ヶ/]+)(?:[\s　]*[(（](.+)[）)])?(?:\n?＊([^\n\s]+))?/g
   for (;;) {
     const match = reg.exec(message)
     if (!match) {

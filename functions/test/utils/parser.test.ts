@@ -154,7 +154,7 @@ describe('parseMessage', () => {
   })
   it('should work with title and description', () => {
     let result = parseMessage(
-      '1/11(水)\n19:00 メアリ(羽柴なつみさん企画参加)＊羽柴なつみさんch\n\n',
+      '1/11(水)\n19:00 メアリ(因幡はねるさん企画参加)＊因幡はねるさんch\n\n',
       'honeystrap'
     )
     expect(result?.scheduledAt).toEqual(new Date('2021-01-10T15:00:00.000Z'))
@@ -165,8 +165,8 @@ describe('parseMessage', () => {
       startedAt: new Date('2021-01-11T10:00:00.000Z'),
       twitter: {
         timelineId: '',
-        text: '羽柴なつみさん企画参加(羽柴なつみさんch)',
-        memberIds: ['natsumi-hashiba'],
+        text: '因幡はねるさん企画参加(因幡はねるさんch)',
+        memberIds: ['haneru-inaba'],
         isHost: false,
       },
     })

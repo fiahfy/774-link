@@ -30,6 +30,16 @@
     }
   },
   {
+    "id": "hiyocro",
+    "name": "Hiyoku no Crosspiece",
+    "nameJa": "緋翼のクロスピース",
+    "sourceable": true,
+    "twitter": {
+      "name": "緋翼のクロスピース公式🍩村猫ななし",
+      "screenName": "hiyocro_pt"
+    }
+  },
+  {
     "id": "vapart",
     "name": "VApArt",
     "nameJa": "ブイアパ",

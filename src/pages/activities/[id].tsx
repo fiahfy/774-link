@@ -15,19 +15,21 @@ import {
 } from '@material-ui/core'
 import { OpenInNew, Twitter, YouTube } from '@material-ui/icons'
 import { format } from 'date-fns'
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { findGroup, findMember, listMembers } from '~/data'
 import firebaseAdmin from '~/firebase-admin'
 import { Activity } from '~/models'
+import Layout from '~/components/Layout'
+import { NextPageWithLayout } from '../_app'
 
 type Props = {
   activity: Activity
 }
 
-const Detail: NextPage<Props> = (props) => {
+const Detail: NextPageWithLayout<Props> = (props) => {
   const { activity } = props
 
   const theme = useTheme()
@@ -148,6 +150,10 @@ const Detail: NextPage<Props> = (props) => {
       </List>
     </Container>
   )
+}
+
+Detail.getLayout = (page: ReactElement) => {
+  return <Layout>{page}</Layout>
 }
 
 export default Detail

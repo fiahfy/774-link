@@ -1,10 +1,12 @@
 import { Container } from '@material-ui/core'
 import { addDays, isSameDay, startOfDay, subDays } from 'date-fns'
-import { GetStaticProps, NextPage } from 'next'
+import { GetStaticProps } from 'next'
 import dynamic from 'next/dynamic'
-import React from 'react'
+import React, { ReactElement } from 'react'
 import firebaseAdmin from '~/firebase-admin'
 import { Activity } from '~/models'
+import Layout from '~/components/Layout'
+import { NextPageWithLayout } from './_app'
 
 const Schedule = dynamic(() => import('~/components/Schedule'), { ssr: false })
 
@@ -32,7 +34,7 @@ type Props = {
   activities: Activity[]
 }
 
-const Index: NextPage<Props> = (props) => {
+const Index: NextPageWithLayout<Props> = (props) => {
   const { activities } = props
 
   useScrollToSelector('#primary-guideline')
@@ -68,6 +70,10 @@ const Index: NextPage<Props> = (props) => {
       ))}
     </Container>
   )
+}
+
+Index.getLayout = (page: ReactElement) => {
+  return <Layout>{page}</Layout>
 }
 
 export default Index

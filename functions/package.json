@@ -35,14 +35,13 @@
     "build": "tsc",
     "deploy": "firebase deploy --only functions",
     "dev": "tsc -w",
-    "lint": "npm run lint:eslint && npm run lint:prettier",
-    "lint:eslint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "lint:prettier": "prettier -c --ignore-path .gitignore .",
+    "format": "prettier -c --ignore-path .gitignore .",
+    "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
     "logs": "firebase functions:log",
     "package": "if [ -d ../data ]; then npm pack ../data; fi",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "test": "npm run lint && jest"
+    "test": "npm run format && npm run lint && jest"
   }
 }

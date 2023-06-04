@@ -1,11 +1,20 @@
 import { CssBaseline, ThemeProvider } from '@material-ui/core'
+import { NextPage } from 'next'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
-import React from 'react'
-import Layout from '~/components/Layout'
+import React, { ReactElement, ReactNode } from 'react'
 import theme from '~/theme'
 
-const MyApp = (props: AppProps): JSX.Element => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+const MyApp = (props: AppPropsWithLayout) => {
   const { Component, pageProps } = props
 
   React.useEffect(() => {
@@ -15,6 +24,8 @@ const MyApp = (props: AppProps): JSX.Element => {
       jssStyles.parentElement?.removeChild(jssStyles)
     }
   }, [])
+
+  const getLayout = Component.getLayout ?? ((page) => page)
 
   return (
     <React.Fragment>
@@ -28,9 +39,7 @@ const MyApp = (props: AppProps): JSX.Element => {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        {getLayout(<Component {...pageProps} />)}
       </ThemeProvider>
     </React.Fragment>
   )

@@ -25,26 +25,32 @@ const useStyles = makeStyles((theme) => ({
   //   },
 }))
 
-const Layout: React.FC = (props) => {
-  const { children } = props
+type Props = {
+  hideAppBar?: boolean
+}
+
+const Layout: React.FC<Props> = (props) => {
+  const { children, hideAppBar = false } = props
 
   const classes = useStyles()
   // const theme = useTheme()
 
   return (
     <div>
-      <AppBar position="fixed">
-        <Toolbar>
-          <Box mr={1}>
-            <Image height="44" src="/icon_transparent.png" width="44" />
-          </Box>
-          <Typography noWrap variant="h6">
-            774.link (β)
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      {!hideAppBar && (
+        <AppBar position="fixed">
+          <Toolbar>
+            <Box mr={1}>
+              <Image height="44" src="/icon_transparent.png" width="44" />
+            </Box>
+            <Typography noWrap variant="h6">
+              774.link (β)
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      )}
       <main>
-        <div className={classes.toolbarSpacer} />
+        {!hideAppBar && <div className={classes.toolbarSpacer} />}
         {children}
         {/* <div className={classes.toolbarSpacer} /> */}
       </main>

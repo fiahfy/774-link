@@ -1,14 +1,14 @@
-import { Box, Divider, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import Head from 'next/head'
 import React, { ReactElement } from 'react'
 import Layout from '~/components/Layout'
 import { NextPageWithLayout } from './_app'
 
-const NotFound: NextPageWithLayout = () => {
+const Maintenance: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>404: This page could not be found</title>
+        <title>Under Maintenance</title>
       </Head>
       <Box
         alignItems="center"
@@ -20,19 +20,15 @@ const NotFound: NextPageWithLayout = () => {
         width="100%"
       >
         <Box alignItems="center" display="flex">
-          <Typography variant="h6">404</Typography>
-          <Box height={60} mx={2}>
-            <Divider orientation="vertical" />
-          </Box>
-          <Typography variant="body1">This page could not be found</Typography>
+          <Typography variant="body1">Under Maintenance</Typography>
         </Box>
       </Box>
     </>
   )
 }
 
-NotFound.getLayout = (page: ReactElement) => {
+Maintenance.getLayout = (page: ReactElement) => {
   return <Layout hideAppBar>{page}</Layout>
 }
 
-export default NotFound
+export default Maintenance
